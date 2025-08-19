@@ -1,0 +1,67 @@
+//
+// Created by kitaS24 on 18.08.2025.
+//
+
+#ifndef ENGINE7_STRUCTS_H
+#define ENGINE7_STRUCTS_H
+
+struct EntAction{
+    int ActionType;
+    unsigned int activator;
+    unsigned int caller;
+};
+
+struct Vec2{
+    float X;
+    float Y;
+};
+struct Vec2I{
+    int X;
+    int Y;
+};
+struct Vec3{
+    float X;
+    float Y;
+    float Z;
+};
+struct Vec3I{
+    int X;
+    int Y;
+    int Z;
+};
+
+struct BrushSide{
+    bool Used;
+    Vec3I Vertex[16];
+    Vec2 Uvs[16];
+    int VertexN;
+    Vec3 Normal;
+    unsigned int Material;
+};
+
+struct Brush{
+    BrushSide BrushPlane[32];
+    unsigned int Planes;
+    int CollisionType;
+    bool Active;
+    Vec3 TransformMatrix;
+    Vec3 RotationMatrix[3];
+    Vec3 Rotation;
+};
+
+struct Material{
+    bool Loaded;
+    bool TxProperty;
+    GLuint Texture;
+    GLuint TextureProperty;
+    GLuint Shader;
+};
+
+struct GpuLights{
+    float Pos[Engine_Max_Lights*3];
+    float Color[Engine_Max_Lights*3];
+    bool enabled[Engine_Max_Lights];
+};
+
+
+#endif //ENGINE7_STRUCTS_H
