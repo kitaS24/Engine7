@@ -6,14 +6,17 @@
 #define ENGINE7_ENTMANAGER_H
 class Ent{
 private:
-    float ThinkTimer;
+    float ThinkTimer = 0;
 protected:
     Brush *Brushes;
     Material *Materials;
     GpuLights *LightsPtr;
     Vec3 Pos;
+    Vec3 Rot;
     Vec3 Scale;
     float Time;
+    DISPLAY *Display;
+    Vec3 *CamPos;
 public:
     virtual std::string GetDebugName(){
         return "Not Defined!";
@@ -26,10 +29,12 @@ public:
        ImGui::End();
     }
 
-    virtual void SetRenderPointer(Brush *Br,Material *M,GpuLights *L){
+    virtual void SetRenderPointer(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
+        Display = D;
+        CamPos = CamP;
     }
     virtual void SetT(float T){
         Time = T;
@@ -52,7 +57,7 @@ public:
         ThinkTimer = Val;
     }
 
-    virtual float Think(){
+    virtual float Think(float TPS){
 
         //think function for your ent
         return 0;//time to the next think (sec)

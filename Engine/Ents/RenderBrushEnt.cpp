@@ -24,7 +24,7 @@ class WorldRender : public Ent{
             if((*(materials + Side.Material)).TxProperty) {
                 glActiveTexture(GL_TEXTURE1);
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).Texture);
+                glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).TextureProperty);
             }
             glUseProgram((*(materials+Side.Material)).Shader);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightPos"), LN,(*L).Pos);
@@ -32,6 +32,7 @@ class WorldRender : public Ent{
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*CamPos).X,(*CamPos).Y,(*CamPos).Z);
 
         }
 

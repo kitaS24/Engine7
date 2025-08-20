@@ -22,7 +22,7 @@ void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2
 void EntThink(std::vector<std::unique_ptr<Ent>> &Ent,float TPS){
     for (int i = 0; i < Ent.size(); i++) {
         if(Ent[i]->ThinkCheck(TPS)){
-            Ent[i]->SetThinkTimer(Ent[i]->Think());
+            Ent[i]->SetThinkTimer(Ent[i]->Think(TPS));
         }
     }
 }
@@ -33,9 +33,9 @@ void EntUpdate(std::vector<std::unique_ptr<Ent>> &Ent,float T){
     }
 }
 
-void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L){
+void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L,DISPLAY *D,Vec3 *CamPos){
     for (int i = 0; i < Ent.size(); i++) {
-            Ent[i]->SetRenderPointer(Br,Mt,L);
+            Ent[i]->SetRenderPointer(Br,Mt,L,D,CamPos);
     }
 }
 

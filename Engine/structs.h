@@ -36,6 +36,7 @@ struct BrushSide{
     Vec2 Uvs[16];
     int VertexN;
     Vec3 Normal;
+    Vec3 CollisionPos;
     unsigned int Material;
 };
 
@@ -63,5 +64,20 @@ struct GpuLights{
     bool enabled[Engine_Max_Lights];
 };
 
+struct DISPLAY{
+    int X;
+    int Y;
+    float FPS;
+    double TPF;
+    double lastT;
+    GLFWwindow* window;
+    int MX;
+    int MY;
+    bool Left;
+    bool Right;
+    bool Pressed;
+
+
+};
 
 #endif //ENGINE7_STRUCTS_H

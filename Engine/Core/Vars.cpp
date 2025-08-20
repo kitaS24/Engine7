@@ -7,3 +7,6 @@ unsigned int DebugEntView = 0;
 Brush LevelBrushes[Engine_Max_Brushes] = {};
 Material Materials[Engine_Max_Materials] = {};
 GpuLights Lights = {};
+
+DISPLAY D = {};
+Vec3 CamPos = {};
