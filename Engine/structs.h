@@ -29,6 +29,18 @@ struct Vec3I{
     int Y;
     int Z;
 };
+struct Vec4{
+    float X;
+    float Y;
+    float Z;
+    float A;
+};
+struct Vec4I{
+    int X;
+    int Y;
+    int Z;
+    int A;
+};
 
 struct BrushSide{
     bool Used;
@@ -48,6 +60,9 @@ struct Brush{
     Vec3 TransformMatrix;
     Vec3 RotationMatrix[3];
     Vec3 Rotation;
+
+    Vec3I BoundingBox1;
+    Vec3I BoundingBox2;
 };
 
 struct Material{

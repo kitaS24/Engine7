@@ -1,0 +1,62 @@
+//
+// Created by kitaS24 on 21.08.2025.
+//
+
+void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Material *Material,GpuLights *L,unsigned int LN,Vec3 CamPos,Vec4 Color){
+    glEnable(GL_TEXTURE_2D);
+    if(!(*Material).Loaded){
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, (*(materials+0)).Texture);
+        glUseProgram(NULL);
+        glColor3ub(255,0,0);
+    }else {
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, (*Material).Texture);
+        if((*Material).TxProperty) {
+            glActiveTexture(GL_TEXTURE1);
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, (*Material).TextureProperty);
+        }
+        glUseProgram((*Material).Shader);
+        glUniform3fv(glGetUniformLocation((*Material).Shader, "LightPos"), LN,(*L).Pos);
+        glUniform3fv(glGetUniformLocation((*Material).Shader, "LightCol"), LN,(*L).Color);
+        glUniform1i(glGetUniformLocation((*Material).Shader, "LightN"), LN);
+        glUniform1i(glGetUniformLocation((*Material).Shader, "Property"), (*Material).TxProperty);
+        glUniform1i(glGetUniformLocation((*Material).Shader, "PropTex"), 1);
+        glUniform3f(glGetUniformLocation((*Material).Shader, "CamPos"), CamPos.X,CamPos.Y,CamPos.Z);
+
+    }
+
+    Vec3 PPos[4] = {
+            rotatePoint({-Size.X,-Size.Y,0},Rot),
+            rotatePoint({Size.X,-Size.Y,0},Rot),
+            rotatePoint({Size.X,Size.Y,0},Rot),
+            rotatePoint({-Size.X,Size.Y,0},Rot),
+    };
+    Vec3 Normal = rotatePoint({0,0,-1},Rot);
+
+    glBegin(GL_QUADS);
+    glColor4ub(Color.X,Color.Y,Color.Z,Color.A);
+    glMultiTexCoord3f(GL_TEXTURE2,Normal.X,Normal.Y,Normal.Z);
+
+    for (int i = 0; i < RenderParticles; ++i) {
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 0);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[0].X, (*(Pos+i)).Y + PPos[0].Y, (*(Pos+i)).Z + PPos[0].Z);
+        glVertex3f((*(Pos+i)).X + PPos[0].X, (*(Pos+i)).Y + PPos[0].Y, (*(Pos+i)).Z + PPos[0].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 0);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[1].X, (*(Pos+i)).Y + PPos[1].Y, (*(Pos+i)).Z + PPos[1].Z);
+        glVertex3f((*(Pos+i)).X + PPos[1].X, (*(Pos+i)).Y + PPos[1].Y, (*(Pos+i)).Z + PPos[1].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 1);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[2].X, (*(Pos+i)).Y + PPos[2].Y, (*(Pos+i)).Z + PPos[2].Z);
+        glVertex3f((*(Pos+i)).X + PPos[2].X, (*(Pos+i)).Y + PPos[2].Y, (*(Pos+i)).Z + PPos[2].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 1);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
+        glVertex3f((*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
+    }
+    glEnd();
+    glActiveTexture(GL_TEXTURE1);
+    glDisable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glDisable(GL_TEXTURE_2D);
+}

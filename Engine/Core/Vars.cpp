@@ -9,4 +9,4 @@ Material Materials[Engine_Max_Materials] = {};
 GpuLights Lights = {};
 
 DISPLAY D = {};
-Vec3 CamPos = {};
+Vec3 Cam[3] = {};

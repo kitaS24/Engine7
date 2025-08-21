@@ -8,6 +8,7 @@ class Light: public Ent{
     Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
     float Br = 4;
     int CustomT = rand()%1000;
+    int ThinkTimes = 0;
 
     std::string GetDebugName() override {
         return "Light";
@@ -34,5 +35,12 @@ class Light: public Ent{
         glBegin(GL_POINTS);
         glVertex3f(Pos.X+Rot.X,Pos.Y+Rot.Y,Pos.Z+Rot.Z);
         glEnd();
+    }
+    float Think(float TPS) override{
+        //ThinkTimes = ThinkTimes+1;
+        //if(ThinkTimes >1){
+        //    KillSelf();
+        //}
+        return 10;
     }
 };

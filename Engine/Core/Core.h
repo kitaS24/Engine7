@@ -13,7 +13,7 @@
 
 #define Engine_Max_Brushes 1024
 #define Engine_Max_Materials 256
-#define Engine_Max_Lights 1024
+#define Engine_Max_Lights 512
 
 #define Deg_To_Rad 0.01745329251994329576923690768488612713442871888542
 #define Rad_To_Deg  57.29577951308232087679815481410517033240547246656432

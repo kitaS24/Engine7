@@ -7,6 +7,7 @@
 class Ent{
 private:
     float ThinkTimer = 0;
+    bool Kill = false;
 protected:
     Brush *Brushes;
     Material *Materials;
@@ -17,6 +18,8 @@ protected:
     float Time;
     DISPLAY *Display;
     Vec3 *CamPos;
+    Vec3 *CamRot;
+    Vec3 *CamRotVec;
 public:
     virtual std::string GetDebugName(){
         return "Not Defined!";
@@ -34,7 +37,9 @@ public:
         Materials = M;
         LightsPtr = L;
         Display = D;
-        CamPos = CamP;
+        CamPos = CamP+0;
+        CamRot = CamP+1;
+        CamRotVec = CamP+2;
     }
     virtual void SetT(float T){
         Time = T;
@@ -42,8 +47,28 @@ public:
     virtual void SetPos(Vec3 V){
         Pos = V;
     }
+    virtual void SetRot(Vec3 V){
+        Rot = V;
+    }
     virtual void SetScale(Vec3 V){
         Scale = V;
+    }
+    virtual Vec3 GetPos(){
+        return Pos;
+    }
+    virtual Vec3 GetScale(){
+        return Scale;
+    }
+    virtual Vec3 GetRotation(){
+        return Rot;
+    }
+
+    void KillSelf(){
+        //kills object as soon as possible
+        Kill = true;
+    }
+    bool ObjectNeedsToBeKilled(){
+        return Kill;
     }
 
     virtual bool ThinkCheck(float TPS){

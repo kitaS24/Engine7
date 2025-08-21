@@ -36,5 +36,5 @@ if(Property == 1){PropertyTx = texture2D(PropTex,texCoord);}
 PropertyTx = vec4(PropertyTx.x*8+1,PropertyTx.y,PropertyTx.z*4,0);
 //vec4 Color = vec4(Pos.x/10,Pos.y/10,Pos.z/10,1);
 Color = Color * vec4(CalculateLights(PropertyTx)*PropertyTx.x+PropertyTx.z,1);
-gl_FragColor = Color;
+gl_FragColor = Color*fragColor;
 }

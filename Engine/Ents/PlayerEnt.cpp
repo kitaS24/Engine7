@@ -5,7 +5,7 @@
 class Player: public Ent{
 
     Vec3 Vel = {0,0,0};
-    Vec3 CamRotVec = {0,0,0};
+    Vec3 CamRotVecInternal = {0,0,0};
 
     //
     void MoveXZ(Vec3 HSize,Vec3 V){
@@ -97,10 +97,13 @@ class Player: public Ent{
         if(glfwGetKey(D.window,GLFW_KEY_DOWN)){
             Rot.X = Rot.X - 90.0f/TPS;
         }
+        if(glfwGetKey(D.window,GLFW_KEY_E)){
+            std::cout << WorldRaycast(Pos, Vec3Add(Pos, Vec3Multiply(CamRotVecInternal,{100000,100000,100000})),{10,10,10},300,Brushes)<<"\n";
+        }
 
         KDir = NormaliseVec3(KDir);
         KDir = rotatePoint(KDir,{0,-Rot.Y,-Rot.Z});
-        CamRotVec =  rotatePoint({0,0,1},{-Rot.X,-Rot.Y,-Rot.Z});
+        CamRotVecInternal =  rotatePoint({0,0,1},{-Rot.X,-Rot.Y,-Rot.Z});
         KDir = Vec3Multiply(KDir,{PlayerAccSpeed/TPS,PlayerAccSpeed/TPS,PlayerAccSpeed/TPS});
         Vel = Vec3Add(Vel,KDir);
         if(MagVec3({Vel.X,0,Vel.Z}) >PlayerSpeed){
@@ -150,6 +153,8 @@ class Player: public Ent{
     void PreRender() override{
         //3d frame
         *CamPos = Pos;
+        *CamRot = Rot;
+        *CamRotVec = CamRotVecInternal;
         glRotatef(Rot.X,1,0,0);
         glRotatef(Rot.Y,0,1,0);
 

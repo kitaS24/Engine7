@@ -32,7 +32,7 @@ class WorldRender : public Ent{
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*CamPos).X,(*CamPos).Y,(*CamPos).Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*(Cam+0)).X,(*(Cam+0)).Y,(*(Cam+0)).Z);
 
         }
 

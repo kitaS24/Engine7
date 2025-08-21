@@ -19,12 +19,16 @@
 #include "EntManager.h"
 #include "Vars.cpp"
 //subsys
+#include "CreateBrush.cpp"
 #include "Light.cpp"
 #include "Collision.cpp"
+#include "Raycast.cpp"
+#include "Particle.cpp"
 //classes
 #include "RenderBrushEnt.cpp"
 #include "PlayerEnt.cpp"
 #include "LightEnt.cpp"
+#include "particleEnt.cpp"
 #include "EntManager.cpp"
 
 
@@ -77,6 +81,7 @@ void Engine(){
     LevelEnt.push_back(std::make_unique<Ent>());
     LevelEnt.push_back(std::make_unique<Ent>());
     LevelEnt.push_back(std::make_unique<WorldRender>());
+    LevelEnt.push_back(std::make_unique<Particle>());
     //LevelEnt.push_back(std::make_unique<Light>());
     //LevelEnt.push_back(std::make_unique<Light>());
     //LevelEnt.push_back(std::make_unique<Light>());
@@ -146,6 +151,7 @@ void Engine(){
         LevelBrushes[0].BrushPlane[i].Uvs[3] = {1,0};
         LevelBrushes[0].BrushPlane[i].Material = 2;
     }
+    CreateBrushBoundingBox(LevelBrushes[0]);
 
     glfwSwapInterval(1);
 
@@ -167,7 +173,7 @@ void Engine(){
             FPS = OpenGlGetFPS(LastFrameT);
             T = T+(1.0f/FPS);
 
-            EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,&CamPos);
+            EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam);
             EntUpdate(LevelEnt,T);
             EntThink(LevelEnt,FPS);
 
@@ -191,6 +197,7 @@ void Engine(){
             //rendering triangle with color (255,255,255) or with different colors for each vertex
             EntPreRender(LevelEnt);
             EntRender3D(LevelEnt);
+            KillAllRequestedObjs(LevelEnt);
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
