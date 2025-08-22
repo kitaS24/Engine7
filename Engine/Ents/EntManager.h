@@ -20,6 +20,7 @@ protected:
     Vec3 *CamPos;
     Vec3 *CamRot;
     Vec3 *CamRotVec;
+    MapKey *UserKeyBind;
 public:
     virtual std::string GetDebugName(){
         return "Not Defined!";
@@ -32,7 +33,7 @@ public:
        ImGui::End();
     }
 
-    virtual void SetRenderPointer(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP){
+    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -40,6 +41,7 @@ public:
         CamPos = CamP+0;
         CamRot = CamP+1;
         CamRotVec = CamP+2;
+        UserKeyBind = KeyBinds;
     }
     virtual void SetT(float T){
         Time = T;

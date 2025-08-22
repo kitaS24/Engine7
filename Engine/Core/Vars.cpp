@@ -12,3 +12,5 @@ DISPLAY D = {};
 Vec3 Cam[3] = {};
 
 bool SaveOrLoadKeyPress = false;
+
+MapKey UserKeyBind;

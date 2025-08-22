@@ -32,8 +32,16 @@ class WorldRender : public Ent{
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*(Cam+0)).X,(*(Cam+0)).Y,(*(Cam+0)).Z);
-
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*(CamPos)).X,(*(CamPos)).Y,(*(CamPos)).Z);
+            if((*(materials + Side.Material)).Metal) {
+                glUniform3f(glGetUniformLocation((*(materials + Side.Material)).Shader, "SpecColor"),
+                            (*(materials + Side.Material)).SpecColor.X, (*(materials + Side.Material)).SpecColor.Y,
+                            (*(materials + Side.Material)).SpecColor.Z);
+            }else{
+                glUniform3f(glGetUniformLocation((*(materials + Side.Material)).Shader, "SpecColor"),
+                            (*(materials + Side.Material)).SpecColor.X*0.08, (*(materials + Side.Material)).SpecColor.Y*0.08,
+                            (*(materials + Side.Material)).SpecColor.Z*0.08);
+            }
         }
 
         glBegin(GL_TRIANGLES);
@@ -98,4 +106,24 @@ class WorldRender : public Ent{
             RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN);
         }
     }
+/*
+    void Save(std::ofstream &File) override{
+        unsigned int Br = 0;
+        for (int i = 0; i < Engine_Max_Brushes; ++i) {
+            if((*(Brushes+i)).Active){
+                Br = Br +1;
+            }
+        }
+        File.write(reinterpret_cast<char *>(&Br), sizeof(Br));
+        for (int i = 0; i < Br; ++i) {
+            File.write(reinterpret_cast<char *>((Brushes+i)), sizeof(Brush));
+        }
+    }
+    void Load(std::ifstream &File) override{
+        unsigned int Br = 0;
+        File.read(reinterpret_cast<char *>(&Br), sizeof(Br));
+        for (int i = 0; i < Br; ++i) {
+            File.read(reinterpret_cast<char *>((Brushes+i)), sizeof(Brush));
+        }
+    }*/
 };

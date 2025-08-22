@@ -8,13 +8,16 @@
 * collisions
 * world raycast
 * particle system
+* mappable keys
+* level loading/saving (quick save/load)
+* PBR
 ### WORKING ON
 * player controller
-* level loading/saving
 ### TODO
 * trenchbroom map compilation
 * static prop creation,compilation
+
+
 * audio
 * GUI
-* mappable keys
-* 
+* level loading

@@ -68,8 +68,10 @@ struct Brush{
 struct Material{
     bool Loaded;
     bool TxProperty;
+    bool Metal;
+    Vec3 SpecColor;
     GLuint Texture;
-    GLuint TextureProperty;
+    GLuint TextureProperty;//Metal|Roughness|LightI
     GLuint Shader;
 };
 

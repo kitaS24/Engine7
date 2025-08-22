@@ -43,10 +43,10 @@ void EntUpdate(std::vector<std::unique_ptr<Ent>> &Ent,float T){
     }
 }
 
-void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L,DISPLAY *D,Vec3 *CamPos){
+void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L,DISPLAY *D,Vec3 *CamPos,MapKey *Key){
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
-            Ent[i]->SetRenderPointer(Br,Mt,L,D,CamPos);
+            Ent[i]->SetPointers(Br,Mt,L,D,CamPos,Key);
             }
     }
 }

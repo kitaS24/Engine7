@@ -72,32 +72,32 @@ class Player: public Ent{
         float PlayerAccSpeed = 7000;
         Vec3 KDir = {};
         Vec3 PlayerSize = {405,915,405};
-        if(glfwGetKey((*Display).window,GLFW_KEY_W)){
+        if((*UserKeyBind).key('W')){
             KDir = Vec3Add(KDir,{0,0,1});
         }
-        if(glfwGetKey((*Display).window,GLFW_KEY_S)){
+        if((*UserKeyBind).key('S')){
             KDir = Vec3Add(KDir,{0,0,-1});
         }
-        if(glfwGetKey((*Display).window,GLFW_KEY_A)){
+        if((*UserKeyBind).key('A')){
             KDir = Vec3Add(KDir,{-1,0,0});
         }
-        if(glfwGetKey((*Display).window,GLFW_KEY_D)){
+        if((*UserKeyBind).key('D')){
             KDir = Vec3Add(KDir,{1,0,0});
         }
 
-        if(glfwGetKey(D.window,GLFW_KEY_LEFT)){
+        if(glfwGetKey((*Display).window,GLFW_KEY_LEFT)){
             Rot.Y = Rot.Y + 90.0f/TPS;
         }
-        if(glfwGetKey(D.window,GLFW_KEY_RIGHT)){
+        if(glfwGetKey((*Display).window,GLFW_KEY_RIGHT)){
             Rot.Y = Rot.Y - 90.0f/TPS;
         }
-        if(glfwGetKey(D.window,GLFW_KEY_UP)){
+        if(glfwGetKey((*Display).window,GLFW_KEY_UP)){
             Rot.X = Rot.X + 90.0f/TPS;
         }
-        if(glfwGetKey(D.window,GLFW_KEY_DOWN)){
+        if(glfwGetKey((*Display).window,GLFW_KEY_DOWN)){
             Rot.X = Rot.X - 90.0f/TPS;
         }
-        if(glfwGetKey(D.window,GLFW_KEY_E)){
+        if((*UserKeyBind).key('E')){
             std::cout << WorldRaycast(Pos, Vec3Add(Pos, Vec3Multiply(CamRotVecInternal,{100000,100000,100000})),{10,10,10},300,Brushes)<<"\n";
         }
 
@@ -113,7 +113,7 @@ class Player: public Ent{
         }
 
         if(CollisionWorldArea(Brushes, Engine_Max_Brushes, Vec3Add(Pos,{0,-5,0}), PlayerSize)) {
-            if (glfwGetKey(D.window, GLFW_KEY_SPACE)) {
+            if ((*UserKeyBind).key(' ')) {
                 Pos.Y = Pos.Y + 10;
                 Vel.Y = Vel.Y + 3500;
             }

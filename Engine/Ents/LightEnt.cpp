@@ -6,7 +6,7 @@ class Light: public Ent{
 
     //Vec3 Color = {0.8,1,1};
     Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
-    float Br = 4;
+    float Br = 8;
     int CustomT = rand()%1000;
     int ThinkTimes = 0;
 

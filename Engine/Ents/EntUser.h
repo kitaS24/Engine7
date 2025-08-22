@@ -21,16 +21,16 @@ void EntLoadCreate(std::ifstream &File,std::vector<std::unique_ptr<Ent>> &Ent){
             }
         }
         if(NameStr == "Particle"){
-            LevelEnt.push_back(std::make_unique<Particle>());
+            Ent.push_back(std::make_unique<Particle>());
         }
         if(NameStr == "Light"){
-            LevelEnt.push_back(std::make_unique<Light>());
+            Ent.push_back(std::make_unique<Light>());
         }
         if(NameStr == "Player"){
-            LevelEnt.push_back(std::make_unique<Player>());
+            Ent.push_back(std::make_unique<Player>());
         }
         if(NameStr == "WorldRender"){
-            LevelEnt.push_back(std::make_unique<WorldRender>());
+            Ent.push_back(std::make_unique<WorldRender>());
         }
     }
 }

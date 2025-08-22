@@ -23,4 +23,11 @@
 #define Engine_Key_Save GLFW_KEY_F6
 #define Engine_Key_Load GLFW_KEY_F9
 
+//mouse btns
+#define Engine_LM 1001
+#define Engine_RM 1000
+//MapSpecial keys Into ASCII
+#define Engine_ASCII_LM 201
+#define Engine_ASCII_RM 200
+
 #endif //ENGINE7_CORE_H
