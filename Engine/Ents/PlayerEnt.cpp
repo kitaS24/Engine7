@@ -130,17 +130,18 @@ class Player: public Ent{
             }
         }else {
             Vel.Y = Vel.Y + Engine_G / TPS;
-            if(MagVec3(KDir) ==0) {
+
                 if (MagVec3({Vel.X, 0, Vel.Z}) < 1000 / TPS) {
-                    Vel.X = 0;
-                    Vel.Z = 0;
+                    if(MagVec3(KDir) ==0) {
+                        Vel.X = 0;
+                        Vel.Z = 0;
+                    }
                 } else {
                     float D = MagVec3({Vel.X, 0, Vel.Z});
                     Vec3 NVel = NormaliseVec3({Vel.X, 0, Vel.Z});
                     NVel = Vec3Multiply(NVel, {D - (1000 / TPS), D - (1000 / TPS), D - (1000 / TPS)});
                     Vel = {NVel.X,Vel.Y,NVel.Z};
                 }
-            }
         }
 
         MoveXZ(PlayerSize,{Vel.X/TPS,Vel.Y/TPS,Vel.Z/TPS});
@@ -161,5 +162,16 @@ class Player: public Ent{
         //Rotate3D(P.Rot.X,P.Rot.Y,P.Rot.Z);
         glTranslatef(-Pos.X,-Pos.Y,-Pos.Z);
         //AddLight(LightsPtr, Pos,{0.4,0,0});
+    }
+
+    void Save(std::ofstream &File) override{
+        File.write(reinterpret_cast<char *>(&Pos), sizeof(Pos));
+        File.write(reinterpret_cast<char *>(&Vel), sizeof(Vel));
+        File.write(reinterpret_cast<char *>(&Rot), sizeof(Rot));
+    }
+    void Load(std::ifstream &File) override{
+        File.read(reinterpret_cast<char *>(&Pos), sizeof(Pos));
+        File.read(reinterpret_cast<char *>(&Vel), sizeof(Vel));
+        File.read(reinterpret_cast<char *>(&Rot), sizeof(Rot));
     }
 };

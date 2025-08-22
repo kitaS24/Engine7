@@ -157,6 +157,32 @@ void Engine(){
 
         while(!glfwWindowShouldClose(D.window))
         {
+
+            if(glfwGetKey(D.window,Engine_Key_Save) ||glfwGetKey(D.window,Engine_Key_Load)){
+                if(!SaveOrLoadKeyPress){
+                    if(glfwGetKey(D.window,Engine_Key_Save) ){
+                        std::ofstream SaveMap{"saves/test1.gems", std::ios::binary};
+                        EntSaveAddObjName(LevelEnt,SaveMap);
+                        EntSave(LevelEnt,SaveMap);
+                        SaveMap.close();
+                    }
+                    if(glfwGetKey(D.window,Engine_Key_Load) ){
+                        std::ifstream LoadMap{"saves/test1.gems", std::ios::binary};
+                        if (!LoadMap.is_open()) {
+                            std::cout << "File not open\n";
+                            std::cout << "File is absent from path : "<<"saves/test1.gems" <<"\n";
+                            //exit(3);
+                        }
+                        LevelEnt.clear();
+                        EntLoadCreate(LoadMap,LevelEnt);
+                        EntLoad(LevelEnt,LoadMap);
+                    }
+                }
+                SaveOrLoadKeyPress = true;
+            }else{
+                SaveOrLoadKeyPress = false;
+            }
+
             glfwGetWindowSize(D.window,&WindowSize.X,&WindowSize.Y);
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();

@@ -115,13 +115,13 @@ public:
         //Called when player shoots
 
     }
-    virtual void Save(){
+    virtual void Save(std::ofstream &File){
         //Called when save is created
-
+        //std::cout << "Save\n";
     }
-    virtual void Load(){
+    virtual void Load(std::ifstream &File){
         //Called when loading object
-
+        //std::cout << "Load\n";
     }
 
     virtual void Render3D(){

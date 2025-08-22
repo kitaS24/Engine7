@@ -10,12 +10,11 @@
 * particle system
 ### WORKING ON
 * player controller
+* level loading/saving
 ### TODO
-* level loading
 * trenchbroom map compilation
 * static prop creation,compilation
 * audio
-
 * GUI
 * mappable keys
 * 

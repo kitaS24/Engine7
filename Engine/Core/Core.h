@@ -20,4 +20,7 @@
 
 #define Engine_G -9800.0f
 
+#define Engine_Key_Save GLFW_KEY_F6
+#define Engine_Key_Load GLFW_KEY_F9
+
 #endif //ENGINE7_CORE_H

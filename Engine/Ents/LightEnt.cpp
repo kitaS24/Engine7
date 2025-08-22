@@ -43,4 +43,16 @@ class Light: public Ent{
         //}
         return 10;
     }
+
+    void Save(std::ofstream &File) override{
+        File.write(reinterpret_cast<char *>(&CustomT), sizeof(CustomT));
+        File.write(reinterpret_cast<char *>(&Color), sizeof(Color));
+        File.write(reinterpret_cast<char *>(&Br), sizeof(Br));
+    }
+    void Load(std::ifstream &File) override{
+        File.read(reinterpret_cast<char *>(&CustomT), sizeof(CustomT));
+        File.read(reinterpret_cast<char *>(&Color), sizeof(Color));
+        File.read(reinterpret_cast<char *>(&Br), sizeof(Br));
+    }
+
 };

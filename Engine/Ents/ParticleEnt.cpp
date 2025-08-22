@@ -56,4 +56,19 @@ class Particle: public Ent{
         }
         RenderParticle(ParticlePos,8,{-(*CamRot).X,-(*CamRot).Y,-(*CamRot).Z},{50,50},Materials+2,LightsPtr,LightsN,*CamPos,{255,255,255,255*(1-(T/2))});
     }
+
+    void Save(std::ofstream &File) override{
+        File.write(reinterpret_cast<char *>(&Pos), sizeof(Pos));
+        File.write(reinterpret_cast<char *>(&ParticlePos), sizeof(ParticlePos));
+        File.write(reinterpret_cast<char *>(&ParticleVel), sizeof(ParticleVel));
+        File.write(reinterpret_cast<char *>(&Rot), sizeof(Rot));
+        File.write(reinterpret_cast<char *>(&T), sizeof(T));
+    }
+    void Load(std::ifstream &File) override{
+        File.read(reinterpret_cast<char *>(&Pos), sizeof(Pos));
+        File.read(reinterpret_cast<char *>(&ParticlePos), sizeof(ParticlePos));
+        File.read(reinterpret_cast<char *>(&ParticleVel), sizeof(ParticleVel));
+        File.read(reinterpret_cast<char *>(&Rot), sizeof(Rot));
+        File.read(reinterpret_cast<char *>(&T), sizeof(T));
+    }
 };

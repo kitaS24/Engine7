@@ -94,6 +94,7 @@ class WorldRender : public Ent{
         //std::cout << LightsN<<"\n";
 
         for (int i = 0; i < Engine_Max_Brushes; ++i) {
+            glColor3ub(255,255,255);
             RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN);
         }
     }
