@@ -9,7 +9,7 @@ class WorldRender : public Ent{
 
     //custom functions
 
-    void RenderBrushSide(BrushSide &Side,Material *materials,GpuLights *L,unsigned int LN,unsigned int FN){
+    void RenderBrushSide(BrushSide &Side,Material *materials,GpuLights *L,unsigned int LN){
 
         if(Side.Material == 0){return;}
 
@@ -29,18 +29,18 @@ class WorldRender : public Ent{
                 glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).TextureProperty);
                 glActiveTexture(GL_TEXTURE2);
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (*L).Depth[0]);
+                glBindTexture(GL_TEXTURE_2D, (*L).Depth);
             }
             glUseProgram((*(materials+Side.Material)).Shader);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightPos"), LN,(*L).Pos);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightCol"), LN,(*L).Color);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
 
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodPos"), FN,(*L).FloodPos);
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodCol"), FN,(*L).FloodColor);
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodSize"), FN,(*L).FloodSize);
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodDir"), FN,(*L).FloodDir);
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodN"), FN);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodPos"),(*L).FloodPos.X,(*L).FloodPos.Y,(*L).FloodPos.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodCol"),(*L).FloodColor.X,(*L).FloodColor.Y,(*L).FloodColor.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodSize"),(*L).FloodSize.X,(*L).FloodSize.Y,(*L).FloodSize.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodDir"),(*L).FloodDir.X,(*L).FloodDir.Y,(*L).FloodDir.Z);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodN"), (*L).FloodEnabled);
 
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
@@ -79,11 +79,11 @@ class WorldRender : public Ent{
         glDisable(GL_TEXTURE_2D);
 
     }
-    void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN,unsigned int FN){
+    void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN){
         if(!Br.Active){return;}
         for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BrushPlane[i].Used) {
-                RenderBrushSide(Br.BrushPlane[i],materials,L,LN,FN);
+                RenderBrushSide(Br.BrushPlane[i],materials,L,LN);
             }
         }
     }
@@ -116,21 +116,14 @@ class WorldRender : public Ent{
             LightsN = 512;
         }
 
-        unsigned int FloodLightsN = 0;
-        for (int i = 0; i < 8; ++i) {
-        FloodLightsN = i;
-            if(!(*LightsPtr).FloodEnabled[i]){
-                FloodLightsN = i;
-                break;
-            }
-        }
-        FloodSceneLights = FloodLightsN;
+
+        FloodSceneLights = (*LightsPtr).FloodEnabled;
 
         //std::cout << LightsN<<"\n";
 
         for (int i = 0; i < Engine_Max_Brushes; ++i) {
             glColor3ub(255,255,255);
-            RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN,FloodLightsN);
+            RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN);
         }
     }
 /*

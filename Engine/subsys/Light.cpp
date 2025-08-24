@@ -22,32 +22,16 @@ void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color){
 }
 
 void AddFloodLight(GpuLights *L,Vec3 Pos,Vec3 Color,Vec3 Size,Vec3 Dir,GLuint DT){
-    int Index = 0;
-    for (int i = 0; i < 8; ++i) {
-        if(!(*L).FloodEnabled[i]){
-            Index = i;
-            break;
-        }
+    if(!(*L).FloodEnabled) {
+        (*L).FloodPos= Pos;
+        (*L).FloodColor= Color;
+
+        (*L).FloodSize= Size;
+        (*L).FloodDir= Dir;
+
+        (*L).Depth= DT;
+        (*L).FloodEnabled= true;
     }
-    (*L).FloodPos[Index*3+0] = Pos.X;
-    (*L).FloodPos[Index*3+1] = Pos.Y;
-    (*L).FloodPos[Index*3+2] = Pos.Z;
-
-    (*L).FloodColor[Index*3+0] = Color.X;
-    (*L).FloodColor[Index*3+1] = Color.Y;
-    (*L).FloodColor[Index*3+2] = Color.Z;
-
-    (*L).FloodSize[Index*3+0] = Size.X;
-    (*L).FloodSize[Index*3+1] = Size.Y;
-    (*L).FloodSize[Index*3+2] = Size.Z;
-
-    (*L).FloodDir[Index*3+0] = Dir.X;
-    (*L).FloodDir[Index*3+1] = Dir.Y;
-    (*L).FloodDir[Index*3+2] = Dir.Z;
-
-    (*L).Depth[Index] = DT;
-
-    (*L).FloodEnabled[Index] = true;
 }
 
 void LightCalcRenderBrushSide(BrushSide &Side,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){

@@ -305,19 +305,11 @@ void Engine(){
             }
 
             for (int i = 0; i < 8; ++i) {
-                Lights.FloodPos[i*3+0] = 0;
-                Lights.FloodPos[i*3+1] = 0;
-                Lights.FloodPos[i*3+2] = 0;
-                Lights.FloodColor[i*3+0] = 0;
-                Lights.FloodColor[i*3+1] = 0;
-                Lights.FloodColor[i*3+2] = 0;
-                Lights.FloodDir[i*3+0] = 0;
-                Lights.FloodDir[i*3+1] = 0;
-                Lights.FloodDir[i*3+2] = 0;
-                Lights.FloodSize[i*3+0] = 0;
-                Lights.FloodSize[i*3+1] = 0;
-                Lights.FloodSize[i*3+2] = 0;
-                Lights.FloodEnabled[i] = false;
+                Lights.FloodPos = {0,0,0};
+                Lights.FloodColor = {0,0,0};
+                Lights.FloodDir = {0,0,0};
+                Lights.FloodSize = {0,0,0};
+                Lights.FloodEnabled = false;
             }
 
             for (int i = 0; i < 6; ++i) {

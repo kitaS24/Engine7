@@ -80,12 +80,12 @@ struct GpuLights{
     float Color[Engine_Max_Lights*3];
     bool enabled[Engine_Max_Lights];
 
-    float FloodPos[8*3];
-    float FloodColor[8*3];
-    float FloodSize[8*3];
-    float FloodDir[8*3];
-    GLuint Depth[8];
-    bool FloodEnabled[8];
+    Vec3 FloodPos;
+    Vec3 FloodColor;
+    Vec3 FloodSize;
+    Vec3 FloodDir;
+    GLuint Depth;
+    bool FloodEnabled;
 };
 
 struct DISPLAY{

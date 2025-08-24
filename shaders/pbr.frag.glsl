@@ -17,10 +17,10 @@ uniform vec3 CamPos;
 //Material
 uniform vec3 SpecColor;
 //FloodLight
-uniform vec3 FloodPos[8];
-uniform vec3 FloodCol[8];
-uniform vec3 FloodSize[8];
-uniform vec3 FloodDir[8];
+uniform vec3 FloodPos;
+uniform vec3 FloodCol;
+uniform vec3 FloodSize;
+uniform vec3 FloodDir;
 uniform int FloodN;
 
 
@@ -125,11 +125,11 @@ vec3 C = vec3(0.005,0.005,0.005);
     }
     //flood light
     //return Color/5000;
-    for(int i=0;i<FloodN;i++){
+    if(FloodN == 1){
 
-    vec2 FloodUV = FloodLightCollision(FloodPos[i],FloodSize[i],FloodDir[i],Pos);
+    vec2 FloodUV = FloodLightCollision(FloodPos,FloodSize,FloodDir,Pos);
     FloodUV = FloodUV +0.5;
-    vec3 LightVec = normalize(vec3(FloodDir[i].x,FloodPos[i].y-Pos.y,FloodDir[i].z));
+    vec3 LightVec = normalize(vec3(FloodDir.x,FloodPos.y-Pos.y,FloodDir.z));
     float SurfaceDot = dot(Normal,LightVec);
     float IClDot = clamp(SurfaceDot,0,1);
     //return vec3(((texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)/5000,0,0);
@@ -138,18 +138,18 @@ vec3 C = vec3(0.005,0.005,0.005);
 
     if(FloodUV.x >0 && FloodUV.x <=1 && FloodUV.y >0 && FloodUV.y <=1){
 
-                float D = distance(FloodPos[i],Pos)/1000;
-                vec3 LightI = FloodCol[i]/(D*D*0.25);
+                float D = distance(FloodPos,Pos)/1000;
+                vec3 LightI = FloodCol/(D*D*0.25);
                 //LightI = vec3(FloodUV,0);
-                vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos[i]))*LightI*IClDot*
-               SampleNearestDepth(FloodPos[i],FloodUV);
+                vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos))*LightI*IClDot*
+               SampleNearestDepth(FloodPos,FloodUV);
                 C = C + CL;
     }else{
 
-                    float D = distance(FloodPos[i],Pos)/1000;
-                    vec3 LightI = FloodCol[i]/(D*D*0.25);
+                    float D = distance(FloodPos,Pos)/1000;
+                    vec3 LightI = FloodCol/(D*D*0.25);
                     //LightI = vec3(FloodUV,0);
-                    vec3 CL = ((DiffuseBRDF(k,Color)*0.3)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos[i]))*LightI*IClDot;
+                    vec3 CL = ((DiffuseBRDF(k,Color)*0.3)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos))*LightI*IClDot;
                     C = C + CL;
     }
     }
