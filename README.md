@@ -11,14 +11,13 @@
 * mappable keys
 * level loading/saving (quick save/load)
 * PBR
+* Flood Light (with shadows)
 ### WORKING ON
 * player controller
-* flood light
-### TODO
 * trenchbroom map compilation
+### TODO
+
 * static prop creation,compilation
-
-
 * audio
 * GUI
 * level loading

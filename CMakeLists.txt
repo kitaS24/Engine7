@@ -21,6 +21,7 @@ include_directories(Engine/)
 include_directories(Engine/Core)
 include_directories(Engine/Ents)
 include_directories(Engine/subsys)
+include_directories(Engine/Import)
 
 
 include_directories(Engine/include/ImGui/backends)

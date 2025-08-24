@@ -26,6 +26,9 @@
 #include "Raycast.cpp"
 #include "Light.cpp"
 #include "Particle.cpp"
+#include "TextFunctions.cpp"
+//import
+#include "TrenchBroomImport.cpp"
 //classes
 #include "RenderBrushEnt.cpp"
 #include "PlayerEnt.cpp"
@@ -100,146 +103,12 @@ void Engine(){
 
     LevelEnt.push_back(std::make_unique<Player>());
 
-    LevelBrushes[0].BrushPlane[0].Vertex[0] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[1] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[3] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[0].Used = true;
-    LevelBrushes[0].BrushPlane[0].VertexN = 4;
-    LevelBrushes[0].BrushPlane[1].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[1] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[2] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[3] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[1].Used = true;
-    LevelBrushes[0].BrushPlane[1].VertexN = 4;
-    LevelBrushes[0].BrushPlane[2].Vertex[0] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[1] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[3] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[2].Used = true;
-    LevelBrushes[0].BrushPlane[2].VertexN = 4;
-    LevelBrushes[0].BrushPlane[3].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[1] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[2] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[3] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[3].Used = true;
-    LevelBrushes[0].BrushPlane[3].VertexN = 4;
-    LevelBrushes[0].BrushPlane[4].Vertex[0] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[1] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[3] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Used = true;
-    LevelBrushes[0].BrushPlane[4].VertexN = 4;
-    LevelBrushes[0].BrushPlane[5].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[1] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[2] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[3] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[5].Used = true;
-    LevelBrushes[0].BrushPlane[5].VertexN = 4;
-    LevelBrushes[0].Active = true;
-    LevelBrushes[0].Planes = 6;
-
-    LevelBrushes[0].BrushPlane[0].Normal = {0,-1,0};
-    LevelBrushes[0].BrushPlane[1].Normal = {0,1,0};
-    LevelBrushes[0].BrushPlane[2].Normal = {-1,0,0};
-    LevelBrushes[0].BrushPlane[3].Normal = {1,0,0};
-    LevelBrushes[0].BrushPlane[4].Normal = {0,0,-1};
-    LevelBrushes[0].BrushPlane[5].Normal = {0,0,1};
-
-    LevelBrushes[0].BrushPlane[0].CollisionPos = {0,-1000,0};
-    LevelBrushes[0].BrushPlane[1].CollisionPos = {0,1000,0};
-    LevelBrushes[0].BrushPlane[2].CollisionPos = {-1000,0,0};
-    LevelBrushes[0].BrushPlane[3].CollisionPos = {1000,0,0};
-    LevelBrushes[0].BrushPlane[4].CollisionPos = {0,0,-1000};
-    LevelBrushes[0].BrushPlane[5].CollisionPos = {0,0,1000};
-
-    for (int i = 0; i < 6; ++i) {
-        LevelBrushes[0].BrushPlane[i].Uvs[0] = {1,1};
-        LevelBrushes[0].BrushPlane[i].Uvs[1] = {0,1};
-        LevelBrushes[0].BrushPlane[i].Uvs[2] = {0,0};
-        LevelBrushes[0].BrushPlane[i].Uvs[3] = {1,0};
-        LevelBrushes[0].BrushPlane[i].Material = 1;
-    }
-    CreateBrushBoundingBox(LevelBrushes[0]);
-
-/*
-    LevelBrushes[0].BrushPlane[0].Vertex[0] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[1] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[0].Vertex[3] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[0].Used = true;
-    LevelBrushes[0].BrushPlane[0].VertexN = 4;
-    LevelBrushes[0].BrushPlane[1].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[1] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[2] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[1].Vertex[3] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[1].Used = true;
-    LevelBrushes[0].BrushPlane[1].VertexN = 4;
-    LevelBrushes[0].BrushPlane[2].Vertex[0] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[1] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[2].Vertex[3] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[2].Used = true;
-    LevelBrushes[0].BrushPlane[2].VertexN = 4;
-    LevelBrushes[0].BrushPlane[3].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[1] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[2] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[3].Vertex[3] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[3].Used = true;
-    LevelBrushes[0].BrushPlane[3].VertexN = 4;
-    LevelBrushes[0].BrushPlane[4].Vertex[0] = {1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[1] = {-1000,1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[2] = {-1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Vertex[3] = {1000,-1000,-1000};
-    LevelBrushes[0].BrushPlane[4].Used = true;
-    LevelBrushes[0].BrushPlane[4].VertexN = 4;
-    LevelBrushes[0].BrushPlane[5].Vertex[0] = {1000,1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[1] = {-1000,1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[2] = {-1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[5].Vertex[3] = {1000,-1000,1000};
-    LevelBrushes[0].BrushPlane[5].Used = true;
-    LevelBrushes[0].BrushPlane[5].VertexN = 4;
-    LevelBrushes[0].Active = true;
-    LevelBrushes[0].Planes = 6;
-*/
-    LevelBrushes[1].BrushPlane[0].Normal = {0,-1,0};
-    LevelBrushes[1].BrushPlane[1].Normal = {0,1,0};
-    LevelBrushes[1].BrushPlane[2].Normal = {-1,0,0};
-    LevelBrushes[1].BrushPlane[3].Normal = {1,0,0};
-    LevelBrushes[1].BrushPlane[4].Normal = {0,0,-1};
-    LevelBrushes[1].BrushPlane[5].Normal = {0,0,1};
-
-    LevelBrushes[1].BrushPlane[0].CollisionPos = {0,1500,0};
-    LevelBrushes[1].BrushPlane[1].CollisionPos = {0,3500,0};
-    LevelBrushes[1].BrushPlane[2].CollisionPos = {-100,0,0};
-    LevelBrushes[1].BrushPlane[3].CollisionPos = {50,0,0};
-    LevelBrushes[1].BrushPlane[4].CollisionPos = {0,0,-50};
-    LevelBrushes[1].BrushPlane[5].CollisionPos = {0,0,50};
-
-    LevelBrushes[1].BrushPlane[0].Vertex[0] = {50,3500,50};
-    LevelBrushes[1].BrushPlane[0].Vertex[1] = {-50,3500,50};
-    LevelBrushes[1].BrushPlane[0].Vertex[2] = {-50,3500,-50};
-    LevelBrushes[1].BrushPlane[0].Vertex[3] = {50,3500,-50};
-    LevelBrushes[1].BrushPlane[0].Used = true;
-    LevelBrushes[1].BrushPlane[0].VertexN = 4;
-
-    for (int i = 0; i < 6; ++i) {
-        LevelBrushes[1].BrushPlane[i].Uvs[0] = {1,1};
-        LevelBrushes[1].BrushPlane[i].Uvs[1] = {0,1};
-        LevelBrushes[1].BrushPlane[i].Uvs[2] = {0,0};
-        LevelBrushes[1].BrushPlane[i].Uvs[3] = {1,0};
-        LevelBrushes[1].BrushPlane[i].Material = 0;
-        LevelBrushes[1].BrushPlane[i].Used = true;
-
-    }
-    LevelBrushes[1].BrushPlane[0].Material = 2;
-    LevelBrushes[1].Active = true;
-    LevelBrushes[1].Planes = 6;
-    CreateBrushBoundingBoxAll(LevelBrushes[1]);
-
     glfwSwapInterval(1);
     UserKeyBind.UpdateWindow(&D);
     UserKeyBind.SetupGlfwKeys();
+
+    LoadTBMap(LevelBrushes);
+
     //UserKeyBind.Map('W',GLFW_KEY_G);UserKeyBind.Map('w',GLFW_KEY_G);
 
         while(!glfwWindowShouldClose(D.window))
@@ -317,7 +186,7 @@ void Engine(){
             }
 
             //rendering triangle with color (255,255,255) or with different colors for each vertex
-
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             EntPreRender(LevelEnt);
             EntRender3D(LevelEnt);
             KillAllRequestedObjs(LevelEnt);
