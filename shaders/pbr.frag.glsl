@@ -1,6 +1,7 @@
 #version 120
 uniform sampler2D tex;
 uniform sampler2D PropTex;
+uniform sampler2D FloodD;
 //uniform sampler2D BlockInfo;
 varying vec4 fragColor;
 varying vec2 texCoord;
@@ -15,6 +16,12 @@ uniform int Property;//1 to read property tx
 uniform vec3 CamPos;
 //Material
 uniform vec3 SpecColor;
+//FloodLight
+uniform vec3 FloodPos[8];
+uniform vec3 FloodCol[8];
+uniform vec3 FloodSize[8];
+uniform vec3 FloodDir[8];
+uniform int FloodN;
 
 
 float GGX(vec3 LightVec,vec3 CamVec,float a){
@@ -54,6 +61,57 @@ vec3 DiffuseBRDF(float kD,vec3 Color){
 return kD*Color/3.14159265;
 }
 
+vec2 FloodLightCollision(vec3 FPos,vec3 FSize,vec3 FVec,vec3 Point){
+//returns UV
+float Ydist = FPos.y - Point.y;
+vec3 FPosNew = FPos+vec3(FVec.x*Ydist,0,FVec.z*Ydist);
+vec2 p = vec2(Point.x-FPosNew.x,Point.z-FPosNew.z);
+return p/vec2(FSize.x,FSize.z)/2;
+}
+
+float SampleNearestDepth(vec3 FPos,vec2 UV){
+float A = 0;
+float D = 1.0f/512;
+/*
+float Dt[4];
+if(-(texture2D(FloodD,vec2(UV.x,UV.y))).x+FPos.y<= Pos.y){Dt[0] = 1;}else{Dt[0] = 0;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y))).x+FPos.y<= Pos.y){Dt[1] = 1;}else{Dt[1] = 0;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y+D))).x+FPos.y<= Pos.y){Dt[2] = 1;}else{Dt[2] = 0;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y+D))).x+FPos.y<= Pos.y){Dt[3] = 1;}else{Dt[3] = 0;}
+
+float x = (UV.x*64.0f)-floor(UV.x*64.0f);
+float y = (UV.y*64.0f)-floor(UV.y*64.0f);
+
+return mix(mix(Dt[0],Dt[1],x),mix(Dt[3],Dt[2],x),y);
+*/
+
+if(-(texture2D(FloodD,UV)).x+FPos.y<= Pos.y){A = A +1;}
+
+//return A;
+
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
+
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
+/*
+if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D-D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y+D+D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y-D-D))).x+FPos.y<= Pos.y){A = A +1;}
+
+if(-(texture2D(FloodD,vec2(UV.x-D-D,UV.y-D-D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y-D-D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y+D+D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D-D,UV.y+D+D))).x+FPos.y<= Pos.y){A = A +1;}
+*/
+return A/9;
+}
+
 vec3 CalculateLights(float k,vec3 F,vec3 Color,float Roughness){
 vec3 C = vec3(0.005,0.005,0.005);
     for(int i=0;i<LightN;i++){
@@ -64,6 +122,36 @@ vec3 C = vec3(0.005,0.005,0.005);
         vec3 LightI = LightCol[i]/(D*D);
         vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,LightPos[i]))*LightI*IClDot;
         C = C + CL;
+    }
+    //flood light
+    //return Color/5000;
+    for(int i=0;i<FloodN;i++){
+
+    vec2 FloodUV = FloodLightCollision(FloodPos[i],FloodSize[i],FloodDir[i],Pos);
+    FloodUV = FloodUV +0.5;
+    vec3 LightVec = normalize(vec3(FloodDir[i].x,FloodPos[i].y-Pos.y,FloodDir[i].z));
+    float SurfaceDot = dot(Normal,LightVec);
+    float IClDot = clamp(SurfaceDot,0,1);
+    //return vec3(((texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)/5000,0,0);
+
+    //return FloodCol[i];
+
+    if(FloodUV.x >0 && FloodUV.x <=1 && FloodUV.y >0 && FloodUV.y <=1){
+
+                float D = distance(FloodPos[i],Pos)/1000;
+                vec3 LightI = FloodCol[i]/(D*D*0.25);
+                //LightI = vec3(FloodUV,0);
+                vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos[i]))*LightI*IClDot*
+               SampleNearestDepth(FloodPos[i],FloodUV);
+                C = C + CL;
+    }else{
+
+                    float D = distance(FloodPos[i],Pos)/1000;
+                    vec3 LightI = FloodCol[i]/(D*D*0.25);
+                    //LightI = vec3(FloodUV,0);
+                    vec3 CL = ((DiffuseBRDF(k,Color)*0.3)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos[i]))*LightI*IClDot;
+                    C = C + CL;
+    }
     }
     return C;
 }
@@ -76,6 +164,6 @@ PropertyTx = vec4(PropertyTx.x,PropertyTx.y,PropertyTx.z*4,0);
 
 //property X = Metal | property Y = Roughness
 Color = vec4(CalculateLights(PropertyTx.x,SpecColor,Color.xyz,PropertyTx.y*0.8),1);
-
+//Color = vec4((texture2D(FloodD,texCoord)).x/2000,0,0,1);
 gl_FragColor = fragColor*Color;
 }

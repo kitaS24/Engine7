@@ -5,10 +5,11 @@
 class WorldRender : public Ent{
 
     unsigned int SceneLights = 0;
+    unsigned int FloodSceneLights = 0;
 
     //custom functions
 
-    void RenderBrushSide(BrushSide &Side,Material *materials,GpuLights *L,unsigned int LN){
+    void RenderBrushSide(BrushSide &Side,Material *materials,GpuLights *L,unsigned int LN,unsigned int FN){
 
         if(Side.Material == 0){return;}
 
@@ -21,17 +22,29 @@ class WorldRender : public Ent{
             glActiveTexture(GL_TEXTURE0);
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).Texture);
+            //glBindTexture(GL_TEXTURE_2D,(*L).Depth[0]);
             if((*(materials + Side.Material)).TxProperty) {
                 glActiveTexture(GL_TEXTURE1);
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).TextureProperty);
+                glActiveTexture(GL_TEXTURE2);
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, (*L).Depth[0]);
             }
             glUseProgram((*(materials+Side.Material)).Shader);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightPos"), LN,(*L).Pos);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightCol"), LN,(*L).Color);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
+
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodPos"), FN,(*L).FloodPos);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodCol"), FN,(*L).FloodColor);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodSize"), FN,(*L).FloodSize);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodDir"), FN,(*L).FloodDir);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodN"), FN);
+
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodD"), 2);
             glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*(CamPos)).X,(*(CamPos)).Y,(*(CamPos)).Z);
             if((*(materials + Side.Material)).Metal) {
                 glUniform3f(glGetUniformLocation((*(materials + Side.Material)).Shader, "SpecColor"),
@@ -58,17 +71,19 @@ class WorldRender : public Ent{
             glVertex3f(Side.Vertex[i+2].X,Side.Vertex[i+2].Y,Side.Vertex[i+2].Z);
         }
         glEnd();
+        glActiveTexture(GL_TEXTURE2);
+        glDisable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE1);
         glDisable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
         glDisable(GL_TEXTURE_2D);
 
     }
-    void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN){
+    void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN,unsigned int FN){
         if(!Br.Active){return;}
         for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BrushPlane[i].Used) {
-                RenderBrushSide(Br.BrushPlane[i],materials,L,LN);
+                RenderBrushSide(Br.BrushPlane[i],materials,L,LN,FN);
             }
         }
     }
@@ -84,6 +99,7 @@ class WorldRender : public Ent{
         ImGui::SetWindowSize(ImVec2(200,200));
         //ImGui::Text("No Variables yet");
         ImGui::Text(("Lights:"+std::to_string(SceneLights)).c_str());
+        ImGui::Text(("FloodLights:"+std::to_string(FloodSceneLights)).c_str());
         ImGui::End();
     }
     void Render3D() override{
@@ -99,11 +115,22 @@ class WorldRender : public Ent{
         if(LightsN >512){
             LightsN = 512;
         }
+
+        unsigned int FloodLightsN = 0;
+        for (int i = 0; i < 8; ++i) {
+        FloodLightsN = i;
+            if(!(*LightsPtr).FloodEnabled[i]){
+                FloodLightsN = i;
+                break;
+            }
+        }
+        FloodSceneLights = FloodLightsN;
+
         //std::cout << LightsN<<"\n";
 
         for (int i = 0; i < Engine_Max_Brushes; ++i) {
             glColor3ub(255,255,255);
-            RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN);
+            RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN,FloodLightsN);
         }
     }
 /*

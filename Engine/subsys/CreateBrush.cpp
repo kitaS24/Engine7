@@ -29,3 +29,31 @@ void CreateBrushBoundingBox(Brush &Br){
         }
     }
 }
+
+void CreateBrushBoundingBoxNormals(Brush &Br){
+    for (int i = 0; i < Br.Planes; ++i) {
+            if(Br.BoundingBox1.X > Br.BrushPlane[i].CollisionPos.X){
+                Br.BoundingBox1.X = Br.BrushPlane[i].CollisionPos.X;
+            }
+            if(Br.BoundingBox1.Y > Br.BrushPlane[i].CollisionPos.Y){
+                Br.BoundingBox1.Y = Br.BrushPlane[i].CollisionPos.Y;
+            }
+            if(Br.BoundingBox1.Z > Br.BrushPlane[i].CollisionPos.Z){
+                Br.BoundingBox1.Z = Br.BrushPlane[i].CollisionPos.Z;
+            }
+            //
+            if(Br.BoundingBox2.X < Br.BrushPlane[i].CollisionPos.X){
+                Br.BoundingBox2.X = Br.BrushPlane[i].CollisionPos.X;
+            }
+            if(Br.BoundingBox2.Y < Br.BrushPlane[i].CollisionPos.Y){
+                Br.BoundingBox2.Y = Br.BrushPlane[i].CollisionPos.Y;
+            }
+            if(Br.BoundingBox2.Z < Br.BrushPlane[i].CollisionPos.Z){
+                Br.BoundingBox2.Z = Br.BrushPlane[i].CollisionPos.Z;
+            }
+    }
+}
+void CreateBrushBoundingBoxAll(Brush &Br){
+    CreateBrushBoundingBox(Br);
+    CreateBrushBoundingBoxNormals(Br);
+}

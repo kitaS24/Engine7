@@ -158,6 +158,20 @@ GLuint CreateTx(unsigned int W,unsigned int H,unsigned char* data,bool GlLinear,
 
     return texture;
 }
+GLuint CreateDepthTx(unsigned int W,unsigned int H,float* data,bool GlLinear){
+    GLuint texture;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, W, H, 0, GL_RED, GL_FLOAT, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST+GlLinear);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST+GlLinear);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    return texture;
+}
 GLuint LoadRawTexture(std::string FilePath,int W,int H,bool Interpolate,bool RGBA){
 
     unsigned char *TxBuffer;

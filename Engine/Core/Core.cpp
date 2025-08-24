@@ -22,9 +22,9 @@
 #include "EntManager.h"
 //subsys (level 1)
 #include "CreateBrush.cpp"
-#include "Light.cpp"
 #include "Collision.cpp"
 #include "Raycast.cpp"
+#include "Light.cpp"
 #include "Particle.cpp"
 //classes
 #include "RenderBrushEnt.cpp"
@@ -48,8 +48,12 @@ void Engine(){
         }
     Materials[0].Texture = LoadBmpTexture("MissingTx.bmp",false,false);
         Materials[1].Texture = LoadBmpTexture("portal2.bmp",false,false);
+        Materials[1].TextureProperty = LoadBmpTexture("portal2Dt.bmp",false,false);
         Materials[1].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
     Materials[1].Loaded = true;
+    Materials[1].TxProperty = true;
+    Materials[1].SpecColor = {0.510,0.510,0.510};
+    Materials[1].Metal= false;
     Materials[2].Texture = LoadBmpTexture("portal2Metal.bmp",false,false);
     Materials[2].TextureProperty = LoadBmpTexture("portal2MetalDt.bmp",false,false);
     Materials[2].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
@@ -86,11 +90,12 @@ void Engine(){
     LevelEnt.push_back(std::make_unique<Ent>());
     LevelEnt.push_back(std::make_unique<WorldRender>());
     LevelEnt.push_back(std::make_unique<Particle>());
+    LevelEnt.push_back(std::make_unique<LightFlood>());
     //LevelEnt.push_back(std::make_unique<Light>());
     //LevelEnt.push_back(std::make_unique<Light>());
     //LevelEnt.push_back(std::make_unique<Light>());
     for (int i = 0; i < 10; ++i) {
-        LevelEnt.push_back(std::make_unique<Light>());
+        //LevelEnt.push_back(std::make_unique<Light>());
     }
 
     LevelEnt.push_back(std::make_unique<Player>());
@@ -153,9 +158,84 @@ void Engine(){
         LevelBrushes[0].BrushPlane[i].Uvs[1] = {0,1};
         LevelBrushes[0].BrushPlane[i].Uvs[2] = {0,0};
         LevelBrushes[0].BrushPlane[i].Uvs[3] = {1,0};
-        LevelBrushes[0].BrushPlane[i].Material = 2;
+        LevelBrushes[0].BrushPlane[i].Material = 1;
     }
     CreateBrushBoundingBox(LevelBrushes[0]);
+
+/*
+    LevelBrushes[0].BrushPlane[0].Vertex[0] = {1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[0].Vertex[1] = {-1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[0].Vertex[2] = {-1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[0].Vertex[3] = {1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[0].Used = true;
+    LevelBrushes[0].BrushPlane[0].VertexN = 4;
+    LevelBrushes[0].BrushPlane[1].Vertex[0] = {1000,1000,1000};
+    LevelBrushes[0].BrushPlane[1].Vertex[1] = {-1000,1000,1000};
+    LevelBrushes[0].BrushPlane[1].Vertex[2] = {-1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[1].Vertex[3] = {1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[1].Used = true;
+    LevelBrushes[0].BrushPlane[1].VertexN = 4;
+    LevelBrushes[0].BrushPlane[2].Vertex[0] = {-1000,1000,1000};
+    LevelBrushes[0].BrushPlane[2].Vertex[1] = {-1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[2].Vertex[2] = {-1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[2].Vertex[3] = {-1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[2].Used = true;
+    LevelBrushes[0].BrushPlane[2].VertexN = 4;
+    LevelBrushes[0].BrushPlane[3].Vertex[0] = {1000,1000,1000};
+    LevelBrushes[0].BrushPlane[3].Vertex[1] = {1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[3].Vertex[2] = {1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[3].Vertex[3] = {1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[3].Used = true;
+    LevelBrushes[0].BrushPlane[3].VertexN = 4;
+    LevelBrushes[0].BrushPlane[4].Vertex[0] = {1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[4].Vertex[1] = {-1000,1000,-1000};
+    LevelBrushes[0].BrushPlane[4].Vertex[2] = {-1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[4].Vertex[3] = {1000,-1000,-1000};
+    LevelBrushes[0].BrushPlane[4].Used = true;
+    LevelBrushes[0].BrushPlane[4].VertexN = 4;
+    LevelBrushes[0].BrushPlane[5].Vertex[0] = {1000,1000,1000};
+    LevelBrushes[0].BrushPlane[5].Vertex[1] = {-1000,1000,1000};
+    LevelBrushes[0].BrushPlane[5].Vertex[2] = {-1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[5].Vertex[3] = {1000,-1000,1000};
+    LevelBrushes[0].BrushPlane[5].Used = true;
+    LevelBrushes[0].BrushPlane[5].VertexN = 4;
+    LevelBrushes[0].Active = true;
+    LevelBrushes[0].Planes = 6;
+*/
+    LevelBrushes[1].BrushPlane[0].Normal = {0,-1,0};
+    LevelBrushes[1].BrushPlane[1].Normal = {0,1,0};
+    LevelBrushes[1].BrushPlane[2].Normal = {-1,0,0};
+    LevelBrushes[1].BrushPlane[3].Normal = {1,0,0};
+    LevelBrushes[1].BrushPlane[4].Normal = {0,0,-1};
+    LevelBrushes[1].BrushPlane[5].Normal = {0,0,1};
+
+    LevelBrushes[1].BrushPlane[0].CollisionPos = {0,1500,0};
+    LevelBrushes[1].BrushPlane[1].CollisionPos = {0,3500,0};
+    LevelBrushes[1].BrushPlane[2].CollisionPos = {-100,0,0};
+    LevelBrushes[1].BrushPlane[3].CollisionPos = {50,0,0};
+    LevelBrushes[1].BrushPlane[4].CollisionPos = {0,0,-50};
+    LevelBrushes[1].BrushPlane[5].CollisionPos = {0,0,50};
+
+    LevelBrushes[1].BrushPlane[0].Vertex[0] = {50,3500,50};
+    LevelBrushes[1].BrushPlane[0].Vertex[1] = {-50,3500,50};
+    LevelBrushes[1].BrushPlane[0].Vertex[2] = {-50,3500,-50};
+    LevelBrushes[1].BrushPlane[0].Vertex[3] = {50,3500,-50};
+    LevelBrushes[1].BrushPlane[0].Used = true;
+    LevelBrushes[1].BrushPlane[0].VertexN = 4;
+
+    for (int i = 0; i < 6; ++i) {
+        LevelBrushes[1].BrushPlane[i].Uvs[0] = {1,1};
+        LevelBrushes[1].BrushPlane[i].Uvs[1] = {0,1};
+        LevelBrushes[1].BrushPlane[i].Uvs[2] = {0,0};
+        LevelBrushes[1].BrushPlane[i].Uvs[3] = {1,0};
+        LevelBrushes[1].BrushPlane[i].Material = 0;
+        LevelBrushes[1].BrushPlane[i].Used = true;
+
+    }
+    LevelBrushes[1].BrushPlane[0].Material = 2;
+    LevelBrushes[1].Active = true;
+    LevelBrushes[1].Planes = 6;
+    CreateBrushBoundingBoxAll(LevelBrushes[1]);
 
     glfwSwapInterval(1);
     UserKeyBind.UpdateWindow(&D);
@@ -165,6 +245,7 @@ void Engine(){
         while(!glfwWindowShouldClose(D.window))
         {
 
+            glfwGetWindowSize(D.window,&D.X,&D.Y);
             if(glfwGetKey(D.window,Engine_Key_Save) ||glfwGetKey(D.window,Engine_Key_Load)){
                 if(!SaveOrLoadKeyPress){
                     if(glfwGetKey(D.window,Engine_Key_Save) ){
@@ -223,11 +304,28 @@ void Engine(){
                 Lights.enabled[i] = false;
             }
 
+            for (int i = 0; i < 8; ++i) {
+                Lights.FloodPos[i*3+0] = 0;
+                Lights.FloodPos[i*3+1] = 0;
+                Lights.FloodPos[i*3+2] = 0;
+                Lights.FloodColor[i*3+0] = 0;
+                Lights.FloodColor[i*3+1] = 0;
+                Lights.FloodColor[i*3+2] = 0;
+                Lights.FloodDir[i*3+0] = 0;
+                Lights.FloodDir[i*3+1] = 0;
+                Lights.FloodDir[i*3+2] = 0;
+                Lights.FloodSize[i*3+0] = 0;
+                Lights.FloodSize[i*3+1] = 0;
+                Lights.FloodSize[i*3+2] = 0;
+                Lights.FloodEnabled[i] = false;
+            }
+
             for (int i = 0; i < 6; ++i) {
                 //LevelBrushes[0].BrushPlane[i].Material = 2+(int(T*0.5)%2);
             }
 
             //rendering triangle with color (255,255,255) or with different colors for each vertex
+
             EntPreRender(LevelEnt);
             EntRender3D(LevelEnt);
             KillAllRequestedObjs(LevelEnt);

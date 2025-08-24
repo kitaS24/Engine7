@@ -56,3 +56,62 @@ class Light: public Ent{
     }
 
 };
+
+
+class LightFlood: public Ent{
+
+    //Vec3 Color = {0.8,1,1};
+    Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
+    float Br = 0.5;
+    Vec3 LSize = {10000,50000,10000};
+    Vec3 Dir = {0.05,0,0};
+    bool baked = false;
+    GLuint DepthTx = 0;
+
+    std::string GetDebugName() override {
+        return "LightFlood";
+    }
+    void CreateVarWindow(int cId,Vec2I W) override {
+        ImGui::Begin((GetDebugName()+"##"+std::to_string(cId)).c_str());
+        ImGui::SetWindowPos(ImVec2(0,W.Y-200));
+        ImGui::SetWindowSize(ImVec2(200,200));
+        ImGui::Text("light entity");
+        ImGui::ColorEdit3("Light Color",&Color.X);
+        ImGui::SliderFloat("light Brightness",&Br,0,20);
+        ImGui::SliderFloat("DirX",&Dir.X,-1,1);
+        ImGui::SliderFloat("DirZ",&Dir.Z,-1,1);
+
+        ImGui::SliderFloat("SizeX",&LSize.X,0,1000);
+        ImGui::SliderFloat("SizeZ",&LSize.Z,0,1000);
+        ImGui::End();
+    }
+    GLuint Sh;
+    void PreRender() override{
+        //Vec3 Rot = {0,3500,0};
+        if(!baked){
+            baked = true;
+            Sh = OpenGlCreateShaderProgram("shaders/Light.vert.glsl","shaders/Light.frag.glsl");
+            DepthTx =BakeFloodLight({0,4000,0},LSize,Dir,Brushes,8,Sh,{float((*Display).X),float((*Display).Y)});
+
+        }
+
+        AddFloodLight(LightsPtr, {0,4000,0},{Color.X*Br,Color.Y*Br,Color.Z*Br},LSize,Dir,DepthTx);
+    }
+    /*
+    void Render3D() override{
+        Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
+        glColor3ub(255,0,0);
+        glPointSize(4);
+        glBegin(GL_POINTS);
+        glVertex3f(Pos.X+Rot.X,Pos.Y+Rot.Y,Pos.Z+Rot.Z);
+        glEnd();
+    }
+    float Think(float TPS) override{
+        //ThinkTimes = ThinkTimes+1;
+        //if(ThinkTimes >1){
+        //    KillSelf();
+        //}
+        return 10;
+    }*/
+
+};

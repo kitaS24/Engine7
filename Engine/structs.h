@@ -79,6 +79,13 @@ struct GpuLights{
     float Pos[Engine_Max_Lights*3];
     float Color[Engine_Max_Lights*3];
     bool enabled[Engine_Max_Lights];
+
+    float FloodPos[8*3];
+    float FloodColor[8*3];
+    float FloodSize[8*3];
+    float FloodDir[8*3];
+    GLuint Depth[8];
+    bool FloodEnabled[8];
 };
 
 struct DISPLAY{

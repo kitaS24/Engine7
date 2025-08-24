@@ -13,6 +13,7 @@
 * PBR
 ### WORKING ON
 * player controller
+* flood light
 ### TODO
 * trenchbroom map compilation
 * static prop creation,compilation
