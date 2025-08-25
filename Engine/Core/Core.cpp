@@ -189,8 +189,13 @@ void Engine(){
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             EntPreRender(LevelEnt);
             EntRender3D(LevelEnt);
-            KillAllRequestedObjs(LevelEnt);
 
+
+            //OpenGlBeginFrame2D(D.X,D.Y,-1,1);
+            //glViewport(0, 0, D.X, D.Y);
+           // EntRender2D(LevelEnt);
+
+            KillAllRequestedObjs(LevelEnt);
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             //ending rendering

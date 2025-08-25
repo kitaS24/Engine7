@@ -64,7 +64,7 @@ return kD*Color/3.14159265;
 vec2 FloodLightCollision(vec3 FPos,vec3 FSize,vec3 FVec,vec3 Point){
 //returns UV
 float Ydist = FPos.y - Point.y;
-vec3 FPosNew = FPos+vec3(FVec.x*Ydist,0,FVec.z*Ydist);
+vec3 FPosNew = FPos+vec3(FVec.x*-Ydist,0,FVec.z*-Ydist);
 vec2 p = vec2(Point.x-FPosNew.x,Point.z-FPosNew.z);
 return p/vec2(FSize.x,FSize.z)/2;
 }
@@ -72,6 +72,7 @@ return p/vec2(FSize.x,FSize.z)/2;
 float SampleNearestDepth(vec3 FPos,vec2 UV){
 float A = 0;
 float D = 1.0f/512;
+float V = ((1-clamp(dot(Normal,vec3(0,1,0)),0,1))*100);
 /*
 float Dt[4];
 if(-(texture2D(FloodD,vec2(UV.x,UV.y))).x+FPos.y<= Pos.y){Dt[0] = 1;}else{Dt[0] = 0;}
@@ -85,19 +86,19 @@ float y = (UV.y*64.0f)-floor(UV.y*64.0f);
 return mix(mix(Dt[0],Dt[1],x),mix(Dt[3],Dt[2],x),y);
 */
 
-if(-(texture2D(FloodD,UV)).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,UV)).x+FPos.y+V<= Pos.y){A = A +1;}
 
 //return A;
 
-if(-(texture2D(FloodD,vec2(UV.x+D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x-D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y+D))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x,UV.y-D))).x+FPos.y+V<= Pos.y){A = A +1;}
 
-if(-(texture2D(FloodD,vec2(UV.x-D,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x+D,UV.y-D))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x+D,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
-if(-(texture2D(FloodD,vec2(UV.x-D,UV.y+D))).x+FPos.y<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y-D))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y-D))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x+D,UV.y+D))).x+FPos.y+V<= Pos.y){A = A +1;}
+if(-(texture2D(FloodD,vec2(UV.x-D,UV.y+D))).x+FPos.y+V<= Pos.y){A = A +1;}
 /*
 if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
 if(-(texture2D(FloodD,vec2(UV.x-D-D,UV.y))).x+FPos.y<= Pos.y){A = A +1;}
@@ -129,10 +130,12 @@ vec3 C = vec3(0.005,0.005,0.005);
 
     vec2 FloodUV = FloodLightCollision(FloodPos,FloodSize,FloodDir,Pos);
     FloodUV = FloodUV +0.5;
-    vec3 LightVec = normalize(vec3(FloodDir.x,FloodPos.y-Pos.y,FloodDir.z));
+    vec3 LightVec = normalize(FloodDir-Pos);
+    //vec3 LightVec = normalize(vec3(FloodDir.x,FloodPos.y-Pos.y,FloodDir.z));
     float SurfaceDot = dot(Normal,LightVec);
-    float IClDot = clamp(SurfaceDot,0,1);
-    //return vec3(((texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)/5000,0,0);
+    float IClDot =clamp(SurfaceDot,0,1);
+    //return vec3(((((texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)+FloodPos.y)-Pos.y)/10000+5000,0,0);
+    //return vec3((FloodPos.y-Pos.y-(texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)/10000,0,0);
 
     //return FloodCol[i];
 

@@ -67,6 +67,14 @@ void EntRender3D(std::vector<std::unique_ptr<Ent>> &Ent){
     }
 }
 
+void EntRender2D(std::vector<std::unique_ptr<Ent>> &Ent){
+    for (int i = 0; i < Ent.size(); i++) {
+        if (Ent[i]) {
+            Ent[i]->Render2D();
+        }
+    }
+}
+
 
 void EntSave(std::vector<std::unique_ptr<Ent>> &Ent,std::ofstream &File){
     for (int i = 0; i < Ent.size(); i++) {

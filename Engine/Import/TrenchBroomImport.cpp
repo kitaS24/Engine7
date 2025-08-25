@@ -43,12 +43,12 @@ void GetTBMapData(Vec3 *V,Vec3 *TC,Vec3 *N,std::string File,float Scale){
     f.SetDivider(' ');
 
     std::string ln;
-    // Read from the text file
+
     std::ifstream Read(File);
 
-    // Use a while loop together with the getline() function to read the file line by line
+
     while (getline (Read, ln)) {
-        // Output the text from the file
+
         f.SetStr(ln);
         if(f.GetText(0) == "v"){
             *(V +IndexV )={stof(f.GetText(1))*Scale,stof(f.GetText(2))*Scale,stof(f.GetText(3))*Scale};
@@ -64,7 +64,7 @@ void GetTBMapData(Vec3 *V,Vec3 *TC,Vec3 *N,std::string File,float Scale){
         }
     }
 
-    // Close the file
+
     Read.close();
 
 }
@@ -94,10 +94,10 @@ void LoadTBMap(Brush *Brushes){
     cf.SetDivider('/');
 
     std::string ln;
-    // Read from the text file
+
     std::ifstream Read("test.obj");
 
-    // Use a while loop together with the getline() function to read the file line by line
+
     while (getline (Read, ln)) {
         // Output the text from the file
         f.SetStr(ln);
@@ -115,7 +115,7 @@ void LoadTBMap(Brush *Brushes){
         if(f.GetText(0) == "usemtl"){
             BrushSide = BrushSide+1;
 
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Material = 2;
+            (*(Brushes+Brush)).BrushPlane[BrushSide].Material = 1;
             //std::cout << "Texture:"<<f.GetText(1)<<"\n";
         }
         if(f.GetText(0) == "f"){
@@ -123,7 +123,7 @@ void LoadTBMap(Brush *Brushes){
                 cf.SetStr(f.GetText((i+1)*2));
 
                 (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].X = VertexDt[stoi(cf.GetText(0))-1].X;
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0))-1].Y;
+                (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0))-1].Y-1000;
                 (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].Z = VertexDt[stoi(cf.GetText(0))-1].Z;
 
                 (*(Brushes+Brush)).BrushPlane[BrushSide].Uvs[i].X = TextureDt[stoi(cf.GetText(1))-1].X;
@@ -162,7 +162,7 @@ void LoadTBMap(Brush *Brushes){
         CreateBrushBoundingBoxAll((*(Brushes+Brush)));
     }
 
-    // Close the file
+
     Read.close();
 
 

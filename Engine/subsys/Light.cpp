@@ -154,7 +154,7 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,
 
     int Size = 2048*2;
     GLuint tx;
-
+    glViewport(0, 0, Size, Size);
     glGenTextures(1, &tx);
     glBindTexture(GL_TEXTURE_2D, tx);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, Size, Size, 0, GL_RED, GL_FLOAT, nullptr);
@@ -165,9 +165,10 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     GLuint fbo;
+
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glViewport(0, 0, Size, Size);
+
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tx, 0);
     GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
@@ -182,7 +183,7 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,
     OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-LightSize.X/2, LightSize.X/2, LightSize.Z/2, -LightSize.Z/2, -1, 100000);
+    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, -1, 100000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -201,28 +202,7 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //glfwGetWindowSize()
     glViewport(0, 0, WindowSize.X, WindowSize.Y);
-/*
-    OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
-    OpenGlBeginFrame2D(800,600,-1,1);
-    glViewport(0, 0, 800, 600);
-    glActiveTexture(GL_TEXTURE0);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, tx);
-    glUseProgram(NULL);
-    glColor3ub(255,255,255);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0,0);
-    glVertex3f(0,0,1);
-    glTexCoord2f(1,0);
-    glVertex3f(600,0,1);
-    glTexCoord2f(1,1);
-    glVertex3f(600,600,1);
-    glTexCoord2f(0,1);
-    glVertex3f(0,600,1);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-*/
-    return tx;
     //return 0;
 
+    return tx;
 }
