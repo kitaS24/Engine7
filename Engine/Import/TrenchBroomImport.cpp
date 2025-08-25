@@ -115,7 +115,7 @@ void LoadTBMap(Brush *Brushes){
         if(f.GetText(0) == "usemtl"){
             BrushSide = BrushSide+1;
 
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Material = 1;
+            (*(Brushes+Brush)).BrushPlane[BrushSide].Material = 2;
             //std::cout << "Texture:"<<f.GetText(1)<<"\n";
         }
         if(f.GetText(0) == "f"){

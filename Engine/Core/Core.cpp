@@ -18,6 +18,7 @@
 #include "math.cpp"
 //subsys (level 0)
 #include "KeyMap.cpp"
+#include "iniRead.cpp"
 //
 #include "EntManager.h"
 //subsys (level 1)
@@ -27,6 +28,7 @@
 #include "Light.cpp"
 #include "Particle.cpp"
 #include "TextFunctions.cpp"
+#include "TextureLoad.cpp"
 //import
 #include "TrenchBroomImport.cpp"
 //classes
@@ -39,6 +41,8 @@
 #include "Vars.cpp"
 
 void Engine(){
+    IniRead Ini;
+
     float T = 0;
     float FPS = 0;
     float LastFrameT = 0;
@@ -49,34 +53,10 @@ void Engine(){
         if(!CreateGlWindow(D.window,800,600,"Test")){
             exit(-1);
         }
-    Materials[0].Texture = LoadBmpTexture("MissingTx.bmp",false,false);
-        Materials[1].Texture = LoadBmpTexture("portal2.bmp",false,false);
-        Materials[1].TextureProperty = LoadBmpTexture("portal2Dt.bmp",false,false);
-        Materials[1].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
-    Materials[1].Loaded = true;
-    Materials[1].TxProperty = true;
-    Materials[1].SpecColor = {0.510,0.510,0.510};
-    Materials[1].Metal= false;
-    Materials[2].Texture = LoadBmpTexture("portal2Metal.bmp",false,false);
-    Materials[2].TextureProperty = LoadBmpTexture("portal2MetalDt.bmp",false,false);
-    Materials[2].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
-    Materials[2].Loaded = true;
-    Materials[2].TxProperty = true;
-    Materials[2].SpecColor = {0.549,0.503,0.364};
-    Materials[2].Metal= true;
-    Materials[3].Texture = LoadBmpTexture("portal2Metal.bmp",false,false);
-    Materials[3].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
-    Materials[3].Loaded = true;
-    Materials[4].Texture = LoadBmpTexture("plastic1.bmp",false,false);
-    Materials[4].TextureProperty = LoadBmpTexture("plastic1Dt.bmp",false,false);
-    Materials[4].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
-    Materials[4].Loaded = true;
-    Materials[4].TxProperty = true;
-    Materials[5].Texture = LoadBmpTexture("test.bmp",false,false);
-    Materials[5].TextureProperty = LoadBmpTexture("testDt.bmp",false,false);
-    Materials[5].Shader = OpenGlCreateShaderProgram("shaders/base.vert.glsl","shaders/pbr.frag.glsl");
-    Materials[5].Loaded = true;
-    Materials[5].TxProperty = true;
+    Materials[0].Texture = LoadBmpTexture("textures/MissingTx.bmp",false,false);
+
+    LoadMaterials(Materials,"textures/textures.ini");
+
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
