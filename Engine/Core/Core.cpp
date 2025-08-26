@@ -29,15 +29,16 @@
 #include "Particle.cpp"
 #include "TextFunctions.cpp"
 #include "TextureLoad.cpp"
-//import
-#include "TrenchBroomImport.cpp"
 //classes
 #include "RenderBrushEnt.cpp"
 #include "PlayerEnt.cpp"
 #include "LightEnt.cpp"
 #include "particleEnt.cpp"
 #include "EntManager.cpp"
-
+//subsys (level 2)
+#include "save.cpp"
+//import
+#include "TrenchBroomImport.cpp"
 #include "Vars.cpp"
 
 void Engine(){
@@ -88,7 +89,9 @@ void Engine(){
     UserKeyBind.UpdateWindow(&D);
     UserKeyBind.SetupGlfwKeys();
 
-    LoadTBMap(LevelBrushes,"PipeMap.obj","textures/textures.ini");
+    LoadTBMap(LevelBrushes,"PipeMap.obj","textures/textures.ini","saves/test1.gems",LevelEnt);
+    ImportEnts("PipeMap.map",LevelEnt);
+    EngineSave(&LevelEnt,LevelBrushes,"saves/test1.gems");
 
     //UserKeyBind.Map('W',GLFW_KEY_G);UserKeyBind.Map('w',GLFW_KEY_G);
 
@@ -99,21 +102,10 @@ void Engine(){
             if(glfwGetKey(D.window,Engine_Key_Save) ||glfwGetKey(D.window,Engine_Key_Load)){
                 if(!SaveOrLoadKeyPress){
                     if(glfwGetKey(D.window,Engine_Key_Save) ){
-                        std::ofstream SaveMap{"saves/test1.gems", std::ios::binary};
-                        EntSaveAddObjName(LevelEnt,SaveMap);
-                        EntSave(LevelEnt,SaveMap);
-                        SaveMap.close();
+                        EngineSave(&LevelEnt,LevelBrushes,"saves/test1.gems");
                     }
                     if(glfwGetKey(D.window,Engine_Key_Load) ){
-                        std::ifstream LoadMap{"saves/test1.gems", std::ios::binary};
-                        if (!LoadMap.is_open()) {
-                            std::cout << "File not open\n";
-                            std::cout << "File is absent from path : "<<"saves/test1.gems" <<"\n";
-                            //exit(3);
-                        }
-                        LevelEnt.clear();
-                        EntLoadCreate(LoadMap,LevelEnt);
-                        EntLoad(LevelEnt,LoadMap);
+                        EngineLoad(&LevelEnt,LevelBrushes,"saves/test1.gems");
                     }
                 }
                 SaveOrLoadKeyPress = true;

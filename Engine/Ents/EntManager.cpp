@@ -2,8 +2,6 @@
 // Created by kitaS24 on 18.08.2025.
 //
 
-#include "EntUser.h"
-
 void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2I WindowSize){
     ImGui::Begin("ents");
     ImGui::SetWindowPos(ImVec2(0,0));
@@ -76,38 +74,6 @@ void EntRender2D(std::vector<std::unique_ptr<Ent>> &Ent){
 }
 
 
-void EntSave(std::vector<std::unique_ptr<Ent>> &Ent,std::ofstream &File){
-    for (int i = 0; i < Ent.size(); i++) {
-        if (Ent[i]) {
-            Ent[i]->Save(File);
-        }
-    }
-}
-void EntSaveAddObjName(std::vector<std::unique_ptr<Ent>> &Ent, std::ofstream &File){
-    std::string N = "";
-    char cN[64] ="";//char name
-    unsigned int Ents = Ent.size();
-    File.write(reinterpret_cast<char *>(&Ents), sizeof(Ents));
-    for (int i = 0; i < Ent.size(); i++) {
-        if (Ent[i]) {
-            N = Ent[i]->GetDebugName();
-            for (int j = 0; j < 64; ++j) {
-                cN[j] = 0;
-            }
-            for (int j = 0; j < 64 && j < N.length(); ++j) {
-                cN[j] = N.at(j);
-            }
-            File.write(reinterpret_cast<char *>(&cN), 64);
-        }
-    }
-}
-void EntLoad(std::vector<std::unique_ptr<Ent>> &Ent,std::ifstream &File){
-    for (int i = 0; i < Ent.size(); i++) {
-        if (Ent[i]) {
-            Ent[i]->Load(File);
-        }
-    }
-}
 
 //
 void KillAllRequestedObjs(std::vector<std::unique_ptr<Ent>> &Ent){

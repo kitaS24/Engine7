@@ -12,13 +12,12 @@
 * level loading/saving (quick save/load)
 * PBR
 * Flood Light (with shadows)
-* trenchbroom map loading (obj)
+* trenchbroom map loading and saving (obj,.map)
+* _level loading_
 ### WORKING ON
 * player controller
-* trenchbroom map compilation
 ### TODO
 
 * static prop creation,compilation
 * audio
 * GUI
-* level loading
