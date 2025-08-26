@@ -53,9 +53,10 @@ void Engine(){
         if(!CreateGlWindow(D.window,800,600,"Test")){
             exit(-1);
         }
+        LoadMaterials(Materials,"textures/textures.ini");
     Materials[0].Texture = LoadBmpTexture("textures/MissingTx.bmp",false,false);
 
-    LoadMaterials(Materials,"textures/textures.ini");
+
 
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -87,7 +88,7 @@ void Engine(){
     UserKeyBind.UpdateWindow(&D);
     UserKeyBind.SetupGlfwKeys();
 
-    LoadTBMap(LevelBrushes);
+    LoadTBMap(LevelBrushes,"PipeMap.obj","textures/textures.ini");
 
     //UserKeyBind.Map('W',GLFW_KEY_G);UserKeyBind.Map('w',GLFW_KEY_G);
 

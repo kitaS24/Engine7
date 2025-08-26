@@ -69,14 +69,51 @@ void GetTBMapData(Vec3 *V,Vec3 *TC,Vec3 *N,std::string File,float Scale){
 
 }
 
-void LoadTBMap(Brush *Brushes){
+int TBSearchMaterial(std::string *MaterialName,int Textures,std::string TBMaterial){
+    std::string TBMaterialClip = "";
+    for (int i = 0; i < TBMaterial.length(); ++i) {
+        if(TBMaterial.at(i) == '/' || TBMaterial.at(i) == '\\'){
+            TBMaterialClip = "";
+        }else{
+            TBMaterialClip.append(1,TBMaterial.at(i));
+        }
+    }
+    if(TBMaterialClip == "__TB_empty"){
+        return 0;
+    }
+    //std::cout << TBMaterial<<"\n";
+    for (int i = 0; i < Textures; ++i) {
+        if(TBMaterialClip == *(MaterialName+i)){
+            return i+2;
+        }
+    }
+    return 1;
+}
+
+void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
     // loads trench broom map from obj
+
+    int TextureId = 0;
+    std::string materialNames[Engine_Max_Materials] = {};
+    std::string IniStr = "";
+    IniRead Ini;
+
+    Ini.SearchHeader(MaterialName, "material");
+    for (int i = 0; i < Engine_Max_Materials; ++i){
+        IniStr = Ini.ListHeaderContent();
+        if (IniStr.at(0) == '!') {
+            break;
+        }
+        materialNames[TextureId] = IniStr;
+        TextureId = TextureId + 1;
+    }
+
     unsigned int V=0;
     unsigned int TC=0;
     unsigned int N=0;
     int Brush = -1;
     int BrushSide = -1;
-    GetTBMapInfo(V,TC,N,"test.obj");
+    GetTBMapInfo(V,TC,N,MapName);
 
     Vec3 * VertexDt;
     VertexDt = new Vec3 [V];
@@ -85,7 +122,7 @@ void LoadTBMap(Brush *Brushes){
     Vec3 * NormalDt;
     NormalDt = new Vec3 [N];
 
-    GetTBMapData(VertexDt,TextureDt,NormalDt,"test.obj",25.4);
+    GetTBMapData(VertexDt,TextureDt,NormalDt,MapName,25.4);
 
 
     TextSplit f;
@@ -95,7 +132,7 @@ void LoadTBMap(Brush *Brushes){
 
     std::string ln;
 
-    std::ifstream Read("test.obj");
+    std::ifstream Read(MapName);
 
 
     while (getline (Read, ln)) {
@@ -105,18 +142,19 @@ void LoadTBMap(Brush *Brushes){
             if(Brush >=0){
                 (*(Brushes+Brush)).Active = true;
                 (*(Brushes+Brush)).Planes = BrushSide+1;
-                std::cout << (*(Brushes+Brush)).Planes<<"\n";
+                //std::cout << (*(Brushes+Brush)).Planes<<"\n";
                 CreateBrushBoundingBoxAll((*(Brushes+Brush)));
             }
             Brush = Brush+1;
             BrushSide =-1;
-            std::cout << "Brush:"<<Brush<<"\n";
+            //std::cout << "Brush:"<<Brush<<"\n";
         }
         if(f.GetText(0) == "usemtl"){
             BrushSide = BrushSide+1;
 
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Material = 2;
-            //std::cout << "Texture:"<<f.GetText(1)<<"\n";
+            (*(Brushes+Brush)).BrushPlane[BrushSide].Material =
+                    TBSearchMaterial(materialNames,Engine_Max_Materials,f.GetText(1));
+            std::cout << "Texture:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].Material<<"\n";
         }
         if(f.GetText(0) == "f"){
             for (int i = 0;i<16 && (!f.GetTextOOB((i)*2));++i){
@@ -158,7 +196,7 @@ void LoadTBMap(Brush *Brushes){
     if(Brush >=0){
         (*(Brushes+Brush)).Active = true;
         (*(Brushes+Brush)).Planes = BrushSide+1;
-        std::cout << (*(Brushes+Brush)).Planes<<"\n";
+       //std::cout << (*(Brushes+Brush)).Planes<<"\n";
         CreateBrushBoundingBoxAll((*(Brushes+Brush)));
     }
 

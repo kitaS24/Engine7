@@ -12,6 +12,7 @@
 * level loading/saving (quick save/load)
 * PBR
 * Flood Light (with shadows)
+* trenchbroom map loading (obj)
 ### WORKING ON
 * player controller
 * trenchbroom map compilation
