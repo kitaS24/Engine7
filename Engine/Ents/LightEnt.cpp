@@ -5,7 +5,7 @@
 class Light: public Ent{
 
     //Vec3 Color = {0.8,1,1};
-    Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
+    Vec3 Color = {0,0,0};//{int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
     float Br = 8;
     int CustomT = rand()%1000;
     int ThinkTimes = 0;
@@ -24,16 +24,16 @@ class Light: public Ent{
     }
 
     void PreRender() override{
-        Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
+        //Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
         //Vec3 Rot = {0,3500,0};
-        AddLight(LightsPtr, Vec3Add(Pos,Rot),{Color.X*Br,Color.Y*Br,Color.Z*Br});
+        AddLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br});
     }
     void Render3D() override{
-        Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
+        //Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
         glColor3ub(255,0,0);
         glPointSize(4);
         glBegin(GL_POINTS);
-        glVertex3f(Pos.X+Rot.X,Pos.Y+Rot.Y,Pos.Z+Rot.Z);
+        glVertex3f(Pos.X,Pos.Y,Pos.Z);
         glEnd();
     }
     float Think(float TPS) override{
@@ -53,6 +53,26 @@ class Light: public Ent{
         File.read(reinterpret_cast<char *>(&CustomT), sizeof(CustomT));
         File.read(reinterpret_cast<char *>(&Color), sizeof(Color));
         File.read(reinterpret_cast<char *>(&Br), sizeof(Br));
+    }
+    void SetVar(std::string Var,std::string Val) override{
+        if(Var == "color"){
+            TextSplit cf;
+            cf.SetDivider(' ');
+            cf.SetStr(Val);
+            Color.X = stof(cf.GetText(0));
+            Color.Y = stof(cf.GetText(1));
+            Color.Z = stof(cf.GetText(2));
+            Br = 1;
+        }
+        if(Var == "origin"){
+            TextSplit cf;
+            cf.SetDivider(' ');
+            cf.SetStr(Val);
+            Pos.X = stof(cf.GetText(0))*Engine_Map_Scale;
+            Pos.Y = stof(cf.GetText(2))*Engine_Map_Scale;
+            Pos.Z = stof(cf.GetText(1))*Engine_Map_Scale;
+            Br = 1;
+        }
     }
 
 };
@@ -169,5 +189,6 @@ class LightFlood: public Ent{
         //}
         return 10;
     }*/
+
 
 };

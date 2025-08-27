@@ -40,21 +40,60 @@ void EntLoad(std::vector<std::unique_ptr<Ent>> &Ent,std::ifstream &File){
 
 void SaveBrushes(Brush *Brushes, std::ofstream &File){
     int BrushN = 0;
+    Brush B = {};
+    BrushSave BS = {};
     for (int i = 0; i < Engine_Max_Brushes; ++i) {
+        BrushN = i;
         if(!((*(Brushes+i)).Active)){
-            BrushN = i+1;
+            break;
         }
     }
     File.write(reinterpret_cast<char *>(&BrushN), sizeof(BrushN));
     for (int i = 0; i < BrushN; ++i) {
-        File.write(reinterpret_cast<char *>(&(*(Brushes+i))), sizeof((*(Brushes+i))));
+
+        B = *(Brushes+i);
+        BS.Planes = B.Planes;
+        BS.CollisionType = B.CollisionType;
+        BS.Active = B.Active;
+        BS.TransformMatrix = B.TransformMatrix;
+        for (int j = 0; j < 3; ++j) {
+            BS.RotationMatrix[j] = B.RotationMatrix[j];
+        }
+        BS.Rotation = B.Rotation;
+        BS.BoundingBox1 = B.BoundingBox1;
+        BS.BoundingBox2 = B.BoundingBox2;
+
+        File.write(reinterpret_cast<char *>(&BS), sizeof(BrushSave));
+        for (int j = 0; j < B.Planes; ++j) {
+            File.write(reinterpret_cast<char *>(&B.BrushPlane[j]), sizeof(BrushSave));
+        }
     }
 }
 void LoadBrushes(Brush *Brushes, std::ifstream &File){
     int BrushN = 0;
+
+    BrushSave BS = {};
     File.read(reinterpret_cast<char *>(&BrushN), sizeof(BrushN));
     for (int i = 0; i < BrushN; ++i) {
-        File.read(reinterpret_cast<char *>(&(*(Brushes+i))), sizeof((*(Brushes+i))));
+        Brush &B = *(Brushes+i);
+
+        File.read(reinterpret_cast<char *>(&BS), sizeof(BrushSave));
+
+        B.Planes = BS.Planes;
+        B.CollisionType = BS.CollisionType;
+        B.Active = BS.Active;
+        B.TransformMatrix = BS.TransformMatrix;
+        for (int j = 0; j < 3; ++j) {
+            B.RotationMatrix[j] = BS.RotationMatrix[j];
+        }
+        B.Rotation = BS.Rotation;
+        B.BoundingBox1 = BS.BoundingBox1;
+        B.BoundingBox2 = BS.BoundingBox2;
+
+        for (int j = 0; j < B.Planes; ++j) {
+            File.read(reinterpret_cast<char *>(&B.BrushPlane[j]), sizeof(BrushSide));
+        }
+
         //File.write(reinterpret_cast<char *>(&(*(Brushes+i))), sizeof((*(Brushes+i))));
     }
 }

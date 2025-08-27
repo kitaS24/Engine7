@@ -138,6 +138,12 @@ public:
         //Called when rendering (3d) begins
 
     }
+
+    virtual void SetVar(std::string Var,std::string Val){
+        //called when map is loaded with trenchbroom and var needs to be set
+        //low case
+
+    }
 };
 
 #endif //ENGINE7_ENTMANAGER_H

@@ -5,6 +5,9 @@
 #ifndef ENGINE7_STRUCTS_H
 #define ENGINE7_STRUCTS_H
 
+
+#define Engine_Brush_Planes 16
+
 struct EntAction{
     int ActionType;
     unsigned int activator;
@@ -53,7 +56,19 @@ struct BrushSide{
 };
 
 struct Brush{
-    BrushSide BrushPlane[32];
+    BrushSide BrushPlane[Engine_Brush_Planes];
+    unsigned int Planes;
+    int CollisionType;
+    bool Active;
+    Vec3 TransformMatrix;
+    Vec3 RotationMatrix[3];
+    Vec3 Rotation;
+
+    Vec3I BoundingBox1;
+    Vec3I BoundingBox2;
+};
+
+struct BrushSave{
     unsigned int Planes;
     int CollisionType;
     bool Active;

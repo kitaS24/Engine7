@@ -5,6 +5,26 @@
 #ifndef ENGINE7_ENTUSER_H
 #define ENGINE7_ENTUSER_H
 
+bool EntCreate(std::string Str,std::vector<std::unique_ptr<Ent>> &Ent){
+    if(Str == "Particle"){
+        Ent.push_back(std::make_unique<Particle>());
+        return true;
+    }
+    if(Str == "Light"){
+        Ent.push_back(std::make_unique<Light>());
+        return true;
+    }
+    if(Str == "Player"){
+        Ent.push_back(std::make_unique<Player>());
+        return true;
+    }
+    if(Str == "WorldRender"){
+        Ent.push_back(std::make_unique<WorldRender>());
+        return true;
+    }
+    return false;
+}
+
 void EntLoadCreate(std::ifstream &File,std::vector<std::unique_ptr<Ent>> &Ent){
     unsigned int Ents = 0;
     char NameData[64] = {};
@@ -20,19 +40,9 @@ void EntLoadCreate(std::ifstream &File,std::vector<std::unique_ptr<Ent>> &Ent){
                 NameStr.append(1,NameData[j]);
             }
         }
-        if(NameStr == "Particle"){
-            Ent.push_back(std::make_unique<Particle>());
-        }
-        if(NameStr == "Light"){
-            Ent.push_back(std::make_unique<Light>());
-        }
-        if(NameStr == "Player"){
-            Ent.push_back(std::make_unique<Player>());
-        }
-        if(NameStr == "WorldRender"){
-            Ent.push_back(std::make_unique<WorldRender>());
-        }
+        EntCreate(NameStr,Ent);
     }
 }
+
 
 #endif //ENGINE7_ENTUSER_H

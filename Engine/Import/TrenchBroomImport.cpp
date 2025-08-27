@@ -90,7 +90,7 @@ int TBSearchMaterial(std::string *MaterialName,int Textures,std::string TBMateri
     return 1;
 }
 
-void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
+void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::string SaveName,std::vector<std::unique_ptr<Ent>> &LevelEnt){
     // loads trench broom map from obj
 
     int TextureId = 0;
@@ -122,7 +122,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
     Vec3 * NormalDt;
     NormalDt = new Vec3 [N];
 
-    GetTBMapData(VertexDt,TextureDt,NormalDt,MapName,25.4);
+    GetTBMapData(VertexDt,TextureDt,NormalDt,MapName,Engine_Map_Scale);
 
 
     TextSplit f;
@@ -149,6 +149,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
             BrushSide =-1;
             //std::cout << "Brush:"<<Brush<<"\n";
         }
+        if(BrushSide<Engine_Brush_Planes){
         if(f.GetText(0) == "usemtl"){
             BrushSide = BrushSide+1;
 
@@ -156,35 +157,36 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
                     TBSearchMaterial(materialNames,Engine_Max_Materials,f.GetText(1));
             std::cout << "Texture:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].Material<<"\n";
         }
-        if(f.GetText(0) == "f"){
-            for (int i = 0;i<16 && (!f.GetTextOOB((i)*2));++i){
-                cf.SetStr(f.GetText((i+1)*2));
+        if(f.GetText(0) == "f") {
+            for (int i = 0; i < 16 && (!f.GetTextOOB((i) * 2)); ++i) {
+                cf.SetStr(f.GetText((i + 1) * 2));
 
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].X = VertexDt[stoi(cf.GetText(0))-1].X;
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0))-1].Y-1000;
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[i].Z = VertexDt[stoi(cf.GetText(0))-1].Z;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].X = VertexDt[stoi(cf.GetText(0)) - 1].X;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0)) - 1].Y;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Z = VertexDt[stoi(cf.GetText(0)) - 1].Z;
 
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Uvs[i].X = TextureDt[stoi(cf.GetText(1))-1].X;
-                (*(Brushes+Brush)).BrushPlane[BrushSide].Uvs[i].Y = TextureDt[stoi(cf.GetText(1))-1].Y;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].X = TextureDt[stoi(cf.GetText(1)) - 1].X;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].Y = TextureDt[stoi(cf.GetText(1)) - 1].Y;
 
 
-                (*(Brushes+Brush)).BrushPlane[BrushSide].VertexN = i+1;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN = i + 1;
                 //std::cout << "Data:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].VertexN<<"\n";
             }
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Used = true;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].Used = true;
 
             cf.SetStr(f.GetText(2));
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Normal.X = NormalDt[stoi(cf.GetText(2))-1].X;
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Normal.Y = NormalDt[stoi(cf.GetText(2))-1].Y;
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Normal.Z = NormalDt[stoi(cf.GetText(2))-1].Z;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.X = NormalDt[stoi(cf.GetText(2)) - 1].X;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Y = NormalDt[stoi(cf.GetText(2)) - 1].Y;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Z = NormalDt[stoi(cf.GetText(2)) - 1].Z;
 
             //(*(Brushes+Brush)).BrushPlane[BrushSide].Normal = {0,-1,0};
 
 
 
-            (*(Brushes+Brush)).BrushPlane[BrushSide].CollisionPos.X = (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[0].X;
-            (*(Brushes+Brush)).BrushPlane[BrushSide].CollisionPos.Y = (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[0].Y;
-            (*(Brushes+Brush)).BrushPlane[BrushSide].CollisionPos.Z = (*(Brushes+Brush)).BrushPlane[BrushSide].Vertex[0].Z;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.X = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].X;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Y = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Y;
+            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Z = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Z;
+        }
             /*
             std::cout <<"X:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].CollisionPos.X<<
                       "|Y:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].CollisionPos.Y<<
@@ -196,6 +198,9 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
     if(Brush >=0){
         (*(Brushes+Brush)).Active = true;
         (*(Brushes+Brush)).Planes = BrushSide+1;
+        if((*(Brushes+Brush)).Planes >Engine_Brush_Planes){
+            (*(Brushes+Brush)).Planes =Engine_Brush_Planes;
+        }
        //std::cout << (*(Brushes+Brush)).Planes<<"\n";
         CreateBrushBoundingBoxAll((*(Brushes+Brush)));
     }
@@ -208,7 +213,83 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName){
     delete[] TextureDt;
     delete[] NormalDt;
 
+    //EngineSave(LevelEnt,Brushes,SaveName);
+
     std::cout << "V:"<<V<<"\n";
     std::cout << "TC:"<<TC<<"\n";
     std::cout << "N:"<<N<<"\n";
+}
+
+
+void ImportEnts(std::string MapName,std::vector<std::unique_ptr<Ent>> &LevelEnt){
+    // form map file
+
+    std::string ln;
+    std::string lnC;
+
+    std::ifstream Read(MapName);
+
+    TextSplit f;
+    f.SetDivider(' ');
+    std::string Parameters[3] = {};
+    bool EntWrite = false;
+    while (getline (Read, ln)) {
+        if(ln.at(0) == '"'){
+            //try to read property
+            //the worst way to read any file
+
+            lnC = "";
+            for (int i = 0; i < ln.length(); ++i) {
+                if(ln.at(i) != '"'){
+                    lnC.append(1,ln.at(i));
+                }
+            }
+
+
+            f.SetStr(lnC);
+
+            int v = 0;
+
+            for (int i = 0; i < 3; ++i) {
+                Parameters[i] = "";
+            }
+            for (int i = 0; i < lnC.length(); ++i) {
+                if(lnC.at(i) == ' ' && v ==0){
+                    v++;
+                }else{
+                    Parameters[v].append(1,lnC.at(i));
+                }
+            }
+
+            for (int i = 0; i < Parameters[0].length(); ++i) {
+                //to lower case
+                if(Parameters[0].at(i) >='A' && Parameters[0].at(i)<='Z'){
+                    Parameters[2].append(1,Parameters[0].at(i) + ('a'-'A'));
+                }else{
+                    Parameters[2].append(1,Parameters[0].at(i));
+                }
+            }
+
+            if(EntWrite) {
+                if (LevelEnt[LevelEnt.size() - 1]) {
+                    LevelEnt[LevelEnt.size() - 1]->SetVar(Parameters[2], Parameters[1]);
+                }
+            }else{
+                if(Parameters[2] == "classname") {
+                    if (EntCreate(Parameters[1], LevelEnt)) {
+                        EntWrite = true;
+                    }
+                }
+            }
+
+            std::cout << "N:"<<Parameters[2]<<"\n";
+            //std::cout << "NO:"<<Parameters[0]<<"\n";
+            std::cout << "V:"<<Parameters[1]<<"\n";
+        }
+
+        if(ln.at(0) == '}'){
+            EntWrite = false;
+        }
+    }
+    Read.close();
 }

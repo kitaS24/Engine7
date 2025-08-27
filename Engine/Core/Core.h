@@ -30,4 +30,7 @@
 #define Engine_ASCII_LM 201
 #define Engine_ASCII_RM 200
 
+//
+#define Engine_Map_Scale 25.4
+
 #endif //ENGINE7_CORE_H
