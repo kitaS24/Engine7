@@ -14,6 +14,7 @@ protected:
     GpuLights *LightsPtr;
     Vec3 Pos;
     Vec3 Rot;
+    Vec3 Vel;
     Vec3 Scale;
     float Time;
     DISPLAY *Display;
@@ -21,6 +22,7 @@ protected:
     Vec3 *CamRot;
     Vec3 *CamRotVec;
     MapKey *UserKeyBind;
+    std::vector<std::unique_ptr<Ent>> *Ents;
 public:
     virtual std::string GetDebugName(){
         return "Not Defined!";
@@ -33,7 +35,7 @@ public:
        ImGui::End();
     }
 
-    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds){
+    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -42,6 +44,7 @@ public:
         CamRot = CamP+1;
         CamRotVec = CamP+2;
         UserKeyBind = KeyBinds;
+        Ents = Ent;
     }
     virtual void SetT(float T){
         Time = T;
@@ -143,6 +146,15 @@ public:
         //called when map is loaded with trenchbroom and var needs to be set
         //low case
 
+    }
+
+    virtual void addVel(Vec3 V){
+        Vel = Vec3Add(Vel,V);
+    }
+
+    virtual void ShadowPass(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader){
+        // called when 3d shadows are baked
+        //render geometry with a special shader here
     }
 };
 

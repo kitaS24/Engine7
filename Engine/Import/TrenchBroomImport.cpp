@@ -155,7 +155,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
 
             (*(Brushes+Brush)).BrushPlane[BrushSide].Material =
                     TBSearchMaterial(materialNames,Engine_Max_Materials,f.GetText(1));
-            std::cout << "Texture:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].Material<<"\n";
+            //std::cout << "Texture:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].Material<<"\n";
         }
         if(f.GetText(0) == "f") {
             for (int i = 0; i < 16 && (!f.GetTextOOB((i) * 2)); ++i) {
@@ -282,9 +282,9 @@ void ImportEnts(std::string MapName,std::vector<std::unique_ptr<Ent>> &LevelEnt)
                 }
             }
 
-            std::cout << "N:"<<Parameters[2]<<"\n";
+            //std::cout << "N:"<<Parameters[2]<<"\n";
             //std::cout << "NO:"<<Parameters[0]<<"\n";
-            std::cout << "V:"<<Parameters[1]<<"\n";
+            //std::cout << "V:"<<Parameters[1]<<"\n";
         }
 
         if(ln.at(0) == '}'){

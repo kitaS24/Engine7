@@ -121,9 +121,8 @@ void Engine(){
             //ImGui::Text("Hello, World!");
             EntList(LevelEnt,DebugEntView,WindowSize);
 
-            // clear and start in 3D mode
-            OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
-            OpenGlBeginFrame3D(D.window,800,600,500000,true);
+
+
 
             //get FPS and time from start
             FPS = OpenGlGetFPS(LastFrameT);
@@ -160,6 +159,10 @@ void Engine(){
 
             //rendering triangle with color (255,255,255) or with different colors for each vertex
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+            OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
+            OpenGlBeginFrame3D(D.window,800,600,500000,true);
+
             EntPreRender(LevelEnt);
             EntRender3D(LevelEnt);
 

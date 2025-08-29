@@ -75,7 +75,7 @@ void LightCalcRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,V
 }
 
 
-GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,int Lod,GLuint Shader,Vec2 WindowSize){
+GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent){
     //float Data[512][512] = {};
 
     /*
@@ -194,15 +194,82 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,Brush *Brushes,
 
     //Rotate3D(P.Rot.X,P.Rot.Y,P.Rot.Z);
     glTranslatef(-LightPos.X,-LightPos.Y,-LightPos.Z);
+    /*
     for (int i = 0; i < Engine_Max_Brushes; ++i) {
         glColor3ub(255,255,255);
         LightCalcRenderBrush(*(Brushes+i),Shader,LightPos,LightSize,LightDir);
-    }
+    }*/
+        for (int i = 0; i < Ent.size(); i++) {
+            if (Ent[i]) {
+                Ent[i]->ShadowPass(LightPos,LightSize,LightDir,Shader);
+            }
+        }
+
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glDeleteFramebuffers(1,&fbo);
     //glfwGetWindowSize()
     glViewport(0, 0, WindowSize.X, WindowSize.Y);
+    //OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
     //return 0;
 
     return tx;
+}
+
+
+
+void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent,GLuint Tx){
+
+
+    int Size = 2048*2;
+    glViewport(0, 0, Size, Size);
+
+    GLuint fbo;
+
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Tx, 0);
+    GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, drawBuffers);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "FBO not complete!" << std::endl;
+    }
+
+    //call
+    //OpenGlBeginFrame2D(Size,Size,1,100000);
+
+    OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, -1, 100000);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    //OpenGlBeginFrame2D(5000,5000,-1,10000);
+
+    glRotatef(90,1,0,0);
+    //glRotatef(Rot.Y,0,1,0);
+
+    //Rotate3D(P.Rot.X,P.Rot.Y,P.Rot.Z);
+    glTranslatef(-LightPos.X,-LightPos.Y,-LightPos.Z);
+    /*
+    for (int i = 0; i < Engine_Max_Brushes; ++i) {
+        glColor3ub(255,255,255);
+        LightCalcRenderBrush(*(Brushes+i),Shader,LightPos,LightSize,LightDir);
+    }*/
+    for (int i = 0; i < Ent.size(); i++) {
+        if (Ent[i]) {
+            Ent[i]->ShadowPass(LightPos,LightSize,LightDir,Shader);
+        }
+    }
+
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDeleteFramebuffers(1,&fbo);//
+    //glfwGetWindowSize()
+    glViewport(0, 0, WindowSize.X, WindowSize.Y);
+    OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
+    //return 0;
 }

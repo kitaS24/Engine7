@@ -14,6 +14,7 @@
 * Flood Light (with shadows)
 * trenchbroom map loading and saving (obj,.map)
 * _level loading_
+* GUI (ImGUI)
 ### WORKING ON
 * player controller
 ### TODO

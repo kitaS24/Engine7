@@ -106,18 +106,27 @@ class LightFlood: public Ent{
         ImGui::End();
     }
     GLuint Sh;
-    void PreRender() override{
+    float Think(float TPS) override{
         Pos = {0,6000,0};
         //Vec3 Rot = {0,3500,0};
         if(!baked){
             baked = true;
             Sh = OpenGlCreateShaderProgram("shaders/Light.vert.glsl","shaders/Light.frag.glsl");
-            DepthTx =BakeFloodLight(Pos,LSize,Dir,Brushes,8,Sh,{float((*Display).X),float((*Display).Y)});
-
+            DepthTx =BakeFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents);
+        }else{
+            UpdateFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents,DepthTx);
         }
 
-        AddFloodLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br},LSize,Dir,DepthTx);
+
+        return 0;//1/30.0f;
     }
+
+    void PreRender() override{
+        if(baked) {
+            AddFloodLight(LightsPtr, Pos, {Color.X * Br, Color.Y * Br, Color.Z * Br}, LSize, Dir, DepthTx);
+        }
+    }
+
     void Render3D() override{
         glLineWidth(2);
         glUseProgram(NULL);

@@ -60,3 +60,44 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
     glActiveTexture(GL_TEXTURE0);
     glDisable(GL_TEXTURE_2D);
 }
+
+
+void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
+    glEnable(GL_TEXTURE_2D);
+    glUseProgram(Shader);
+    //glUseProgram(NULL);
+    glUniform3f(glGetUniformLocation(Shader, "FloodPos"), LightPos.X, LightPos.Y, LightPos.Z);
+    glUniform3f(glGetUniformLocation(Shader, "FloodSize"), LightSize.X, LightSize.Y, LightSize.Z);
+    glUniform3f(glGetUniformLocation(Shader, "FloodDir"), LightDir.X, LightDir.Y, LightDir.Z);
+
+    Vec3 PPos[4] = {
+            rotatePoint({-Size.X,-Size.Y,0},Rot),
+            rotatePoint({Size.X,-Size.Y,0},Rot),
+            rotatePoint({Size.X,Size.Y,0},Rot),
+            rotatePoint({-Size.X,Size.Y,0},Rot),
+    };
+    Vec3 Normal = rotatePoint({0,0,-1},Rot);
+
+    glBegin(GL_QUADS);
+    glMultiTexCoord3f(GL_TEXTURE2,Normal.X,Normal.Y,Normal.Z);
+
+    for (int i = 0; i < RenderParticles; ++i) {
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 0);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[0].X, (*(Pos+i)).Y + PPos[0].Y, (*(Pos+i)).Z + PPos[0].Z);
+        glVertex3f((*(Pos+i)).X + PPos[0].X, (*(Pos+i)).Y + PPos[0].Y, (*(Pos+i)).Z + PPos[0].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 0);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[1].X, (*(Pos+i)).Y + PPos[1].Y, (*(Pos+i)).Z + PPos[1].Z);
+        glVertex3f((*(Pos+i)).X + PPos[1].X, (*(Pos+i)).Y + PPos[1].Y, (*(Pos+i)).Z + PPos[1].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 1);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[2].X, (*(Pos+i)).Y + PPos[2].Y, (*(Pos+i)).Z + PPos[2].Z);
+        glVertex3f((*(Pos+i)).X + PPos[2].X, (*(Pos+i)).Y + PPos[2].Y, (*(Pos+i)).Z + PPos[2].Z);
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 1);
+        glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
+        glVertex3f((*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
+    }
+    glEnd();
+    glActiveTexture(GL_TEXTURE1);
+    glDisable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glDisable(GL_TEXTURE_2D);
+}

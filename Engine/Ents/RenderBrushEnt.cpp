@@ -79,11 +79,50 @@ class WorldRender : public Ent{
         glDisable(GL_TEXTURE_2D);
 
     }
+    void ShadowRenderBrushSide(BrushSide &Side,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
+
+        if(Side.Material == 0){return;}
+        glUseProgram(Shader);
+        //glUseProgram(NULL);
+        glUniform3f(glGetUniformLocation(Shader, "FloodPos"), LightPos.X, LightPos.Y, LightPos.Z);
+        glUniform3f(glGetUniformLocation(Shader, "FloodSize"), LightSize.X, LightSize.Y, LightSize.Z);
+        glUniform3f(glGetUniformLocation(Shader, "FloodDir"), LightDir.X, LightDir.Y, LightDir.Z);
+
+        glBegin(GL_TRIANGLES);
+        glMultiTexCoord3f(GL_TEXTURE2,Side.Normal.X,Side.Normal.Y,Side.Normal.Z);
+        for (int i = 0; i < Side.VertexN-2; ++i) {
+            glMultiTexCoord2f(GL_TEXTURE0,Side.Uvs[0].X,Side.Uvs[0].Y);
+            glMultiTexCoord3f(GL_TEXTURE1,Side.Vertex[0].X,Side.Vertex[0].Y,Side.Vertex[0].Z);
+            glVertex3f(Side.Vertex[0].X,Side.Vertex[0].Y,Side.Vertex[0].Z);
+            glMultiTexCoord2f(GL_TEXTURE0,Side.Uvs[i+1].X,Side.Uvs[i+1].Y);
+            glMultiTexCoord3f(GL_TEXTURE1,Side.Vertex[i+1].X,Side.Vertex[i+1].Y,Side.Vertex[i+1].Z);
+            glVertex3f(Side.Vertex[i+1].X,Side.Vertex[i+1].Y,Side.Vertex[i+1].Z);
+            glMultiTexCoord2f(GL_TEXTURE0,Side.Uvs[i+2].X,Side.Uvs[i+2].Y);
+            glMultiTexCoord3f(GL_TEXTURE1,Side.Vertex[i+2].X,Side.Vertex[i+2].Y,Side.Vertex[i+2].Z);
+            glVertex3f(Side.Vertex[i+2].X,Side.Vertex[i+2].Y,Side.Vertex[i+2].Z);
+        }
+        glEnd();
+        glActiveTexture(GL_TEXTURE2);
+        glDisable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE1);
+        glDisable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glDisable(GL_TEXTURE_2D);
+
+    }
     void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN){
         if(!Br.Active){return;}
         for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BrushPlane[i].Used) {
                 RenderBrushSide(Br.BrushPlane[i],materials,L,LN);
+            }
+        }
+    }
+    void ShadowRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
+        if(!Br.Active){return;}
+        for (int i = 0; i < Br.Planes; ++i) {
+            if(Br.BrushPlane[i].Used) {
+                ShadowRenderBrushSide(Br.BrushPlane[i],Shader,LightPos,LightSize,LightDir);
             }
         }
     }
@@ -124,6 +163,13 @@ class WorldRender : public Ent{
         for (int i = 0; i < Engine_Max_Brushes; ++i) {
             glColor3ub(255,255,255);
             RenderBrush(*(Brushes+i),Materials,LightsPtr,LightsN);
+        }
+    }
+
+    void ShadowPass(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader) override{
+        for (int i = 0; i < Engine_Max_Brushes; ++i) {
+            glColor3ub(255,255,255);
+            ShadowRenderBrush(*(Brushes+i),Shader,LightPos,LightSize,LightDir);
         }
     }
 /*

@@ -57,6 +57,10 @@ class Particle: public Ent{
         RenderParticle(ParticlePos,8,{-(*CamRot).X,-(*CamRot).Y,-(*CamRot).Z},{50,50},Materials+2,LightsPtr,LightsN,*CamPos,{255,255,255,255*(1-(T/2))});
     }
 
+    void ShadowPass(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader) override{
+        ShadowRenderParticle(ParticlePos,8,{-(*CamRot).X,-(*CamRot).Y,-(*CamRot).Z},{50,50},Shader,LightPos,LightSize,LightDir);
+    }
+
     void Save(std::ofstream &File) override{
         File.write(reinterpret_cast<char *>(&Pos), sizeof(Pos));
         File.write(reinterpret_cast<char *>(&ParticlePos), sizeof(ParticlePos));
