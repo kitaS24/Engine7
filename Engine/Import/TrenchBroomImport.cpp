@@ -84,10 +84,24 @@ int TBSearchMaterial(std::string *MaterialName,int Textures,std::string TBMateri
     //std::cout << TBMaterial<<"\n";
     for (int i = 0; i < Textures; ++i) {
         if(TBMaterialClip == *(MaterialName+i)){
-            return i+2;
+            return i+1;//textures starts from 1 (0 is Nodraw)
         }
     }
     return 1;
+}
+bool TBSearchMaterialNodraw(std::string TBMaterial){
+    std::string TBMaterialClip = "";
+    for (int i = 0; i < TBMaterial.length(); ++i) {
+        if(TBMaterial.at(i) == '/' || TBMaterial.at(i) == '\\'){
+            TBMaterialClip = "";
+        }else{
+            TBMaterialClip.append(1,TBMaterial.at(i));
+        }
+    }
+    if(TBMaterialClip == "__TB_empty"){
+        return true;
+    }
+    return false;
 }
 
 void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::string SaveName,std::vector<std::unique_ptr<Ent>> &LevelEnt){
@@ -113,6 +127,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
     unsigned int N=0;
     int Brush = -1;
     int BrushSide = -1;
+    bool SkipFace = false;
     GetTBMapInfo(V,TC,N,MapName);
 
     Vec3 * VertexDt;
@@ -151,10 +166,10 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
         }
         if(BrushSide<Engine_Brush_Planes){
         if(f.GetText(0) == "usemtl"){
-            BrushSide = BrushSide+1;
-
-            (*(Brushes+Brush)).BrushPlane[BrushSide].Material =
-                    TBSearchMaterial(materialNames,Engine_Max_Materials,f.GetText(1));
+            SkipFace =TBSearchMaterialNodraw(f.GetText(1));
+                BrushSide = BrushSide + 1;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Material =
+                        TBSearchMaterial(materialNames, Engine_Max_Materials, f.GetText(1));
             //std::cout << "Texture:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].Material<<"\n";
         }
         if(f.GetText(0) == "f") {
@@ -173,6 +188,10 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
                 //std::cout << "Data:"<<(*(Brushes+Brush)).BrushPlane[BrushSide].VertexN<<"\n";
             }
             (*(Brushes + Brush)).BrushPlane[BrushSide].Used = true;
+
+            if(SkipFace){
+                (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN =0;
+            }
 
             cf.SetStr(f.GetText(2));
             (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.X = NormalDt[stoi(cf.GetText(2)) - 1].X;

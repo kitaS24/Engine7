@@ -17,9 +17,9 @@ void main() {
         texCoord = gl_MultiTexCoord0.xy;
         Pos = gl_MultiTexCoord1.xyz;
         //Pos = vec3(Pos.x,abs(Pos.y-FloodPos.y),Pos.z);
-        float a = Pos.y-FloodPos.y;
+        float a = FloodPos.y-Pos.y;
         Normal = gl_MultiTexCoord2.xyz;
 
-        gl_Position = gl_ModelViewProjectionMatrix*(gl_Vertex-vec4(FloodDir.x*a,0,FloodDir.z*a,0));
+        gl_Position = gl_ModelViewProjectionMatrix*(gl_Vertex+vec4(FloodDir.x*a,0,FloodDir.z*a,0));
 
 }

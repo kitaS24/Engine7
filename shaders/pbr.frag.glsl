@@ -71,8 +71,8 @@ return p/vec2(FSize.x,FSize.z)/2;
 
 float SampleNearestDepth(vec3 FPos,vec2 UV){
 float A = 0;
-float D = 1.0f/512;
-float V = ((1-clamp(dot(Normal,vec3(0,1,0)),0,1))*100);
+float D = 1.0f/4096;
+float V = -((1-clamp(dot(Normal,vec3(0,1,0)),0,1))*20);
 /*
 float Dt[4];
 if(-(texture2D(FloodD,vec2(UV.x,UV.y))).x+FPos.y<= Pos.y){Dt[0] = 1;}else{Dt[0] = 0;}
@@ -166,7 +166,7 @@ if(Property == 1){PropertyTx = texture2D(PropTex,texCoord);}
 PropertyTx = vec4(PropertyTx.x,PropertyTx.y,PropertyTx.z*4,0);
 
 //property X = Metal | property Y = Roughness
-Color = vec4(CalculateLights(PropertyTx.x,SpecColor,Color.xyz,PropertyTx.y*0.8),1);
+Color = vec4(CalculateLights(PropertyTx.x,SpecColor,Color.xyz,PropertyTx.y),1);
 //Color = vec4((texture2D(FloodD,texCoord)).x/2000,0,0,1);
 gl_FragColor = fragColor*Color;
 }

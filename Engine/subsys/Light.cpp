@@ -75,7 +75,7 @@ void LightCalcRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,V
 }
 
 
-GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent){
+void InitFloodLight(GLuint &tx,GLuint &fbo,GLuint &rbo){
     //float Data[512][512] = {};
 
     /*
@@ -153,86 +153,92 @@ GLuint BakeFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,V
 
 
     int Size = 2048*2;
-    GLuint tx;
     glViewport(0, 0, Size, Size);
     glGenTextures(1, &tx);
     glBindTexture(GL_TEXTURE_2D, tx);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, Size, Size, 0, GL_RED, GL_FLOAT, nullptr);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    GLuint fbo;
 
     glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glGenRenderbuffers(1, &rbo);
+    //glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tx, 0);
     GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
     glDrawBuffers(1, drawBuffers);
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        std::cout << "FBO not complete!" << std::endl;
-    }
+    //if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    //    std::cout << "FBO not complete!" << std::endl;
+    //}
 
     //call
     //OpenGlBeginFrame2D(Size,Size,1,100000);
 
-    OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
+    /*
+    OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND); // Enable blending
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set blend
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, -1, 100000);
+    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, -1, -100000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glScalef(1,-1,1);
+     */
     //OpenGlBeginFrame2D(5000,5000,-1,10000);
 
-    glRotatef(90,1,0,0);
+    //glRotatef(-90,1,0,0);
     //glRotatef(Rot.Y,0,1,0);
 
     //Rotate3D(P.Rot.X,P.Rot.Y,P.Rot.Z);
-    glTranslatef(-LightPos.X,-LightPos.Y,-LightPos.Z);
+    //glTranslatef(-LightPos.X,-LightPos.Y,-LightPos.Z);
     /*
     for (int i = 0; i < Engine_Max_Brushes; ++i) {
         glColor3ub(255,255,255);
         LightCalcRenderBrush(*(Brushes+i),Shader,LightPos,LightSize,LightDir);
     }*/
+    /*
         for (int i = 0; i < Ent.size(); i++) {
             if (Ent[i]) {
                 Ent[i]->ShadowPass(LightPos,LightSize,LightDir,Shader);
             }
-        }
+        }*/
 
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //glDeleteFramebuffers(1,&fbo);
     //glfwGetWindowSize()
-    glViewport(0, 0, WindowSize.X, WindowSize.Y);
+    //glViewport(0, 0, WindowSize.X, WindowSize.Y);
     //OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
     //return 0;
 
-    return tx;
+    //return tx;
 }
 
 
 
-void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent,GLuint Tx){
+void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent,GLuint &tx,GLuint &fbo,GLuint &rbo){
 
 
     int Size = 2048*2;
     glViewport(0, 0, Size, Size);
 
-    GLuint fbo;
 
-    glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tx, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, Size, Size);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Tx, 0);
-    GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-    glDrawBuffers(1, drawBuffers);
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         std::cout << "FBO not complete!" << std::endl;
     }
@@ -243,10 +249,10 @@ void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,V
     OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, -1, 100000);
+    glOrtho(-LightSize.X/1, LightSize.X/1, LightSize.Z/1, -LightSize.Z/1, 1, 100000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
+    //glScalef(1,1,1);
     //OpenGlBeginFrame2D(5000,5000,-1,10000);
 
     glRotatef(90,1,0,0);
@@ -267,7 +273,8 @@ void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,V
 
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDeleteFramebuffers(1,&fbo);//
+    //glDeleteFramebuffers(1,&fbo);//
+    //glDeleteRenderbuffers(1, &rbo);
     //glfwGetWindowSize()
     glViewport(0, 0, WindowSize.X, WindowSize.Y);
     OpenGlErase(0.0f,0.0f,0.0f,1.0f,true,true);

@@ -86,7 +86,7 @@ class LightFlood: public Ent{
     Vec3 LSize = {10000,-10000,10000};
     Vec3 Dir = {0.140,0,0.263};
     bool baked = false;
-    GLuint DepthTx = 0;
+    GLuint DepthTx[3] = {0,0,0};
 
     std::string GetDebugName() override {
         return "LightFlood";
@@ -101,8 +101,8 @@ class LightFlood: public Ent{
         ImGui::SliderFloat("DirX",&Dir.X,-1,1);
         ImGui::SliderFloat("DirZ",&Dir.Z,-1,1);
 
-        ImGui::SliderFloat("SizeX",&LSize.X,0,1000);
-        ImGui::SliderFloat("SizeZ",&LSize.Z,0,1000);
+        ImGui::SliderFloat("SizeX",&LSize.X,0,5000);
+        ImGui::SliderFloat("SizeZ",&LSize.Z,0,5000);
         ImGui::End();
     }
     GLuint Sh;
@@ -112,9 +112,10 @@ class LightFlood: public Ent{
         if(!baked){
             baked = true;
             Sh = OpenGlCreateShaderProgram("shaders/Light.vert.glsl","shaders/Light.frag.glsl");
-            DepthTx =BakeFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents);
+            //DepthTx =BakeFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents);
+            InitFloodLight(DepthTx[0],DepthTx[1],DepthTx[2]);
         }else{
-            UpdateFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents,DepthTx);
+            UpdateFloodLight(Pos,LSize,Dir,Sh,{float((*Display).X),float((*Display).Y)},*Ents,DepthTx[0],DepthTx[1],DepthTx[2]);
         }
 
 
@@ -123,7 +124,7 @@ class LightFlood: public Ent{
 
     void PreRender() override{
         if(baked) {
-            AddFloodLight(LightsPtr, Pos, {Color.X * Br, Color.Y * Br, Color.Z * Br}, LSize, Dir, DepthTx);
+            AddFloodLight(LightsPtr, Pos, {Color.X * Br, Color.Y * Br, Color.Z * Br}, LSize, Dir, DepthTx[0]);
         }
     }
 

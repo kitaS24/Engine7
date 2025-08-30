@@ -14,7 +14,7 @@ class WorldRender : public Ent{
         if(Side.Material == 0){return;}
 
         glEnable(GL_TEXTURE_2D);
-        if((!(*(materials+Side.Material)).Loaded) || Side.Material== 1){
+        if((!(*(materials+Side.Material)).Loaded)){
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, (*(materials+0)).Texture);
             glUseProgram(NULL);
@@ -26,34 +26,34 @@ class WorldRender : public Ent{
             if((*(materials + Side.Material)).TxProperty) {
                 glActiveTexture(GL_TEXTURE1);
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material-1)).TextureProperty);
+                glBindTexture(GL_TEXTURE_2D, (*(materials + Side.Material)).TextureProperty);
                 glActiveTexture(GL_TEXTURE2);
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, (*L).Depth);
             }
-            glUseProgram((*(materials+Side.Material-1)).Shader);
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "LightPos"), LN,(*L).Pos);
-            glUniform3fv(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "LightCol"), LN,(*L).Color);
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "LightN"), LN);
+            glUseProgram((*(materials+Side.Material)).Shader);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightPos"), LN,(*L).Pos);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightCol"), LN,(*L).Color);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
 
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodPos"),(*L).FloodPos.X,(*L).FloodPos.Y,(*L).FloodPos.Z);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodCol"),(*L).FloodColor.X,(*L).FloodColor.Y,(*L).FloodColor.Z);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodSize"),(*L).FloodSize.X,(*L).FloodSize.Y,(*L).FloodSize.Z);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodDir"),(*L).FloodDir.X,(*L).FloodDir.Y,(*L).FloodDir.Z);
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodN"), (*L).FloodEnabled);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodPos"),(*L).FloodPos.X,(*L).FloodPos.Y,(*L).FloodPos.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodCol"),(*L).FloodColor.X,(*L).FloodColor.Y,(*L).FloodColor.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodSize"),(*L).FloodSize.X,(*L).FloodSize.Y,(*L).FloodSize.Z);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodDir"),(*L).FloodDir.X,(*L).FloodDir.Y,(*L).FloodDir.Z);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodN"), (*L).FloodEnabled);
 
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "PropTex"), 1);
-            glUniform1i(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "FloodD"), 2);
-            glUniform3f(glGetUniformLocation((*(materials+Side.Material-1)).Shader, "CamPos"), (*(CamPos)).X,(*(CamPos)).Y,(*(CamPos)).Z);
-            if((*(materials + Side.Material-1)).Metal) {
-                glUniform3f(glGetUniformLocation((*(materials + Side.Material-1)).Shader, "SpecColor"),
-                            (*(materials + Side.Material-1)).SpecColor.X, (*(materials + Side.Material-1)).SpecColor.Y,
-                            (*(materials + Side.Material-1)).SpecColor.Z);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "Property"), (*(materials + Side.Material)).TxProperty);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "PropTex"), 1);
+            glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodD"), 2);
+            glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "CamPos"), (*(CamPos)).X,(*(CamPos)).Y,(*(CamPos)).Z);
+            if((*(materials + Side.Material)).Metal) {
+                glUniform3f(glGetUniformLocation((*(materials + Side.Material)).Shader, "SpecColor"),
+                            (*(materials + Side.Material)).SpecColor.X, (*(materials + Side.Material)).SpecColor.Y,
+                            (*(materials + Side.Material)).SpecColor.Z);
             }else{
-                glUniform3f(glGetUniformLocation((*(materials + Side.Material-1)).Shader, "SpecColor"),
-                            (*(materials + Side.Material-1)).SpecColor.X*0.08, (*(materials + Side.Material-1)).SpecColor.Y*0.08,
-                            (*(materials + Side.Material-1)).SpecColor.Z*0.08);
+                glUniform3f(glGetUniformLocation((*(materials + Side.Material)).Shader, "SpecColor"),
+                            (*(materials + Side.Material)).SpecColor.X*0.08, (*(materials + Side.Material)).SpecColor.Y*0.08,
+                            (*(materials + Side.Material)).SpecColor.Z*0.08);
             }
         }
 

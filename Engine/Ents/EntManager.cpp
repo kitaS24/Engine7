@@ -2,7 +2,7 @@
 // Created by kitaS24 on 18.08.2025.
 //
 
-void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2I WindowSize){
+void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2I WindowSize,DISPLAY D){
     ImGui::Begin("ents");
     ImGui::SetWindowPos(ImVec2(0,0));
     ImGui::SetWindowSize(ImVec2(200,WindowSize.Y-200));
@@ -13,6 +13,7 @@ void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2
             }
         }
     }
+    ImGui::Text(("FPS:"+std::to_string(D.FPS)).c_str());
     ImGui::End();
     for (int i = 0; i < Ent.size(); i++) {
         if(Ent[i]) {

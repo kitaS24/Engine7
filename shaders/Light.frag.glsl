@@ -25,5 +25,5 @@ uniform int FloodN;
 
 void main() {
 
-gl_FragColor = vec4(abs(Pos.y-FloodPos.y),0,0,1);
+gl_FragColor = vec4(FloodPos.y-Pos.y,0,0,1);
 }

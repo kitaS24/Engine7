@@ -47,10 +47,12 @@ void Engine(){
     float T = 0;
     float FPS = 0;
     float LastFrameT = 0;
+    float DebugTimeScale = 1;
     Vec2I WindowSize = {0,0};
         OpenGlInit(true);
 
         //creating window with W 800 and H 600
+    glfwWindowHint(GLFW_DEPTH_BITS, 24);
         if(!CreateGlWindow(D.window,800,600,"Test")){
             exit(-1);
         }
@@ -119,14 +121,19 @@ void Engine(){
             ImGui::NewFrame();
 
             //ImGui::Text("Hello, World!");
-            EntList(LevelEnt,DebugEntView,WindowSize);
+            EntList(LevelEnt,DebugEntView,WindowSize,D);
 
 
 
 
             //get FPS and time from start
-            FPS = OpenGlGetFPS(LastFrameT);
+            FPS = OpenGlGetFPS(LastFrameT)*DebugTimeScale;
+            D.FPS = FPS;
             T = T+(1.0f/FPS);
+
+            ImGui::Begin("DEBUG");
+            ImGui::SliderFloat("TimeScale",&DebugTimeScale,1,100);
+            ImGui::End();
 
             EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam,&UserKeyBind);
             EntUpdate(LevelEnt,T);
@@ -159,6 +166,7 @@ void Engine(){
 
             //rendering triangle with color (255,255,255) or with different colors for each vertex
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 
             OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
             OpenGlBeginFrame3D(D.window,800,600,500000,true);
