@@ -58,3 +58,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         OpenAL32
         winmm
 )
+
+
+#
+include_directories(game)

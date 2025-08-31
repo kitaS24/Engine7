@@ -2,7 +2,7 @@
 // Created by kitaS24 on 26.08.2025.
 //
 
-#include "EntUser.h"
+#include "game/EntUser.h"
 
 void EntSave(std::vector<std::unique_ptr<Ent>> &Ent,std::ofstream &File){
     for (int i = 0; i < Ent.size(); i++) {
