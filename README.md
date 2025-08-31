@@ -15,10 +15,10 @@
 * trenchbroom map loading and saving (obj,.map)
 * _level loading_
 * GUI (ImGUI)
+* audio
 ### WORKING ON
 * player controller
 ### TODO
 
 * static prop creation,compilation
-* audio
 * GUI

@@ -110,11 +110,13 @@ if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y-D-D))).x+FPos.y<= Pos.y){A = A +1;}
 if(-(texture2D(FloodD,vec2(UV.x+D+D,UV.y+D+D))).x+FPos.y<= Pos.y){A = A +1;}
 if(-(texture2D(FloodD,vec2(UV.x-D-D,UV.y+D+D))).x+FPos.y<= Pos.y){A = A +1;}
 */
-return A/9;
+float R = A/9;
+if(R <0.05){R = 0.05;}
+return R;
 }
 
 vec3 CalculateLights(float k,vec3 F,vec3 Color,float Roughness){
-vec3 C = vec3(0.005,0.005,0.005);
+vec3 C = Color*vec3(0.005,0.005,0.005);
     for(int i=0;i<LightN;i++){
         vec3 LightVec = normalize(LightPos[i]-Pos);
         float SurfaceDot = dot(Normal,LightVec);
@@ -130,7 +132,7 @@ vec3 C = vec3(0.005,0.005,0.005);
 
     vec2 FloodUV = FloodLightCollision(FloodPos,FloodSize,FloodDir,Pos);
     FloodUV = FloodUV +0.5;
-    vec3 LightVec = normalize(FloodDir-Pos);
+    vec3 LightVec = normalize(FloodPos-Pos);
     //vec3 LightVec = normalize(vec3(FloodDir.x,FloodPos.y-Pos.y,FloodDir.z));
     float SurfaceDot = dot(Normal,LightVec);
     float IClDot =clamp(SurfaceDot,0,1);
@@ -138,7 +140,7 @@ vec3 C = vec3(0.005,0.005,0.005);
     //return vec3((FloodPos.y-Pos.y-(texture2D(FloodD,vec2(FloodUV.x,FloodUV.y))).x)/10000,0,0);
 
     //return FloodCol[i];
-
+    if(IClDot >0){
     if(FloodUV.x >0 && FloodUV.x <=1 && FloodUV.y >0 && FloodUV.y <=1){
 
                 float D = distance(FloodPos,Pos)/1000;
@@ -150,10 +152,12 @@ vec3 C = vec3(0.005,0.005,0.005);
     }else{
 
                     float D = distance(FloodPos,Pos)/1000;
-                    vec3 LightI = FloodCol/(D*D*0.25);
-                    //LightI = vec3(FloodUV,0);
-                    vec3 CL = ((DiffuseBRDF(k,Color)*0.3)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos))*LightI*IClDot;
-                    C = C + CL;
+                                    vec3 LightI = FloodCol/(D*D*0.25);
+                                    //LightI = vec3(FloodUV,0);
+                                    vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,FloodPos))*LightI*IClDot*
+                                   0.05;
+                                    C = C + CL;
+    }
     }
     }
     return C;
