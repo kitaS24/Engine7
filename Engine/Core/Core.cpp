@@ -14,8 +14,12 @@
 #include "imgui_impl_opengl3.h"
 #include "ImGuiSetup.h"
 #include "OpenGLRenderer.cpp"
+#include <OpenAl/al.h>
+#include <OpenAl/alc.h>
 #include "structs.h"
 #include "math.cpp"
+
+
 //subsys (level 0)
 #include "KeyMap.cpp"
 #include "iniRead.cpp"
@@ -29,6 +33,8 @@
 #include "Particle.cpp"
 #include "TextFunctions.cpp"
 #include "TextureLoad.cpp"
+#include "AL_Setup.cpp"
+#include "SoundEngine.cpp"
 //classes
 #include "RenderBrushEnt.cpp"
 #include "PlayerEnt.cpp"
@@ -95,11 +101,23 @@ void Engine(){
     ImportEnts("PipeMap.map",LevelEnt);
     EngineSave(&LevelEnt,LevelBrushes,"saves/test1.gems");
 
+    EngineAl.Setup();
+
+    SoundEngineSource TestSound;
+
+    TestSound.Setup({0,0,0});
+    TestSound.LoadWavSound("Handle1D.wav",10);
+    TestSound.Play(1);
+
     //UserKeyBind.Map('W',GLFW_KEY_G);UserKeyBind.Map('w',GLFW_KEY_G);
 
         while(!glfwWindowShouldClose(D.window))
         {
-
+            //if(int(T*2)%2 == 1) {
+            //    TestSound.Pause();
+            //    TestSound.Play(1);
+            //}
+            EngineAl.SetListener(Cam[0],Cam[2],true);
             glfwGetWindowSize(D.window,&D.X,&D.Y);
             if(glfwGetKey(D.window,Engine_Key_Save) ||glfwGetKey(D.window,Engine_Key_Load)){
                 if(!SaveOrLoadKeyPress){
@@ -186,6 +204,8 @@ void Engine(){
             glfwSwapBuffers(D.window);
             glfwPollEvents();
         }
+        TestSound.Delete();
+        EngineAl.Cleanup();
         return;
 
 }

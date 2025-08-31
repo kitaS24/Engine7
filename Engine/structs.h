@@ -119,4 +119,25 @@ struct DISPLAY{
 
 };
 
+struct Sound{
+
+    Vec3I Source;
+
+    float Volume;
+
+    bool UseGlobalVolume;
+    //Engine
+    bool InUse;
+    float Time;
+    float SoundTime;
+    //Engine soundProp
+    float EchoTimer;
+
+
+    //OpenAl
+    ALuint bufferID;
+    //static
+    ALuint AlSource;
+};
+
 #endif //ENGINE7_STRUCTS_H

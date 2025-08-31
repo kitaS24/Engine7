@@ -22,6 +22,8 @@ include_directories(Engine/Core)
 include_directories(Engine/Ents)
 include_directories(Engine/subsys)
 include_directories(Engine/Import)
+#
+include_directories(Engine/subsys/OpenAl)
 
 
 include_directories(Engine/include/ImGui/backends)
@@ -41,4 +43,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/${GlInclude}/G
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${IMGUI_DIR}
         ${IMGUI_DIR}/backends
+)
+
+set(OPENAL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/Engine/include/OpenAl")
+set(OPENAL_LIB_DIR "${CMAKE_SOURCE_DIR}/Engine/include/OpenAl")
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+        ${OPENAL_INCLUDE_DIR}
+)
+target_link_directories(${PROJECT_NAME} PRIVATE
+        ${OPENAL_LIB_DIR}
+)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        OpenAL32
+        winmm
 )

@@ -156,6 +156,9 @@ public:
         // called when 3d shadows are baked
         //render geometry with a special shader here
     }
+    virtual void Cleanup(){
+        // called when engine shuts down
+    }
 };
 
 #endif //ENGINE7_ENTMANAGER_H
