@@ -172,5 +172,8 @@ PropertyTx = vec4(PropertyTx.x,PropertyTx.y,PropertyTx.z*4,0);
 //property X = Metal | property Y = Roughness
 Color = vec4(CalculateLights(PropertyTx.x,SpecColor,Color.xyz,PropertyTx.y),1);
 //Color = vec4((texture2D(FloodD,texCoord)).x/2000,0,0,1);
+
+//hdr/
+Color = vec4(Color.xyz/(Color.xyz+vec3(1,1,1)),1);
 gl_FragColor = fragColor*Color;
 }

@@ -82,7 +82,7 @@ class LightFlood: public Ent{
 
     //Vec3 Color = {0.8,1,1};
     Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
-    float Br = 0.5;
+    float Br = 2;
     Vec3 LSize = {10000,-10000,10000};
     Vec3 Dir = {0.140,0,0.263};
     bool baked = false;

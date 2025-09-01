@@ -224,6 +224,7 @@ private:
     float LastFrameT = 0;
     float DebugTimeScale = 1;
     Vec2I WindowSize = {0,0};
+    bool Map1stFrame = true;
 
     void EngineGlSetup(){
         OpenGlInit(true);
@@ -280,6 +281,22 @@ private:
         }
     }
 
+    void Engine1stFrame(){
+        if(Map1stFrame){
+            Map1stFrame = false;
+            EntOnMapStartCall(LevelEnt);
+        }
+    }
+
+    void LoadMap(){
+        if(LevelTransition.LoadMap){
+            EngineLoad(&LevelEnt,LevelBrushes,LevelTransition.MapName);
+            Map1stFrame = LevelTransition.IsNewMap;
+            LevelTransition.LoadMap = false;
+            LevelTransition.IsNewMap = false;
+        }
+    }
+
 public:
     void Setup(){
         EngineGlSetup();
@@ -297,10 +314,12 @@ public:
         UserKeyBind.UpdateWindow(&D);
         UserKeyBind.SetupGlfwKeys();
 
-        LoadTBMap(LevelBrushes,"PipeMap.obj","textures/textures.ini","saves/test1.gems",LevelEnt);
+        /*
+        LoadTBMap(LevelBrushes,"PipeMap.obj","textures/textures.ini",LevelEnt);
         ImportEnts("PipeMap.map",LevelEnt);
         EngineSave(&LevelEnt,LevelBrushes,"saves/test1.gems");
-
+        EngineLoad(&LevelEnt,LevelBrushes,"saves/test1.gems");
+*/
         EngineAl.Setup();
 }
     bool Frame(){
@@ -331,7 +350,10 @@ public:
         ImGui::SliderFloat("TimeScale",&DebugTimeScale,1,100);
         ImGui::End();
 
-        EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam,&UserKeyBind);
+        LoadMap();
+        Engine1stFrame();
+
+        EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam,&UserKeyBind,&LevelTransition);
         EntUpdate(LevelEnt,T);
         EntThink(LevelEnt,FPS);
 
@@ -350,6 +372,10 @@ public:
         EntPreRender(LevelEnt);
         EntRender3D(LevelEnt);
 
+        OpenGlBeginFrame2D(D.X,D.Y,-100,100);
+
+        EntRender2D(LevelEnt);
+
 
         //OpenGlBeginFrame2D(D.X,D.Y,-1,1);
         //glViewport(0, 0, D.X, D.Y);
@@ -364,6 +390,12 @@ public:
         return !glfwWindowShouldClose(D.window);
     }
     void Cleanup(){
+        EntCleanupCall(LevelEnt);
         EngineAl.Cleanup();
+    }
+    void CompileTrenchBroomMap(std::string ObjFile,std::string MapFile,std::string OutFile,std::string TexturesFile){
+        LoadTBMap(LevelBrushes,ObjFile,TexturesFile,LevelEnt);
+        ImportEnts(MapFile,LevelEnt);
+        EngineSave(&LevelEnt,LevelBrushes,OutFile);
     }
 };

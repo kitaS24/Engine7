@@ -98,6 +98,7 @@ class Player: public Ent{
             Rot.X = Rot.X - 90.0f/TPS;
         }
         if((*UserKeyBind).key('E')){
+            ChangeMap("saves/test1.gems",true);
             std::cout << WorldRaycast(Pos, Vec3Add(Pos, Vec3Multiply(CamRotVecInternal,{100000,100000,100000})),{10,10,10},300,Brushes)<<"\n";
         }
 

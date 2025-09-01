@@ -104,7 +104,7 @@ bool TBSearchMaterialNodraw(std::string TBMaterial){
     return false;
 }
 
-void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::string SaveName,std::vector<std::unique_ptr<Ent>> &LevelEnt){
+void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::vector<std::unique_ptr<Ent>> &LevelEnt){
     // loads trench broom map from obj
 
     int TextureId = 0;

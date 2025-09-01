@@ -65,7 +65,7 @@ void SaveBrushes(Brush *Brushes, std::ofstream &File){
 
         File.write(reinterpret_cast<char *>(&BS), sizeof(BrushSave));
         for (int j = 0; j < B.Planes; ++j) {
-            File.write(reinterpret_cast<char *>(&B.BrushPlane[j]), sizeof(BrushSave));
+            File.write(reinterpret_cast<char *>(&B.BrushPlane[j]), sizeof(BrushSide));
         }
     }
 }

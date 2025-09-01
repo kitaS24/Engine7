@@ -42,10 +42,10 @@ void EntUpdate(std::vector<std::unique_ptr<Ent>> &Ent,float T){
     }
 }
 
-void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L,DISPLAY *D,Vec3 *CamPos,MapKey *Key){
+void EntUpdatePointers(std::vector<std::unique_ptr<Ent>> &Ent,Brush *Br,Material *Mt,GpuLights *L,DISPLAY *D,Vec3 *CamPos,MapKey *Key,MapTransition *Tr ){
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
-            Ent[i]->SetPointers(Br,Mt,L,D,CamPos,Key,&Ent);
+            Ent[i]->SetPointers(Br,Mt,L,D,CamPos,Key,&Ent,Tr);
             }
     }
 }
@@ -70,6 +70,20 @@ void EntRender2D(std::vector<std::unique_ptr<Ent>> &Ent){
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
             Ent[i]->Render2D();
+        }
+    }
+}
+void EntCleanupCall(std::vector<std::unique_ptr<Ent>> &Ent){
+    for (int i = 0; i < Ent.size(); i++) {
+        if (Ent[i]) {
+            Ent[i]->Cleanup();
+        }
+    }
+}
+void EntOnMapStartCall(std::vector<std::unique_ptr<Ent>> &Ent){
+    for (int i = 0; i < Ent.size(); i++) {
+        if (Ent[i]) {
+            Ent[i]->OnMapStart();
         }
     }
 }

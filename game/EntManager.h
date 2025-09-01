@@ -4,6 +4,10 @@
 
 #ifndef ENGINE7_ENTMANAGER_H
 #define ENGINE7_ENTMANAGER_H
+
+#include "structs.h"
+#include <string>
+
 class Ent{
 private:
     float ThinkTimer = 0;
@@ -23,6 +27,14 @@ protected:
     Vec3 *CamRotVec;
     MapKey *UserKeyBind;
     std::vector<std::unique_ptr<Ent>> *Ents;
+    MapTransition *Transition;
+
+
+    void ChangeMap(std::string Map,bool IsNewMap){
+        (*Transition).MapName = Map;
+        (*Transition).IsNewMap = IsNewMap;
+        (*Transition).LoadMap = true;
+    }
 public:
     virtual std::string GetDebugName(){
         return "Not Defined!";
@@ -35,7 +47,8 @@ public:
        ImGui::End();
     }
 
-    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent){
+    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent,
+                             MapTransition *Tr){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -45,6 +58,7 @@ public:
         CamRotVec = CamP+2;
         UserKeyBind = KeyBinds;
         Ents = Ent;
+        Transition = Tr;
     }
     virtual void SetT(float T){
         Time = T;
@@ -116,8 +130,8 @@ public:
         //Called when player shoots
 
     }
-    virtual void OnMapStart(Ent *activator,Ent *caller){
-        //Called when player shoots
+    virtual void OnMapStart(){
+        //Called when map starts (1st tick)
 
     }
     virtual void Save(std::ofstream &File){

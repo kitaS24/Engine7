@@ -15,3 +15,4 @@ bool SaveOrLoadKeyPress = false;
 
 MapKey UserKeyBind;
 OpenAl EngineAl;
+MapTransition LevelTransition = {};
