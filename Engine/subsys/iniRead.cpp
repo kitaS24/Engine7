@@ -49,7 +49,6 @@ public:
                 return;
             }
 
-            //File = Line+"\n";
         }
 
         Read.close();
@@ -70,12 +69,9 @@ public:
                     return "!not_found";
                 }
 
-                //std::cout <<Line<<"\n";
                 FileIndex = FileIndex+1;
                 return Line;
             }
-
-            //File = Line+"\n";
         }
 
         Read.close();
@@ -87,7 +83,6 @@ public:
         unsigned long long int i=0;
 
         std::ifstream Read(FileN);
-        //FileIndex=0;
         while (getline(Read, Line)) {
             i = i+1;
             if(i >= FileIndex+1){
@@ -100,8 +95,6 @@ public:
                 }
 
             }
-
-            //File = Line+"\n";
         }
 
         Read.close();

@@ -59,7 +59,6 @@ class Player: public Ent{
         ImGui::SetWindowPos(ImVec2(0,W.Y-200));
         ImGui::SetWindowSize(ImVec2(200,200));
         ImGui::Text("player");
-        //ImGui::SetWindowFontScale(0.75);
         ImGui::Text(("Vel:"+std::to_string(MagVec3(Vel))).c_str());
         ImGui::Text(std::to_string(Vel.X).c_str());
         ImGui::Text(std::to_string(Vel.Y).c_str());
@@ -148,7 +147,6 @@ class Player: public Ent{
         MoveXZ(PlayerSize,{Vel.X/TPS,Vel.Y/TPS,Vel.Z/TPS});
         MoveY(PlayerSize,{0,Vel.Y/TPS,0});
 
-        //Pos = Vec3Add(Pos,{Vel.X/TPS,Vel.Y/TPS,Vel.Z/TPS});
 
         return 0;
     }
@@ -160,9 +158,7 @@ class Player: public Ent{
         glRotatef(Rot.X,1,0,0);
         glRotatef(Rot.Y,0,1,0);
 
-        //Rotate3D(P.Rot.X,P.Rot.Y,P.Rot.Z);
         glTranslatef(-Pos.X,-Pos.Y,-Pos.Z);
-        //AddLight(LightsPtr, Pos,{0.4,0,0});
     }
 
     void Save(std::ofstream &File) override{

@@ -4,7 +4,6 @@
 
 class Particle: public Ent{
 
-    //Vec3 Color = {0.8,1,1};
     Vec3 Color = {int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
     float Br = 4;
     int CustomT = rand()%1000;
@@ -22,8 +21,6 @@ class Particle: public Ent{
         ImGui::SetWindowPos(ImVec2(0,W.Y-200));
         ImGui::SetWindowSize(ImVec2(200,200));
         ImGui::Text("particle system");
-        //ImGui::ColorEdit3("Light Color",&Color.X);
-        //ImGui::SliderFloat("light Brightness",&Br,0,20);
         ImGui::End();
     }
     float Think(float TPS) override{

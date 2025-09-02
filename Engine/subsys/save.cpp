@@ -94,7 +94,6 @@ void LoadBrushes(Brush *Brushes, std::ifstream &File){
             File.read(reinterpret_cast<char *>(&B.BrushPlane[j]), sizeof(BrushSide));
         }
 
-        //File.write(reinterpret_cast<char *>(&(*(Brushes+i))), sizeof((*(Brushes+i))));
     }
 }
 
@@ -110,7 +109,6 @@ void EngineLoad(std::vector<std::unique_ptr<Ent>> *LevelEnt,Brush *Brushes,std::
     if (!LoadMap.is_open()) {
         std::cout << "File not open\n";
         std::cout << "File is absent from path : "<<"saves/test1.gems" <<"\n";
-        //exit(3);
         return;
     }
     LoadBrushes(Brushes,LoadMap);

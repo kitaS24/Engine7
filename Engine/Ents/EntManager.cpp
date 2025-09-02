@@ -2,6 +2,7 @@
 // Created by kitaS24 on 18.08.2025.
 //
 
+//debug
 void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2I WindowSize,DISPLAY D){
     ImGui::Begin("ents");
     ImGui::SetWindowPos(ImVec2(0,0));
@@ -24,6 +25,7 @@ void EntList(std::vector<std::unique_ptr<Ent>> &Ent,unsigned int &DebugEntV,Vec2
     }
 }
 
+//ent tick/call
 void EntThink(std::vector<std::unique_ptr<Ent>> &Ent,float TPS){
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
@@ -90,12 +92,11 @@ void EntOnMapStartCall(std::vector<std::unique_ptr<Ent>> &Ent){
 
 
 
-//
+//kill 1st object that needs to be killed, (idk why I return)
 void KillAllRequestedObjs(std::vector<std::unique_ptr<Ent>> &Ent){
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
             if (Ent[i]->ObjectNeedsToBeKilled()) {
-                //EntEraseByPointer(Ent,Ent[i].get());
                 Ent[i].reset();
                 return;
             }

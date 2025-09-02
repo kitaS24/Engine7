@@ -83,7 +83,6 @@ class WorldRender : public Ent{
 
         if(Side.Material == 0){return;}
         glUseProgram(Shader);
-        //glUseProgram(NULL);
         glUniform3f(glGetUniformLocation(Shader, "FloodPos"), LightPos.X, LightPos.Y, LightPos.Z);
         glUniform3f(glGetUniformLocation(Shader, "FloodSize"), LightSize.X, LightSize.Y, LightSize.Z);
         glUniform3f(glGetUniformLocation(Shader, "FloodDir"), LightDir.X, LightDir.Y, LightDir.Z);
@@ -136,7 +135,6 @@ class WorldRender : public Ent{
         ImGui::Begin((GetDebugName()+"##"+std::to_string(cId)).c_str());
         ImGui::SetWindowPos(ImVec2(0,W.Y-200));
         ImGui::SetWindowSize(ImVec2(200,200));
-        //ImGui::Text("No Variables yet");
         ImGui::Text(("Lights:"+std::to_string(SceneLights)).c_str());
         ImGui::Text(("FloodLights:"+std::to_string(FloodSceneLights)).c_str());
         ImGui::End();
@@ -158,7 +156,6 @@ class WorldRender : public Ent{
 
         FloodSceneLights = (*LightsPtr).FloodEnabled;
 
-        //std::cout << LightsN<<"\n";
 
         for (int i = 0; i < Engine_Max_Brushes; ++i) {
             glColor3ub(255,255,255);
@@ -172,24 +169,4 @@ class WorldRender : public Ent{
             ShadowRenderBrush(*(Brushes+i),Shader,LightPos,LightSize,LightDir);
         }
     }
-/*
-    void Save(std::ofstream &File) override{
-        unsigned int Br = 0;
-        for (int i = 0; i < Engine_Max_Brushes; ++i) {
-            if((*(Brushes+i)).Active){
-                Br = Br +1;
-            }
-        }
-        File.write(reinterpret_cast<char *>(&Br), sizeof(Br));
-        for (int i = 0; i < Br; ++i) {
-            File.write(reinterpret_cast<char *>((Brushes+i)), sizeof(Brush));
-        }
-    }
-    void Load(std::ifstream &File) override{
-        unsigned int Br = 0;
-        File.read(reinterpret_cast<char *>(&Br), sizeof(Br));
-        for (int i = 0; i < Br; ++i) {
-            File.read(reinterpret_cast<char *>((Brushes+i)), sizeof(Brush));
-        }
-    }*/
 };

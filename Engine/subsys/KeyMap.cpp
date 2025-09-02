@@ -5,13 +5,9 @@
 class MapKey{
     //custom values can be used (over 999)
 private:
-    //GLFWwindow* window;
     DISPLAY *D;
    int KeyM[256];
 public:
-    //void UpdateWindow(GLFWwindow* w){
-    //    window = w;
-    //}
     void UpdateWindow(DISPLAY* d){
             D = d;
     }

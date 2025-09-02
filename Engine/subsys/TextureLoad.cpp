@@ -19,11 +19,9 @@ void LoadMaterials(Material *Materials,std::string FileName) {
     }
 
     for (int i = 0; i < TextureId; ++i) {
-        //std::cout << materialNames[i]<<"\n";
+
         Ini.SearchHeader(FileName, materialNames[i]);
-        //std::cout << "Name:"<<materialNames[i]<<"\n";
-        //std::cout << "Base:"<<Ini.HeaderVar("base")<<"\n";
-        //std::cout << "Data:"<<Ini.HeaderVar("data")<<"\n";
+
         (*(Materials + i + 1)).Texture = LoadBmpTexture(Ini.HeaderVar("base"), false, false);
         (*(Materials + i + 1)).TextureProperty = LoadBmpTexture(Ini.HeaderVar("data"), false, false);
         (*(Materials + i + 1)).Shader = OpenGlCreateShaderProgram(Ini.HeaderVar("vert"), Ini.HeaderVar("frag"));

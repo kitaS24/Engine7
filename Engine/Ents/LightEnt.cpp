@@ -2,17 +2,21 @@
 // Created by kitaS24 on 19.08.2025.
 //
 
+//THIS IS AN EXAMPLE
+
 class Light: public Ent{
 
-    //Vec3 Color = {0.8,1,1};
-    Vec3 Color = {0,0,0};//{int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f,int(rand()%1000)/1000.0f};
+    //setting RGB,Brightness
+    Vec3 Color = {0,0,0};
     float Br = 8;
     int CustomT = rand()%1000;
     int ThinkTimes = 0;
 
+    //setts debug name/ent name
     std::string GetDebugName() override {
         return "Light";
     }
+    //gui
     void CreateVarWindow(int cId,Vec2I W) override {
         ImGui::Begin((GetDebugName()+"##"+std::to_string(cId)).c_str());
         ImGui::SetWindowPos(ImVec2(0,W.Y-200));
@@ -22,38 +26,32 @@ class Light: public Ent{
         ImGui::SliderFloat("light Brightness",&Br,0,20);
         ImGui::End();
     }
-
+    //adds light into the scene
     void PreRender() override{
-        //Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
-        //Vec3 Rot = {0,3500,0};
         AddLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br});
     }
+    //renders dot on the ent pos
     void Render3D() override{
-        //Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
         glColor3ub(255,0,0);
         glPointSize(4);
         glBegin(GL_POINTS);
         glVertex3f(Pos.X,Pos.Y,Pos.Z);
         glEnd();
     }
-    float Think(float TPS) override{
-        //ThinkTimes = ThinkTimes+1;
-        //if(ThinkTimes >1){
-        //    KillSelf();
-        //}
-        return 10;
-    }
 
+    //saving light from save file
     void Save(std::ofstream &File) override{
         File.write(reinterpret_cast<char *>(&CustomT), sizeof(CustomT));
         File.write(reinterpret_cast<char *>(&Color), sizeof(Color));
         File.write(reinterpret_cast<char *>(&Br), sizeof(Br));
     }
+    //loading light from save file
     void Load(std::ifstream &File) override{
         File.read(reinterpret_cast<char *>(&CustomT), sizeof(CustomT));
         File.read(reinterpret_cast<char *>(&Color), sizeof(Color));
         File.read(reinterpret_cast<char *>(&Br), sizeof(Br));
     }
+    // sets "origin" and "color" when loading with trenchbroom
     void SetVar(std::string Var,std::string Val) override{
         if(Var == "color"){
             TextSplit cf;
@@ -108,7 +106,6 @@ class LightFlood: public Ent{
     GLuint Sh;
     float Think(float TPS) override{
         Pos = {0,6000,0};
-        //Vec3 Rot = {0,3500,0};
         if(!baked){
             baked = true;
             Sh = OpenGlCreateShaderProgram("shaders/Light.vert.glsl","shaders/Light.frag.glsl");
@@ -119,7 +116,7 @@ class LightFlood: public Ent{
         }
 
 
-        return 0;//1/30.0f;
+        return 0;
     }
 
     void PreRender() override{
@@ -163,42 +160,7 @@ class LightFlood: public Ent{
         glLineWidth(1);
     }
     void Render2D() override{
-        /*
-        glActiveTexture(GL_TEXTURE0);
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, DepthTx);
-        glUseProgram(NULL);
-        glColor3f(0.1f,1,1);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0,0);
-        glVertex3f(0,0,1);
-        glTexCoord2f(1,0);
-        glVertex3f(600,0,1);
-        glTexCoord2f(1,1);
-        glVertex3f(600,600,1);
-        glTexCoord2f(0,1);
-        glVertex3f(0,600,1);
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-         */
     }
-
-    /*
-    void Render3D() override{
-        Vec3 Rot = rotatePoint({0,3500,0},{(Time+CustomT)*2*2,(Time+CustomT)*9*2,(Time+CustomT)*3*2});
-        glColor3ub(255,0,0);
-        glPointSize(4);
-        glBegin(GL_POINTS);
-        glVertex3f(Pos.X+Rot.X,Pos.Y+Rot.Y,Pos.Z+Rot.Z);
-        glEnd();
-    }
-    float Think(float TPS) override{
-        //ThinkTimes = ThinkTimes+1;
-        //if(ThinkTimes >1){
-        //    KillSelf();
-        //}
-        return 10;
-    }*/
 
 
 };

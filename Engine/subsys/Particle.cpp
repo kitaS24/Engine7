@@ -5,8 +5,6 @@
 void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Material *Material,GpuLights *L,unsigned int LN,Vec3 CamPos,Vec4 Color){
     glEnable(GL_TEXTURE_2D);
     if(!(*Material).Loaded){
-        //glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, (*(materials+0)).Texture);
         glUseProgram(NULL);
         glColor3ub(255,0,0);
     }else {
@@ -63,9 +61,8 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
 
 
 void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
-    //glEnable(GL_TEXTURE_2D);
     glUseProgram(Shader);
-    //glUseProgram(NULL);
+
     glUniform3f(glGetUniformLocation(Shader, "FloodPos"), LightPos.X, LightPos.Y, LightPos.Z);
     glUniform3f(glGetUniformLocation(Shader, "FloodSize"), LightSize.X, LightSize.Y, LightSize.Z);
     glUniform3f(glGetUniformLocation(Shader, "FloodDir"), LightDir.X, LightDir.Y, LightDir.Z);
@@ -96,8 +93,4 @@ void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 S
         glVertex3f((*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
     }
     glEnd();
-    //glActiveTexture(GL_TEXTURE1);
-    //glDisable(GL_TEXTURE_2D);
-    //glActiveTexture(GL_TEXTURE0);
-    //glDisable(GL_TEXTURE_2D);
 }
