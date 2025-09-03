@@ -30,6 +30,7 @@ public:
         return o;
     }
 
+    //returns if out of bounds
     bool GetTextOOB(unsigned int p){
         unsigned int InnerP = 0;
         std::string o = "";

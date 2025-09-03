@@ -3,6 +3,7 @@
 //
 
 void CreateBrushBoundingBox(Brush &Br){
+    //creates bounding box by getting every vertex
     Br.BoundingBox1 = Br.BrushPlane[0].Vertex[0];
     Br.BoundingBox2 = Br.BrushPlane[0].Vertex[0];
     for (int i = 0; i < Br.Planes; ++i) {
@@ -31,6 +32,7 @@ void CreateBrushBoundingBox(Brush &Br){
 }
 
 void CreateBrushBoundingBoxNormals(Brush &Br){
+    //creates bounding box by getting every CollisionPos
     for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BoundingBox1.X > Br.BrushPlane[i].CollisionPos.X){
                 Br.BoundingBox1.X = Br.BrushPlane[i].CollisionPos.X;
@@ -54,6 +56,7 @@ void CreateBrushBoundingBoxNormals(Brush &Br){
     }
 }
 void CreateBrushBoundingBoxAll(Brush &Br){
+    //does both
     CreateBrushBoundingBox(Br);
     CreateBrushBoundingBoxNormals(Br);
 }

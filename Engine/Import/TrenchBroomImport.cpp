@@ -266,6 +266,7 @@ void ImportEnts(std::string MapName,std::vector<std::unique_ptr<Ent>> &LevelEnt)
                 }
             }
 
+            // removing " , ' ' and converting to lowercase
             for (int i = 0; i < Parameters[0].length(); ++i) {
                 //to lower case
                 if(Parameters[0].at(i) >='A' && Parameters[0].at(i)<='Z'){
@@ -275,6 +276,7 @@ void ImportEnts(std::string MapName,std::vector<std::unique_ptr<Ent>> &LevelEnt)
                 }
             }
 
+            // creating new ent, else set var
             if(EntWrite) {
                 if (LevelEnt[LevelEnt.size() - 1]) {
                     LevelEnt[LevelEnt.size() - 1]->SetVar(Parameters[2], Parameters[1]);

@@ -8,12 +8,15 @@ private:
     DISPLAY *D;
    int KeyM[256];
 public:
+    //sets OpenGL display
     void UpdateWindow(DISPLAY* d){
             D = d;
     }
+    //allows to map a key
     void Map(unsigned char Key,int glfwVal){
         KeyM[Key] = glfwVal;
     }
+    //gets key state
     bool key(unsigned char Key){
         if(KeyM[Key] >999){
             if(KeyM[Key] == Engine_RM) {
@@ -26,6 +29,7 @@ public:
             return glfwGetKey((*D).window, KeyM[Key]);
         }
     }
+    //setups keys, for loop
     void SetupGlfwKeys(){
         for (int i = GLFW_KEY_A; i < GLFW_KEY_Z; ++i) {
             KeyM[i] = i;

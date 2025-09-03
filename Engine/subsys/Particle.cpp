@@ -4,6 +4,7 @@
 
 void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Material *Material,GpuLights *L,unsigned int LN,Vec3 CamPos,Vec4 Color){
     glEnable(GL_TEXTURE_2D);
+    //sets shader, texture
     if(!(*Material).Loaded){
         glUseProgram(NULL);
         glColor3ub(255,0,0);
@@ -16,6 +17,7 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, (*Material).TextureProperty);
         }
+        //sets data
         glUseProgram((*Material).Shader);
         glUniform3fv(glGetUniformLocation((*Material).Shader, "LightPos"), LN,(*L).Pos);
         glUniform3fv(glGetUniformLocation((*Material).Shader, "LightCol"), LN,(*L).Color);
@@ -38,6 +40,7 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
     glColor4ub(Color.X,Color.Y,Color.Z,Color.A);
     glMultiTexCoord3f(GL_TEXTURE2,Normal.X,Normal.Y,Normal.Z);
 
+    //render all particles
     for (int i = 0; i < RenderParticles; ++i) {
         glMultiTexCoord2f(GL_TEXTURE0, 0, 0);
         glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[0].X, (*(Pos+i)).Y + PPos[0].Y, (*(Pos+i)).Z + PPos[0].Z);
@@ -52,6 +55,7 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
         glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
         glVertex3f((*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
     }
+    //end
     glEnd();
     glActiveTexture(GL_TEXTURE1);
     glDisable(GL_TEXTURE_2D);
@@ -61,8 +65,9 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
 
 
 void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
+    //sets a shader
     glUseProgram(Shader);
-
+    //sets Flood data
     glUniform3f(glGetUniformLocation(Shader, "FloodPos"), LightPos.X, LightPos.Y, LightPos.Z);
     glUniform3f(glGetUniformLocation(Shader, "FloodSize"), LightSize.X, LightSize.Y, LightSize.Z);
     glUniform3f(glGetUniformLocation(Shader, "FloodDir"), LightDir.X, LightDir.Y, LightDir.Z);
@@ -75,6 +80,7 @@ void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 S
     };
     Vec3 Normal = rotatePoint({0,0,-1},Rot);
 
+    // same, rendering particles
     glBegin(GL_QUADS);
     glMultiTexCoord3f(GL_TEXTURE2,Normal.X,Normal.Y,Normal.Z);
     glColor3ub(255,255,255);
@@ -92,5 +98,6 @@ void ShadowRenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 S
         glMultiTexCoord3f(GL_TEXTURE1, (*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
         glVertex3f((*(Pos+i)).X + PPos[3].X, (*(Pos+i)).Y + PPos[3].Y, (*(Pos+i)).Z + PPos[3].Z);
     }
+    //end
     glEnd();
 }

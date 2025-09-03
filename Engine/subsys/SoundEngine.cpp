@@ -22,6 +22,7 @@ struct WavPcmHeader {
 
 class SoundEngineSource {
 
+    //loading WAV
     bool LoadWAV(const std::string &filename, ALuint &outBuffer, float &outPlayTime) {
         std::ifstream file(filename, std::ios::binary);
         if (!file) {
@@ -29,6 +30,7 @@ class SoundEngineSource {
             return false;
         }
 
+        //getting header
         WavPcmHeader header;
         file.read(reinterpret_cast<char *>(&header), sizeof(WavPcmHeader));
         if (std::strncmp(header.riff, "RIFF", 4) != 0 || std::strncmp(header.wave, "WAVE", 4) != 0) {
@@ -41,7 +43,7 @@ class SoundEngineSource {
         }
 
         char *audioData = new char[header.dataSize];
-        file.read(reinterpret_cast<char *>(audioData), header.dataSize);
+        file.read(reinterpret_cast<char *>(audioData), header.dataSize);//getting Data
         if (!file) {
             std::cerr << "Failed to read WAV audio data.\n";
             delete[] audioData;
@@ -50,6 +52,7 @@ class SoundEngineSource {
 
         outPlayTime = float(header.dataSize) / float(header.byteRate);
 
+        //copying to OpenAl,freeing mem
         ALenum format = 0;
         if (header.channels == 1) {
             format = (header.bitsPerSample == 8) ? AL_FORMAT_MONO8 : AL_FORMAT_MONO16;
@@ -121,7 +124,7 @@ public:
     }
     void Play(float SoundVolume){
 
-        alSourcei(AlSource, AL_SOURCE_RELATIVE, AL_FALSE); // Must be FALSE for 3D spatial sound
+        alSourcei(AlSource, AL_SOURCE_RELATIVE, AL_FALSE); //3D sound
         alSource3i(AlSource, AL_POSITION, Source.X, Source.Y, Source.Z);
 
         alSourcei(AlSource, AL_BUFFER, bufferID);

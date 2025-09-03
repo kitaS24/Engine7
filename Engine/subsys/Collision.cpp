@@ -8,6 +8,7 @@ bool CollisionBehindASide(BrushSide &S,Vec3 Point){
     return DotProduct3F(NormaliseVec3(V),S.Normal) <0;
 }
 bool CollisionInBrush(Brush &B,Vec3 Point){
+    //works for CONVEX brushes
     if(!B.Active){return false;}
     for (int i = 0; i < B.Planes; ++i) {
         if(!CollisionBehindASide(B.BrushPlane[i],Point)){
@@ -17,6 +18,7 @@ bool CollisionInBrush(Brush &B,Vec3 Point){
     return true;
 }
 bool CollisionWorld(Brush *Brushes,unsigned int CheckBrushes,Vec3 Point){
+    //goes thru all brushes and checks them
     for (int i = 0; i < CheckBrushes; ++i) {
         if(CollisionInBrush(*(Brushes+i),Point)){
             return true;
@@ -27,10 +29,12 @@ bool CollisionWorld(Brush *Brushes,unsigned int CheckBrushes,Vec3 Point){
 
 bool CollisionBehindASideArea(BrushSide &S,Vec3 Point,Vec3 HSize){
     //returns true if behind the plane
+    //same but offsets the plane
     Vec3 V = Vec3Subtract(Point, Vec3Add(S.CollisionPos, Vec3Multiply(S.Normal,HSize)));
     return DotProduct3F(NormaliseVec3(V),S.Normal) <0;
 }
 bool CollisionInBrushArea(Brush &B,Vec3 Point,Vec3 HSize){
+    //works for CONVEX brushes
     if(!B.Active){return false;}
     for (int i = 0; i < B.Planes; ++i) {
         if(!CollisionBehindASideArea(B.BrushPlane[i],Point,HSize)){
@@ -40,6 +44,7 @@ bool CollisionInBrushArea(Brush &B,Vec3 Point,Vec3 HSize){
     return true;
 }
 bool CollisionWorldArea(Brush *Brushes,unsigned int CheckBrushes,Vec3 Point,Vec3 HSize){
+    //goes thru all brushes and checks them
     for (int i = 0; i < CheckBrushes; ++i) {
         if(CollisionInBrushArea(*(Brushes+i),Point,HSize)){
             return true;
@@ -60,6 +65,7 @@ bool AABBtoAABB(Vec3 A1,Vec3 A2,Vec3 B1,Vec3 B2) {
 }
 
 bool AABBtoAABBSmart(Vec3 A1,Vec3 A2,Vec3 B1,Vec3 B2){
+    //same as AABB, but "shifts" points so the work with AABBtoAABB function
     Vec3 A1s=A1;Vec3 A2s=A2;Vec3 B1s=B1;Vec3 B2s=B2;
 
     if(A2.X < A1.X){A1s.X=A2.X;A2s.X=A1.X;}

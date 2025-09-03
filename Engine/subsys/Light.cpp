@@ -3,6 +3,7 @@
 //
 
 void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color){
+    //adds light to the scene (needs to be added every frame)
     int Index = 0;
     for (int i = 0; i < Engine_Max_Lights; ++i) {
         if(!(*L).enabled[i]){
@@ -22,6 +23,7 @@ void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color){
 }
 
 void AddFloodLight(GpuLights *L,Vec3 Pos,Vec3 Color,Vec3 Size,Vec3 Dir,GLuint DT){
+    //adds flood/sun light to the scene (needs to be added every frame)
     if(!(*L).FloodEnabled) {
         (*L).FloodPos= Pos;
         (*L).FloodColor= Color;
@@ -34,6 +36,7 @@ void AddFloodLight(GpuLights *L,Vec3 Pos,Vec3 Color,Vec3 Size,Vec3 Dir,GLuint DT
     }
 }
 
+// USELESS
 void LightCalcRenderBrushSide(BrushSide &Side,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
 
     if(Side.Material == 0){return;}
@@ -64,6 +67,7 @@ void LightCalcRenderBrushSide(BrushSide &Side,GLuint Shader,Vec3 LightPos,Vec3 L
     glDisable(GL_TEXTURE_2D);
 
 }
+//USELESS
 void LightCalcRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
     if(!Br.Active){return;}
     for (int i = 0; i < Br.Planes; ++i) {
@@ -73,7 +77,7 @@ void LightCalcRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,V
     }
 }
 
-
+// creates flood light texture
 void InitFloodLight(GLuint &tx,GLuint &fbo,GLuint &rbo){
 
     int Size = 2048*2;
@@ -98,14 +102,14 @@ void InitFloodLight(GLuint &tx,GLuint &fbo,GLuint &rbo){
 }
 
 
-
+//updates floodlight
 void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,Vec2 WindowSize,std::vector<std::unique_ptr<Ent>> &Ent,GLuint &tx,GLuint &fbo,GLuint &rbo){
 
 
     int Size = 2048*2;
     glViewport(0, 0, Size, Size);
 
-
+    // sets a render tx
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tx, 0);
@@ -129,13 +133,14 @@ void UpdateFloodLight(Vec3 LightPos,Vec3 LightSize,Vec3 LightDir,GLuint Shader,V
     glRotatef(90,1,0,0);
     glTranslatef(-LightPos.X,-LightPos.Y,-LightPos.Z);
 
+    //tries to make every entity render something
     for (int i = 0; i < Ent.size(); i++) {
         if (Ent[i]) {
             Ent[i]->ShadowPass(LightPos,LightSize,LightDir,Shader);
         }
     }
 
-
+    //returns to default
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glViewport(0, 0, WindowSize.X, WindowSize.Y);

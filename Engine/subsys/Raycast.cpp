@@ -3,15 +3,18 @@
 //
 
 float WorldRaycast(Vec3 Start,Vec3 End,Vec3 Size,float SampleRate,Brush *Brushes){
+    //sets Dist, Direction
     Vec3 Dir = NormaliseVec3({End.X - Start.X,End.Y - Start.Y,End.Z - Start.Z});
     float D = MagVec3({End.X - Start.X,End.Y - Start.Y,End.Z - Start.Z});
 
     bool CollisionsUsed[Engine_Max_Brushes] = {};
 
+    //sets brushes that might collide
     for (int i = 0; i < Engine_Max_Brushes; ++i) {
         CollisionsUsed[i] = AABBtoAABBSmart(Start,End,IntToFloat3((*(Brushes+i)).BoundingBox1),IntToFloat3((*(Brushes+i)).BoundingBox2));
     }
 
+    //checking every brush that can collide
     for (int i = 0; i < D/SampleRate; ++i) {
         for (int j = 0; j < Engine_Max_Brushes; ++j) {
             if(CollisionsUsed[j]){

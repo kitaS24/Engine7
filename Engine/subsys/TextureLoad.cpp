@@ -8,8 +8,9 @@ void LoadMaterials(Material *Materials,std::string FileName) {
     std::string V = "";
     IniRead Ini;
 
-    Ini.SearchHeader(FileName, "material");
+    Ini.SearchHeader(FileName, "material");//find [material]
     for (int i = 0; i < Engine_Max_Materials; ++i){
+        //checking for "!" - error, else adding that to texture list
         V = Ini.ListHeaderContent();
         if (V.at(0) == '!') {
             break;
@@ -18,8 +19,9 @@ void LoadMaterials(Material *Materials,std::string FileName) {
         TextureId = TextureId + 1;
     }
 
-    for (int i = 0; i < TextureId; ++i) {
 
+    for (int i = 0; i < TextureId; ++i) {
+        //search for a header, getting base texture,data texture,shader,metal(bool),Specular RGB
         Ini.SearchHeader(FileName, materialNames[i]);
 
         (*(Materials + i + 1)).Texture = LoadBmpTexture(Ini.HeaderVar("base"), false, false);
