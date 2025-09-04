@@ -6,6 +6,7 @@
 #define ENGINE7_ENTMANAGER_H
 
 #include "structs.h"
+#include "math.cpp"
 #include <string>
 
 class Ent{
@@ -30,12 +31,19 @@ protected:
     MapTransition *Transition;
 
 
+
+
+
     void ChangeMap(std::string Map,bool IsNewMap){
         (*Transition).MapName = Map;
         (*Transition).IsNewMap = IsNewMap;
         (*Transition).LoadMap = true;
     }
 public:
+
+    Vec3 BoundingBox[2];
+
+
     virtual std::string GetDebugName(){
         return "Not Defined!";
     }
@@ -80,6 +88,38 @@ public:
     }
     virtual Vec3 GetRotation(){
         return Rot;
+    }
+    virtual void SetBoundingBoxPos(Vec3 Pos[2]){
+        BoundingBox[0] = Pos[0];
+        BoundingBox[1] = Pos[1];
+
+        float tmp = 0;
+
+        if(BoundingBox[1].X < BoundingBox[0].X){
+            //swap
+            tmp = BoundingBox[1].X;
+            BoundingBox[1].X = BoundingBox[0].X;
+            BoundingBox[0].X = tmp;
+        }
+        if(BoundingBox[1].Y < BoundingBox[0].Y){
+            //swap
+            tmp = BoundingBox[1].Y;
+            BoundingBox[1].Y = BoundingBox[0].Y;
+            BoundingBox[0].Y = tmp;
+        }
+        if(BoundingBox[1].Z < BoundingBox[0].Z){
+            //swap
+            tmp = BoundingBox[1].Z;
+            BoundingBox[1].Z = BoundingBox[0].Z;
+            BoundingBox[0].Z = tmp;
+        }
+    }
+
+    virtual void SetBoundingBoxSize(Vec3 Size){
+        BoundingBox[0] = Vec3Subtract(Pos,Vec3Multiply(Size,{0.5,0.5,0.5}));
+        BoundingBox[1] = Vec3Add(Pos,Vec3Multiply(Size,{0.5,0.5,0.5}));
+
+
     }
 
     void KillSelf(){

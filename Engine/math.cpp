@@ -2,6 +2,9 @@
 // Created by kitaS24 on 19.08.2025.
 //
 
+#ifndef File_Engine_Math
+#define File_Engine_Math
+
 Vec3 IntToFloat3(Vec3I In){
     return {float(In.X),float(In.Y),float(In.Z)};
 }
@@ -189,3 +192,6 @@ float easeInOutQuart( float t ) {
 float Interpolate(float A,float B,float I){
     return A+((B-A)*I);
 }
+
+
+#endif
