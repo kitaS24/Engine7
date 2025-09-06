@@ -4,7 +4,6 @@
 
 class Player: public Ent{
 
-    Vec3 Vel = {0,0,0};
     Vec3 CamRotVecInternal = {0,0,0};
 
     //

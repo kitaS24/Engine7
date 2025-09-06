@@ -8,6 +8,8 @@
 #include "structs.h"
 #include "math.cpp"
 #include <string>
+#include <vector>
+#include <memory>
 
 class Ent{
 private:
@@ -30,7 +32,7 @@ protected:
     std::vector<std::unique_ptr<Ent>> *Ents;
     MapTransition *Transition;
 
-
+    float weight;//kg
 
 
 
@@ -120,6 +122,28 @@ public:
         BoundingBox[1] = Vec3Add(Pos,Vec3Multiply(Size,{0.5,0.5,0.5}));
 
 
+    }
+
+    void SetWeight(float Kg){
+        weight = Kg;
+    }
+    float GetWeight(){
+        return weight;
+    }
+    float GetForce(float G){
+        return weight*(G/1000);
+        //F = mG
+        // g/1000 converts mm/s to m/s
+    }
+    Vec3 GetForceVec(Vec3 G){
+        return Vec3Multiply({weight,weight,weight}, Vec3Divide(G,{1000,1000,1000}));
+        //F = mG
+        // g/1000 converts mm/s to m/s
+    }
+    Vec3 GetMomentum(){
+        return Vec3Multiply({weight,weight,weight}, Vec3Divide(Vel,{1000,1000,1000}));
+        //F = m(v/1000)
+        // v/1000 converts mm/s to m/s
     }
 
     void KillSelf(){

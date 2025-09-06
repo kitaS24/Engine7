@@ -42,17 +42,22 @@
 
 ## Entity Functions
 
-| Function    | In                             | return | Description                                                                                                       |
-|-------------|--------------------------------|--------|-------------------------------------------------------------------------------------------------------------------|
-| KillSelf    |                                | void   | Flags Entity to be killed (public)                                                                                |
-| GetPos      |                                | Vec3   | Returns Entity Pos (public)                                                                                       |
-| GetScale    |                                | Vec3   | Returns Entity Scale (public)                                                                                     |
-| GetRotation |                                | Vec3   | Returns Entity Rotation (public)                                                                                  |
-| SetPos      | Vec3                           | void   | Sets Entity Pos (public)                                                                                          |
-| SetRot      | Vec3                           | void   | Sets Entity Rot (public)                                                                                          |
-| SetScale    | Vec3                           | void   | Sets Entity Scale (public)                                                                                        |
-| addVel      | Vec3                           | void   | Adds Velocity to the entity velocity (public)                                                                     |
-| ChangeMap   | std::string Map,bool IsNewMap  | void   | Sets Map for engine to load. bool IsNewMap is used when loading new map (not quicksave),OnMapStart will be called |
+| Function    | In                            | return | Description                                                                                                       |
+|-------------|-------------------------------|--------|-------------------------------------------------------------------------------------------------------------------|
+| KillSelf    |                               | void   | Flags Entity to be killed (public)                                                                                |
+| GetPos      |                               | Vec3   | Returns Entity Pos (public)                                                                                       |
+| GetScale    |                               | Vec3   | Returns Entity Scale (public)                                                                                     |
+| GetRotation |                               | Vec3   | Returns Entity Rotation (public)                                                                                  |
+| SetPos      | Vec3                          | void   | Sets Entity Pos (public)                                                                                          |
+| SetRot      | Vec3                          | void   | Sets Entity Rot (public)                                                                                          |
+| SetScale    | Vec3                          | void   | Sets Entity Scale (public)                                                                                        |
+| addVel      | Vec3                          | void   | Adds Velocity to the entity velocity (public)                                                                     |
+| ChangeMap   | std::string Map,bool IsNewMap | void   | Sets Map for engine to load. bool IsNewMap is used when loading new map (not quicksave),OnMapStart will be called |
+| SetWeight   | float Kg                      | void   | Sets weight in KG                                                                                                 |
+| GetWeight   |                               | float  | Gets weight in KG                                                                                                 |
+| GetForce    | float G                       | float  | Returns force -Y                                                                                                  |
+| GetForceVec | Vec3 G                        | Vec3   | Returns force Vec                                                                                                 |
+| GetMomentum |                               | Vec3   | Returns momentum (from ent Vel)                                                                                   |
 
 ## Entity Events
 
