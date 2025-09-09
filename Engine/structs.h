@@ -60,9 +60,8 @@ struct Brush{
     unsigned int Planes;
     int CollisionType;
     bool Active;
-    Vec3 TransformMatrix;
-    Vec3 RotationMatrix[3];
-    Vec3 Rotation;
+    Vec3 RotMatrix[3];
+    Vec3 Transformation[3];//transform,rotationPoint,Rotation
 
     Vec3I BoundingBox1;
     Vec3I BoundingBox2;
@@ -72,9 +71,7 @@ struct BrushSave{
     unsigned int Planes;
     int CollisionType;
     bool Active;
-    Vec3 TransformMatrix;
-    Vec3 RotationMatrix[3];
-    Vec3 Rotation;
+    Vec3 Transformation[3];
 
     Vec3I BoundingBox1;
     Vec3I BoundingBox2;

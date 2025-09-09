@@ -10,8 +10,10 @@ bool CollisionBehindASide(BrushSide &S,Vec3 Point){
 bool CollisionInBrush(Brush &B,Vec3 Point){
     //works for CONVEX brushes
     if(!B.Active){return false;}
+    BrushSide BS = {};
     for (int i = 0; i < B.Planes; ++i) {
-        if(!CollisionBehindASide(B.BrushPlane[i],Point)){
+        BS = CollisionSideRotate(B.BrushPlane[i],B.Transformation,B.RotMatrix);
+        if(!CollisionBehindASide(BS,Point)){
             return false;
         }
     }
@@ -36,8 +38,10 @@ bool CollisionBehindASideArea(BrushSide &S,Vec3 Point,Vec3 HSize){
 bool CollisionInBrushArea(Brush &B,Vec3 Point,Vec3 HSize){
     //works for CONVEX brushes
     if(!B.Active){return false;}
+    BrushSide BS = {};
     for (int i = 0; i < B.Planes; ++i) {
-        if(!CollisionBehindASideArea(B.BrushPlane[i],Point,HSize)){
+        BS = CollisionSideRotate(B.BrushPlane[i],B.Transformation,B.RotMatrix);
+        if(!CollisionBehindASideArea(BS,Point,HSize)){
             return false;
         }
     }

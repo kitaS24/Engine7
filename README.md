@@ -92,3 +92,13 @@ when calling pass 2 arguments
 | MapKey *                            | UserKeyBind | User KeyBinds (class. use Map(unsigned char Key,int glfwVal) to bind, use key(unsigned char Key) to get mapped key state) |
 | std::vector<std::unique_ptr<Ent>> * | Ents        | Pointer to the list with all entities                                                                                     |
 | MapTransition *                     | Transition  | Pointer to struct for level transition                                                                                    |
+
+
+## SubSystem Functions
+
+
+| FunctionName          | In                                            | Out        | Description                                                    |
+|-----------------------|-----------------------------------------------|------------|----------------------------------------------------------------|
+| RotateBrush()         | Brush &Br,Vec3 SetRot,Vec3 RotPoint           | void       | sets rotation for the brush                                    |
+| RenderSideRotate()    | BrushSide Br,Vec3 Transform[3],Vec3 Matrix[3] | BrushSide  | rotates brush side with matrices (including vert)              |
+| CollisionSideRotate() | BrushSide Br,Vec3 Transform[3],Vec3 Matrix[3] | BrushSide  | rotates brush side with matrices (ONLY normals, Collision Pos) |

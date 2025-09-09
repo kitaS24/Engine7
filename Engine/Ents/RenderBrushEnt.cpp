@@ -111,17 +111,21 @@ class WorldRender : public Ent{
     }
     void RenderBrush(Brush &Br,Material *materials,GpuLights *L,unsigned int LN){
         if(!Br.Active){return;}
+        BrushSide BS = {};
         for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BrushPlane[i].Used) {
-                RenderBrushSide(Br.BrushPlane[i],materials,L,LN);
+                BS = RenderSideRotate(Br.BrushPlane[i],Br.Transformation,Br.RotMatrix);
+                RenderBrushSide(BS,materials,L,LN);
             }
         }
     }
     void ShadowRenderBrush(Brush &Br,GLuint Shader,Vec3 LightPos,Vec3 LightSize,Vec3 LightDir){
         if(!Br.Active){return;}
+        BrushSide BS = {};
         for (int i = 0; i < Br.Planes; ++i) {
             if(Br.BrushPlane[i].Used) {
-                ShadowRenderBrushSide(Br.BrushPlane[i],Shader,LightPos,LightSize,LightDir);
+                BS = RenderSideRotate(Br.BrushPlane[i],Br.Transformation,Br.RotMatrix);
+                ShadowRenderBrushSide(BS,Shader,LightPos,LightSize,LightDir);
             }
         }
     }

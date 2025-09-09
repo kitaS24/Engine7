@@ -57,11 +57,9 @@ void SaveBrushes(Brush *Brushes, std::ofstream &File){
         BS.Planes = B.Planes;
         BS.CollisionType = B.CollisionType;
         BS.Active = B.Active;
-        BS.TransformMatrix = B.TransformMatrix;
         for (int j = 0; j < 3; ++j) {
-            BS.RotationMatrix[j] = B.RotationMatrix[j];
+            BS.Transformation[j] = B.Transformation[j];
         }
-        BS.Rotation = B.Rotation;
         BS.BoundingBox1 = B.BoundingBox1;
         BS.BoundingBox2 = B.BoundingBox2;
 
@@ -86,11 +84,9 @@ void LoadBrushes(Brush *Brushes, std::ifstream &File){
         B.Planes = BS.Planes;
         B.CollisionType = BS.CollisionType;
         B.Active = BS.Active;
-        B.TransformMatrix = BS.TransformMatrix;
         for (int j = 0; j < 3; ++j) {
-            B.RotationMatrix[j] = BS.RotationMatrix[j];
+            B.Transformation[j] = BS.Transformation[j];
         }
-        B.Rotation = BS.Rotation;
         B.BoundingBox1 = BS.BoundingBox1;
         B.BoundingBox2 = BS.BoundingBox2;
 

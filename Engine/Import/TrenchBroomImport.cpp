@@ -158,6 +158,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
                 (*(Brushes+Brush)).Planes = BrushSide+1;
                 //std::cout << (*(Brushes+Brush)).Planes<<"\n";
                 CreateBrushBoundingBoxAll((*(Brushes+Brush)));
+                InitRotateMatrix((*(Brushes+Brush)));
             }
             Brush = Brush+1;
             BrushSide =-1;
@@ -209,6 +210,7 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
             (*(Brushes+Brush)).Planes =Engine_Brush_Planes;
         }
         CreateBrushBoundingBoxAll((*(Brushes+Brush)));
+        InitRotateMatrix((*(Brushes+Brush)));
     }
 
 

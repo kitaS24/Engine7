@@ -7,6 +7,8 @@ int main() {
     Game.Setup();
     Game.SetSwapInterval(1);
 
+    Game.CompileTrenchBroomMap("PipeMap.obj","PipeMap.map","saves/test1.gems","textures/textures.ini");
+
     while(Game.Frame()){}
 
     Game.Cleanup();

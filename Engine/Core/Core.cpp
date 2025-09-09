@@ -27,6 +27,7 @@
 #include "game/EntManager.h"
 //subsys (level 1)
 #include "CreateBrush.cpp"
+#include "BrushTransform.cpp"
 #include "Collision.cpp"
 #include "Raycast.cpp"
 #include "Light.cpp"
@@ -183,7 +184,7 @@ public:
 
         //debug window
         ImGui::Begin("DEBUG");
-        ImGui::SliderFloat("TimeScale",&DebugTimeScale,1,100);
+        ImGui::SliderFloat("TimeScale",&DebugTimeScale,0.5,100);
         ImGui::End();
 
         //map loading (if possible)
@@ -200,6 +201,13 @@ public:
         //start 3D frame
         OpenGlErase(0.0f,0.7f,1.0f,1.0f,true,true);
         OpenGlBeginFrame3D(D.window,800,600,500000,true);
+
+        //rotation/transformation test
+        //RotateBrush(LevelBrushes[8],{0,T*10,0},{0,-400,0});
+        //RotateBrush(LevelBrushes[9],{0,T*10,0},{0,-400,0});
+        //RotateBrush(LevelBrushes[10],{0,T*10,0},{0,-400,0});
+
+        //LevelBrushes[0].Transformation[0] = {T*10,0,0};
 
         //3D rendering
         EntPreRender(LevelEnt);
