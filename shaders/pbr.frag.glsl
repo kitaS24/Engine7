@@ -11,6 +11,8 @@ varying vec3 Normal;
 //In
 uniform vec3 LightPos[512];
 uniform vec3 LightCol[512];
+uniform vec3 LightDir[64];
+uniform vec3 LightDt[64];
 uniform int LightN;
 uniform int Property;//1 to read property tx
 uniform vec3 CamPos;
@@ -117,14 +119,41 @@ return R;
 
 vec3 CalculateLights(float k,vec3 F,vec3 Color,float Roughness){
 vec3 C = Color*vec3(0.005,0.005,0.005);
+//vec3 VecToPoint = vec3(0,0,0);
+float spotFade = 0;
     for(int i=0;i<LightN;i++){
-        vec3 LightVec = normalize(LightPos[i]-Pos);
+    vec3 LightVec = normalize(LightPos[i]-Pos);
+    if(i<64){
+        if(LightDt[i].x>=180){
+        //point light
+
+        float SurfaceDot = dot(Normal,LightVec);
+                float IClDot = clamp(SurfaceDot,0,1);
+                float D = distance(LightPos[i],Pos)/1000;
+                vec3 LightI = LightCol[i]/(D*D);
+                vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,LightPos[i]))*LightI*IClDot;
+                C = C + CL;
+
+        }else{
+        if(dot(LightVec,LightDir[i])<cos(radians(LightDt[i].x))+sin(radians(LightDt[i].y))){//spotlight check
+        spotFade = clamp((dot(-LightVec,LightDir[i])-cos(radians(LightDt[i].x)))/sin(radians(LightDt[i].y)),0,1);
         float SurfaceDot = dot(Normal,LightVec);
         float IClDot = clamp(SurfaceDot,0,1);
         float D = distance(LightPos[i],Pos)/1000;
         vec3 LightI = LightCol[i]/(D*D);
-        vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,LightPos[i]))*LightI*IClDot;
+        vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,LightPos[i]))*mix(vec3(0,0,0),LightI,spotFade)*IClDot;
         C = C + CL;
+        }
+        }
+        }else{
+        float SurfaceDot = dot(Normal,LightVec);
+                float IClDot = clamp(SurfaceDot,0,1);
+                float D = distance(LightPos[i],Pos)/1000;
+                vec3 LightI = LightCol[i]/(D*D);
+                vec3 CL = (DiffuseBRDF(k,Color)+SpecularBRDF(1-k,Color,Roughness,F,LightPos[i]))*LightI*IClDot;
+                C = C + CL;
+
+        }
     }
     //flood light
     //return Color/5000;

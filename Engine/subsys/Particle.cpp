@@ -21,6 +21,10 @@ void RenderParticle(Vec3 *Pos,unsigned int RenderParticles,Vec3 Rot,Vec2 Size,Ma
         glUseProgram((*Material).Shader);
         glUniform3fv(glGetUniformLocation((*Material).Shader, "LightPos"), LN,(*L).Pos);
         glUniform3fv(glGetUniformLocation((*Material).Shader, "LightCol"), LN,(*L).Color);
+
+        glUniform3fv(glGetUniformLocation((*Material).Shader, "LightDir"), ClampInt(LN,0,Engine_MaxSpotLights-1),(*L).Dir);
+        glUniform3fv(glGetUniformLocation((*Material).Shader, "LightDt"), ClampInt(LN,0,Engine_MaxSpotLights-1),(*L).Data);
+
         glUniform1i(glGetUniformLocation((*Material).Shader, "LightN"), LN);
         glUniform1i(glGetUniformLocation((*Material).Shader, "Property"), (*Material).TxProperty);
         glUniform1i(glGetUniformLocation((*Material).Shader, "PropTex"), 1);

@@ -33,4 +33,7 @@
 //
 #define Engine_Map_Scale 25.4
 
+//
+#define Engine_MaxSpotLights 64
+
 #endif //ENGINE7_CORE_H

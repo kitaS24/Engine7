@@ -34,6 +34,9 @@ class WorldRender : public Ent{
             glUseProgram((*(materials+Side.Material)).Shader);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightPos"), LN,(*L).Pos);
             glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightCol"), LN,(*L).Color);
+
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightDir"), ClampInt(LN,0,Engine_MaxSpotLights-1),(*L).Dir);
+            glUniform3fv(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightDt"), ClampInt(LN,0,Engine_MaxSpotLights-1),(*L).Data);
             glUniform1i(glGetUniformLocation((*(materials+Side.Material)).Shader, "LightN"), LN);
 
             glUniform3f(glGetUniformLocation((*(materials+Side.Material)).Shader, "FloodPos"),(*L).FloodPos.X,(*L).FloodPos.Y,(*L).FloodPos.Z);

@@ -193,5 +193,16 @@ float Interpolate(float A,float B,float I){
     return A+((B-A)*I);
 }
 
+float ClampFloat(float V,float Min,float Max){
+    if(V>Max){return Max;}
+    if(V<Min){return Min;}
+    return V;
+}
+int ClampInt(int V,int Min,int Max){
+    if(V>Max){return Max;}
+    if(V<Min){return Min;}
+    return V;
+}
+
 
 #endif

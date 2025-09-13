@@ -2,7 +2,7 @@
 // Created by kitaS24 on 19.08.2025.
 //
 
-void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color){
+void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color,Vec3 Dir,float InnerCone,float OuterCone){
     //adds light to the scene (needs to be added every frame)
     int Index = 0;
     for (int i = 0; i < Engine_Max_Lights; ++i) {
@@ -18,6 +18,16 @@ void AddLight(GpuLights *L,Vec3 Pos,Vec3 Color){
     (*L).Color[Index*3+0] = Color.X;
     (*L).Color[Index*3+1] = Color.Y;
     (*L).Color[Index*3+2] = Color.Z;
+
+    if(Index <Engine_MaxSpotLights) {
+        (*L).Dir[Index * 3 + 0] = Dir.X;
+        (*L).Dir[Index * 3 + 1] = Dir.Y;
+        (*L).Dir[Index * 3 + 2] = Dir.Z;
+
+        (*L).Data[Index * 3 + 0] = InnerCone;
+        (*L).Data[Index * 3 + 1] = OuterCone;
+        (*L).Data[Index * 3 + 2] = 0;
+    }
 
     (*L).enabled[Index] = true;
 }

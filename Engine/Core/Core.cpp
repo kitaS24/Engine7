@@ -110,6 +110,14 @@ private:
             Lights.Color[i*3+2] = 0;
             Lights.enabled[i] = false;
         }
+        for (int i = 0; i < Engine_MaxSpotLights; ++i) {
+            Lights.Dir[i*3+0] = 0;
+            Lights.Dir[i*3+1] = 0;
+            Lights.Dir[i*3+2] = 0;
+            Lights.Data[i*3+0] = 0;
+            Lights.Data[i*3+1] = 0;
+            Lights.Data[i*3+2] = 0;
+        }
         //resetting flood/sun light
         Lights.FloodPos = {0,0,0};
         Lights.FloodColor = {0,0,0};

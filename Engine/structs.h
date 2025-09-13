@@ -90,6 +90,8 @@ struct Material{
 struct GpuLights{
     float Pos[Engine_Max_Lights*3];
     float Color[Engine_Max_Lights*3];
+    float Dir[Engine_MaxSpotLights*3];
+    float Data[Engine_MaxSpotLights*3];//Cone(inner),NotUsed,NotUSed
     bool enabled[Engine_Max_Lights];
 
     Vec3 FloodPos;

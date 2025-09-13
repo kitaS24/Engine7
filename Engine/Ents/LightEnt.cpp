@@ -8,6 +8,9 @@ class Light: public Ent{
 
     //setting RGB,Brightness
     Vec3 Color = {0,0,0};
+    Vec3 Dir = {};
+    float InnerCone = 180;
+    float OuterCone = 20;
     float Br = 8;
     int CustomT = rand()%1000;
     int ThinkTimes = 0;
@@ -24,11 +27,18 @@ class Light: public Ent{
         ImGui::Text("light entity");
         ImGui::ColorEdit3("Light Color",&Color.X);
         ImGui::SliderFloat("light Brightness",&Br,0,20);
+
+        ImGui::SliderFloat("Rot X",&Dir.X,180,-180);
+        ImGui::SliderFloat("Rot Y",&Dir.Y,180,-180);
+        ImGui::SliderFloat("Rot Z",&Dir.Z,180,-180);
+
+        ImGui::SliderFloat("InnerCone",&InnerCone,0,180);
+        ImGui::SliderFloat("OuterCone",&OuterCone,0,180);
         ImGui::End();
     }
     //adds light into the scene
     void PreRender() override{
-        AddLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br});
+        AddLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br}, rotatePoint({0,-1,0},Dir),InnerCone,OuterCone);
     }
     //renders dot on the ent pos
     void Render3D() override{
