@@ -122,5 +122,18 @@ by passing only `.gems` engine needs less time to load a level compared to `.map
 ![FullScreen](docs/screenshots/FullScreen2.png)
 
 #### Texture example
-![FullScreen](docs/screenshots/TextureExample.png)
-RED - metallic(0-1) | GREEN - roughness(0-1) or shininess
+![FullScreen](docs/screenshots/TextureExample.png)\
+RED - metallic(0-255) | GREEN - roughness(0-255) or shininess
+
+---
+# License
+**This project is licensed under the GNU GENERAL PUBLIC LICENSE**
+
+## Third-Party Licenses
+**This project uses third-party libraries which have their own licenses**
+
+* [GLFW](licenses/GLFW)  **| https://www.glfw.org/**
+* [GLEW](licenses/GLEW)  **| https://glew.sourceforge.net/**
+* [ImGui](licenses/ImGui)  **| https://github.com/ocornut/imgui**
+* [OpenAl](licenses/OpenAl)  **| https://github.com/kcat/openal-soft**
+* [SimpleGl](licenses/SimpleGl) **| https://github.com/kitaS24/SimpleGl**
