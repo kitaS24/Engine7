@@ -1,18 +1,30 @@
 # Readme for the GameEngine 7
 
-![Demo Screenshot](docs/screenshots/HeaderImg.png)
+![Demo Screenshot](docs/screenshots/HeaderImg.png)\
+engine that uses brushes to render the world.\
+Supports Trenchbroom import ([TRENCHBROOM MAP BUILDING](#TrenchBroomMapBuilding)).\
+pbr shaders
+
 ***
 
 # Table of Contents
 1. [Build (EXE,Release)](#Build)
 2. [Project Setup](#ProjectSetup)
 3. [TRENCHBROOM MAP BUILDING](#TrenchBroomMapBuilding)
-4. [Feature/ todo list](#FeatureList)
+4. [Features / todo list](#FeatureList)
 5. [Screenshots](#Screenshots)
 
 #### external (`docs/`)
 [BasicSetup](docs/BasicSetup.md)\
 [Entity Functions](docs/EntityFunctions.md)
+
+# QuickStart(Example)
+1. Build this code [Build (EXE,Release)](#Build)
+2. Build OpenAl [Compiling_OpenAl](#CompilingOpenAl)
+3. copy folders `\shaders` to Build folder
+4. copy folders `\resources\textures` to Build folder
+5. create `\saves`
+6. copy `PipeMap.obj` and `PipeMap.map` to Build folder. they can be found at `resources/maps`
 
 # Build
 
@@ -25,27 +37,35 @@ cmake --build . --config Release
 
 # ProjectSetup
 
-CMakeLists doesn't build OpenAL and puts dll into the Build folder
+CMake doesn't build OpenAL and puts dll into the Build folder
+
+if you have ONLY Engine7 (without an example project) keep reading, else just make sure that files exist
 
 1. Get Engine Folder or Example Engine7 Project
 2. create files EntManager.h,EntUser.h,GameEnt.cpp,GameSubsys.cpp in game folder
-3. setup files EntManager.h,EntUser.h,GameEnt.cpp,GameSubsys.cpp, example lower
-4. add "texture", "shaders" folder to Build folder
-5. "texture" folder must contain "textures.ini", example lower
-6. "texture" folder must contain your textures
+3. setup files EntManager.h,EntUser.h,GameEnt.cpp,GameSubsys.cpp, example in `docs/BasicSetup.md`
+4. add "textures", "shaders" folder to Build folder
+5. "textures" folder must contain "textures.ini", example in `docs/BasicSetup.md`
+6. "textures" folder must contain your textures
 7. "shaders" folder must contain your shaders (Vertex,Fragment)
-
----
-
-8. Compile OpenAL (openal-soft), guides can be found online
-9. paste OpenAl32.dll file into the Build folder
-10. if not taken from the example, copy basic engine code to "main.cpp"
-
-Engine project **should** build
 
 ##### IMPORTANT : for engine to launch, OpenAl32.dll should be present
 
-### For engine to work, copy example code into specified files
+### CompilingOpenAl
+
+1. Compile OpenAL (openal-soft), guides can be found in readme for OpenAl or you can use this
+```
+mkdir Build
+cd Build
+cmake ..
+cmake --build . --config Release
+```
+2. paste OpenAl32.dll file into the Build folder
+
+Engine project **should** build
+
+
+
 **code is in the docs/BasicSetup.md**
 `docs/BasicSetup.md` also contains file structure
 
