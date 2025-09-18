@@ -8,17 +8,18 @@ pbr shaders
 ***
 
 # Table of Contents
-1. [Build (EXE,Release)](#Build)
-2. [Project Setup](#ProjectSetup)
-3. [TRENCHBROOM MAP BUILDING](#TrenchBroomMapBuilding)
-4. [Features / todo list](#FeatureList)
-5. [Screenshots](#Screenshots)
+1. [QuickStart](#QuickStart)
+2. [Build (EXE,Release)](#Build)
+3. [Project Setup](#ProjectSetup)
+4. [TRENCHBROOM MAP BUILDING](#TrenchBroomMapBuilding)
+5. [Features / todo list](#FeatureList)
+6. [Screenshots](#Screenshots)
 
 #### external (`docs/`)
 [BasicSetup](docs/BasicSetup.md)\
 [Entity Functions](docs/EntityFunctions.md)
 
-# QuickStart(Example)
+# QuickStart
 1. Build this code [Build (EXE,Release)](#Build)
 2. Build OpenAl [Compiling_OpenAl](#CompilingOpenAl)
 3. copy folders `\shaders` to Build folder
@@ -37,9 +38,9 @@ cmake --build . --config Release
 
 # ProjectSetup
 
-CMake doesn't build OpenAL and puts dll into the Build folder
+CMake does not build OpenAL and puts dll into the Build folder
 
-if you have ONLY Engine7 (without an example project) keep reading, else just make sure that files exist
+if you are using only Engine7 (without an example project) keep reading, else just make sure that files exist
 
 1. Get Engine Folder or Example Engine7 Project
 2. create files EntManager.h,EntUser.h,GameEnt.cpp,GameSubsys.cpp in game folder
@@ -62,14 +63,12 @@ cmake --build . --config Release
 ```
 2. paste OpenAl32.dll file into the Build folder
 
-Engine project **should** build
+
 
 
 
 **code is in the docs/BasicSetup.md**
 `docs/BasicSetup.md` also contains file structure
-
----
 
 ---
 
@@ -82,9 +81,9 @@ Engine project **should** build
 * .map
 * .obj
 
-to get obj use export>Wavefront OBJ...\
+to get obj use `export>Wavefront OBJ...`\
 pass 2 files with "textures.ini"\
-save is built into a function so map can be loaded faster with "gems" format\
+save is built into a function so map can be loaded faster with `.gems` format\
 example:
 `Game.CompileTrenchBroomMap("PipeMap.obj","PipeMap.map","saves/test1.gems","textures/textures.ini");`
 
