@@ -25,6 +25,7 @@
 
 #include "structs.h"
 #include "math.cpp"
+#include "Mouse.cpp"
 #include <string>
 #include <vector>
 #include <memory>
@@ -49,6 +50,7 @@ protected:
     MapKey *UserKeyBind;
     std::vector<std::unique_ptr<Ent>> *Ents;
     MapTransition *Transition;
+    EngineMouse *Mouse;
 
     float weight;//kg
 
@@ -76,7 +78,7 @@ public:
     }
 
     virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent,
-                             MapTransition *Tr){
+                             MapTransition *Tr,EngineMouse *EMouse){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -87,6 +89,7 @@ public:
         UserKeyBind = KeyBinds;
         Ents = Ent;
         Transition = Tr;
+        Mouse = EMouse;
     }
     virtual void SetT(float T){
         Time = T;

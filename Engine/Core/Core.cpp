@@ -42,6 +42,7 @@
 //subsys (level 0)
 #include "KeyMap.cpp"
 #include "iniRead.cpp"
+#include "Mouse.cpp"
 //
 #include "game/EntManager.h"
 //subsys (level 1)
@@ -55,6 +56,7 @@
 #include "TextureLoad.cpp"
 #include "AL_Setup.cpp"
 #include "SoundEngine.cpp"
+
 
 #include "GameSubsys.cpp"
 
@@ -73,6 +75,7 @@
 class Engine{
 private:
     IniRead Ini;
+    EngineMouse Mouse;
 
     float T = 0;
     float FPS = 0;
@@ -92,6 +95,8 @@ private:
         //loading textures/ Missing Texture load
         LoadMaterials(Materials,"textures/textures.ini");
         Materials[0].Texture = LoadBmpTexture("textures/MissingTx.bmp",false,false);
+        Mouse.SetupMouseCallBack(D.window,&Mouse);
+        Mouse.SetSens(0.0625);
     }
     void EngineImGuiSetup(){
         ImGui::CreateContext();
@@ -219,7 +224,7 @@ public:
         Engine1stFrame();
 
         //entity tick,pointers
-        EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam,&UserKeyBind,&LevelTransition);
+        EntUpdatePointers(LevelEnt,LevelBrushes,Materials,&Lights,&D,Cam,&UserKeyBind,&LevelTransition,&Mouse);
         EntUpdate(LevelEnt,T);
         EntThink(LevelEnt,FPS);
 
@@ -245,6 +250,13 @@ public:
         //render 2D frame
         EntRender2D(LevelEnt);
 
+        if(!Mouse.GetInMenu()) {
+            Mouse.CenterMouse();
+        }
+        Mouse.ResetInMenu();
+        if(glfwGetKey(D.window,GLFW_KEY_ESCAPE)){
+            Mouse.SetInMenu();
+        }
         //killing ents
         KillAllRequestedObjs(LevelEnt);
 

@@ -88,6 +88,7 @@ class Player: public Ent{
         float PlayerAccSpeed = 7000;
         Vec3 KDir = {};
         Vec3 PlayerSize = {405,915,405};
+        Vec2 MouseOffset = {0,0};
         if((*UserKeyBind).key('W')){
             KDir = Vec3Add(KDir,{0,0,1});
         }
@@ -113,6 +114,21 @@ class Player: public Ent{
         if(glfwGetKey((*Display).window,GLFW_KEY_DOWN)){
             Rot.X = Rot.X - 90.0f/TPS;
         }
+
+        if(!((*Mouse).GetInMenu())){
+            //(*Mouse).SetInMenu();
+            MouseOffset = (*Mouse).GetCenteredMouse(true);//(*Mouse).GetMousePos();
+            //std::cout <<  MouseOffset.X<<"|"<< MouseOffset.Y<<"\n";
+            Rot.Y = Rot.Y - MouseOffset.X;
+            Rot.X = Rot.X - MouseOffset.Y;
+            if (Rot.X > 90) {
+                Rot.X = 90;
+            }
+            if (Rot.X < -90) {
+                Rot.X = -90;
+            }
+        }
+
         if((*UserKeyBind).key('E')){
             ChangeMap("saves/test1.gems",true);
             std::cout << WorldRaycast(Pos, Vec3Add(Pos, Vec3Multiply(CamRotVecInternal,{100000,100000,100000})),{10,10,10},300,Brushes)<<"\n";
