@@ -21,7 +21,7 @@ pbr shaders
 
 # QuickStart
 1. Build this code [Build (EXE,Release)](#Build)
-2. Build OpenAl [Compiling_OpenAl](#CompilingOpenAl)
+2. Build OpenAL [Compiling_OpenAl](#CompilingOpenAl)
 3. copy folders `\shaders` to Build folder
 4. copy folders `\resources\textures` to Build folder
 5. create `\saves`
@@ -52,9 +52,9 @@ if you are using only Engine7 (without an example project) keep reading, else ju
 
 ##### IMPORTANT : for engine to launch, OpenAl32.dll should be present
 
-### CompilingOpenAl
+### CompilingOpenAL
 
-1. Compile OpenAL (openal-soft), guides can be found in readme for OpenAl or you can use this
+1. Compile OpenAL (openal-soft), guides can be found in readme for OpenAL or you can use this
 ```
 mkdir Build
 cd Build
@@ -152,8 +152,8 @@ RED - metallic(0-255) | GREEN - roughness(0-255) or shininess
 ## Third-Party Licenses
 **This project uses third-party libraries which have their own licenses**
 
-* [GLFW](licenses/GLFW)  **| https://www.glfw.org/**
-* [GLEW](licenses/GLEW)  **| https://glew.sourceforge.net/**
-* [ImGui](licenses/ImGui)  **| https://github.com/ocornut/imgui**
-* [OpenAl](licenses/OpenAl)  **| https://github.com/kcat/openal-soft**
-* [SimpleGl](licenses/SimpleGl) **| https://github.com/kitaS24/SimpleGl**
+* [GLFW](Engine/licenses/GLFW)  **| https://www.glfw.org/**
+* [GLEW](Engine/licenses/GLEW)  **| https://glew.sourceforge.net/**
+* [ImGui](Engine/licenses/ImGui)  **| https://github.com/ocornut/imgui**
+* [OpenAL](Engine/licenses/OpenAl)  **| https://github.com/kcat/openal-soft**
+* [SimpleGl](Engine/licenses/SimpleGl) **| https://github.com/kitaS24/SimpleGl**

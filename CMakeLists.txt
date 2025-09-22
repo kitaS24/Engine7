@@ -23,7 +23,7 @@ include_directories(Engine/Ents)
 include_directories(Engine/subsys)
 include_directories(Engine/Import)
 #
-include_directories(Engine/subsys/OpenAl)
+include_directories(Engine/subsys/OpenAL)
 
 
 include_directories(Engine/include/ImGui/backends)
