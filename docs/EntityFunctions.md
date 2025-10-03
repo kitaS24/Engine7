@@ -20,22 +20,24 @@ this file contains most functions
 
 ## Entity Functions
 
-| Function    | In                            | return | Description                                                                                                       |
-|-------------|-------------------------------|--------|-------------------------------------------------------------------------------------------------------------------|
-| KillSelf    |                               | void   | Flags Entity to be killed (public)                                                                                |
-| GetPos      |                               | Vec3   | Returns Entity Pos (public)                                                                                       |
-| GetScale    |                               | Vec3   | Returns Entity Scale (public)                                                                                     |
-| GetRotation |                               | Vec3   | Returns Entity Rotation (public)                                                                                  |
-| SetPos      | Vec3                          | void   | Sets Entity Pos (public)                                                                                          |
-| SetRot      | Vec3                          | void   | Sets Entity Rot (public)                                                                                          |
-| SetScale    | Vec3                          | void   | Sets Entity Scale (public)                                                                                        |
-| addVel      | Vec3                          | void   | Adds Velocity to the entity velocity (public)                                                                     |
-| ChangeMap   | std::string Map,bool IsNewMap | void   | Sets Map for engine to load. bool IsNewMap is used when loading new map (not quicksave),OnMapStart will be called |
-| SetWeight   | float Kg                      | void   | Sets weight in KG                                                                                                 |
-| GetWeight   |                               | float  | Gets weight in KG                                                                                                 |
-| GetForce    | float G                       | float  | Returns force -Y                                                                                                  |
-| GetForceVec | Vec3 G                        | Vec3   | Returns force Vec                                                                                                 |
-| GetMomentum |                               | Vec3   | Returns momentum (from ent Vel)                                                                                   |
+| Function    | In                            | return      | Description                                                                                                       |
+|-------------|-------------------------------|-------------|-------------------------------------------------------------------------------------------------------------------|
+| KillSelf    |                               | void        | Flags Entity to be killed (public)                                                                                |
+| GetPos      |                               | Vec3        | Returns Entity Pos (public)                                                                                       |
+| GetScale    |                               | Vec3        | Returns Entity Scale (public)                                                                                     |
+| GetRotation |                               | Vec3        | Returns Entity Rotation (public)                                                                                  |
+| SetPos      | Vec3                          | void        | Sets Entity Pos (public)                                                                                          |
+| SetRot      | Vec3                          | void        | Sets Entity Rot (public)                                                                                          |
+| SetScale    | Vec3                          | void        | Sets Entity Scale (public)                                                                                        |
+| addVel      | Vec3                          | void        | Adds Velocity to the entity velocity (public)                                                                     |
+| ChangeMap   | std::string Map,bool IsNewMap | void        | Sets Map for engine to load. bool IsNewMap is used when loading new map (not quicksave),OnMapStart will be called |
+| SetWeight   | float Kg                      | void        | Sets weight in KG                                                                                                 |
+| GetWeight   |                               | float       | Gets weight in KG                                                                                                 |
+| GetForce    | float G                       | float       | Returns force -Y                                                                                                  |
+| GetForceVec | Vec3 G                        | Vec3        | Returns force Vec                                                                                                 |
+| GetMomentum |                               | Vec3        | Returns momentum (from ent Vel)                                                                                   |
+| GetName     |                               | std::string | Returns entity name                                                                                               |
+| SetName     | std::string N                 | void        | Sets entity name                                                                                                  |
 
 ## Entity Events
 
@@ -71,6 +73,8 @@ when calling pass 2 arguments
 | std::vector<std::unique_ptr<Ent>> * | Ents        | Pointer to the list with all entities                                                                                     |
 | MapTransition *                     | Transition  | Pointer to struct for level transition                                                                                    |
 | EngineMouse *                       | Mouse       | Pointer to EngineMouse class. Used to read mouse                                                                          |
+| Ent *                               | Self        | Pointer to self                                                                                                           |
+| std::string                         | Name        | Entity name                                                                                                               |
 
 
 ## SubSystem Functions
@@ -117,3 +121,4 @@ when calling pass 2 arguments
 | EngineMouse.GetInMenu()          |                                                                                                                                                    | bool      | used to get InMenu Val                                                                                                |
 | EngineMouse.CenterMouse()        |                                                                                                                                                    | void      | Centers mouse in the window. USED IN ENGINE frame() FUNCTION                                                          |
 | EngineMouse.GetCenteredMouse()   | bool ApplySens                                                                                                                                     | Vec2      | Used to get mouse offset from center. useful in player controller. **ApplySens** allows to get value with sensitivity |
+| GetEntByName()                   | std::vector<std::unique_ptr<Ent>> &Ents,std::string Name                                                                                           | Ent*      | Returns pointer to the FIRST entity with the matching name, else returns nullptr                                      |

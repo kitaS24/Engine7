@@ -127,6 +127,7 @@ by passing only `.gems` engine needs less time to load a level compared to `.map
 * audio
 * player controller (DEMO)
 * mouse
+* Entity Naming
 ### WORKING ON
 ### TODO
 

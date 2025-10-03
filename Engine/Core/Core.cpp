@@ -56,6 +56,7 @@
 #include "TextureLoad.cpp"
 #include "AL_Setup.cpp"
 #include "SoundEngine.cpp"
+#include "EntName.cpp"
 
 
 #include "GameSubsys.cpp"

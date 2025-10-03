@@ -216,6 +216,7 @@ vec4 Color = texture2D(tex,texCoord);
 vec4 PropertyTx = vec4(0,0.6,0,0);
 if(Property == 1){PropertyTx = texture2D(PropTex,texCoord);}
 PropertyTx = vec4(PropertyTx.x,PropertyTx.y,PropertyTx.z*4,0);
+if(PropertyTx.x ==0){PropertyTx.x =0.08;}
 
 //property X = Metal | property Y = Roughness
 Color = vec4(CalculateLights(PropertyTx.x,SpecColor,Color.xyz,PropertyTx.y),1);

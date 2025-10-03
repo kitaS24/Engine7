@@ -51,6 +51,8 @@ protected:
     std::vector<std::unique_ptr<Ent>> *Ents;
     MapTransition *Transition;
     EngineMouse *Mouse;
+    Ent * Self;// pointer to itself
+    std::string Name;// entity name
 
     float weight;//kg
 
@@ -77,8 +79,8 @@ public:
        ImGui::End();
     }
 
-    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent,
-                             MapTransition *Tr,EngineMouse *EMouse){
+    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *ents,
+                             MapTransition *Tr,EngineMouse *EMouse, Ent *self){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -87,9 +89,10 @@ public:
         CamRot = CamP+1;
         CamRotVec = CamP+2;
         UserKeyBind = KeyBinds;
-        Ents = Ent;
+        Ents = ents;
         Transition = Tr;
         Mouse = EMouse;
+        Self = self;
     }
     virtual void SetT(float T){
         Time = T;
@@ -112,6 +115,14 @@ public:
     virtual Vec3 GetRotation(){
         return Rot;
     }
+
+    virtual std::string GetName(){
+        return Name;
+    }
+    virtual void SetName(std::string N){
+        Name = N;
+    }
+
     virtual void SetBoundingBoxPos(Vec3 Pos[2]){
         BoundingBox[0] = Pos[0];
         BoundingBox[1] = Pos[1];

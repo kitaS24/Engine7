@@ -39,10 +39,15 @@ class Light: public Ent{
     }
     //gui
     void CreateVarWindow(int cId,Vec2I W) override {
+
+
+
         ImGui::Begin((GetDebugName()+"##"+std::to_string(cId)).c_str());
         ImGui::SetWindowPos(ImVec2(0,W.Y-200));
         ImGui::SetWindowSize(ImVec2(200,200));
         ImGui::Text("light entity");
+        ImGui::Text("Ent Name:");
+        ImGui::Text(Name.c_str());
         ImGui::ColorEdit3("Light Color",&Color.X);
         ImGui::SliderFloat("light Brightness",&Br,0,20);
 
@@ -56,6 +61,7 @@ class Light: public Ent{
     }
     //adds light into the scene
     void PreRender() override{
+        SetName("player light");
         AddLight(LightsPtr, Pos,{Color.X*Br,Color.Y*Br,Color.Z*Br}, rotatePoint({0,-1,0},Dir),InnerCone,OuterCone);
     }
     //renders dot on the ent pos
@@ -99,6 +105,11 @@ class Light: public Ent{
             Pos.Z = stof(cf.GetText(1))*Engine_Map_Scale;
             Br = 1;
         }
+    }
+
+    // turns light off
+    void OnFire(Ent *activator,Ent *caller) override{
+        Br = 0;
     }
 
 };

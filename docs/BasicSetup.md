@@ -9,6 +9,24 @@ this file contains filenames and basic code for them (referenced by README.md)
 // Created by kitaS24 on 18.08.2025.
 //
 
+/*
+    Engine7 - a GoldSrc like engine
+    Copyright (C) 2025  kitaS24
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #ifndef ENGINE7_ENTMANAGER_H
 #define ENGINE7_ENTMANAGER_H
 
@@ -40,6 +58,8 @@ protected:
     std::vector<std::unique_ptr<Ent>> *Ents;
     MapTransition *Transition;
     EngineMouse *Mouse;
+    Ent * Self;// pointer to itself
+    std::string Name;// entity name
 
     float weight;//kg
 
@@ -66,8 +86,8 @@ public:
        ImGui::End();
     }
 
-    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *Ent,
-                             MapTransition *Tr,EngineMouse *EMouse){
+    virtual void SetPointers(Brush *Br,Material *M,GpuLights *L,DISPLAY *D,Vec3 *CamP,MapKey *KeyBinds,std::vector<std::unique_ptr<Ent>> *ents,
+                             MapTransition *Tr,EngineMouse *EMouse, Ent *self){
         Brushes = Br;
         Materials = M;
         LightsPtr = L;
@@ -76,9 +96,10 @@ public:
         CamRot = CamP+1;
         CamRotVec = CamP+2;
         UserKeyBind = KeyBinds;
-        Ents = Ent;
+        Ents = ents;
         Transition = Tr;
         Mouse = EMouse;
+        Self = self;
     }
     virtual void SetT(float T){
         Time = T;
@@ -101,6 +122,14 @@ public:
     virtual Vec3 GetRotation(){
         return Rot;
     }
+
+    virtual std::string GetName(){
+        return Name;
+    }
+    virtual void SetName(std::string N){
+        Name = N;
+    }
+
     virtual void SetBoundingBoxPos(Vec3 Pos[2]){
         BoundingBox[0] = Pos[0];
         BoundingBox[1] = Pos[1];
@@ -334,6 +363,7 @@ or it can just have this
 #include "TextureLoad.cpp"
 #include "AL_Setup.cpp"
 #include "SoundEngine.cpp"
+#include "EntName.cpp"
  */
 ```
 

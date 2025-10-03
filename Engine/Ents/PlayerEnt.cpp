@@ -80,6 +80,14 @@ class Player: public Ent{
         ImGui::Text(std::to_string(Vel.X).c_str());
         ImGui::Text(std::to_string(Vel.Y).c_str());
         ImGui::Text(std::to_string(Vel.Z).c_str());
+
+        if(ImGui::Button("Fire Light")){
+            Ent* Light = GetEntByName(*Ents,"player light");
+            if(Light){
+                Light->OnFire(nullptr,Self);
+            }
+        }
+
         ImGui::End();
     }
 
