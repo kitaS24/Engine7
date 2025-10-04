@@ -69,7 +69,8 @@ void GetTBMapData(Vec3 *V,Vec3 *TC,Vec3 *N,std::string File,float Scale){
 
         f.SetStr(ln);
         if(f.GetText(0) == "v"){
-            *(V +IndexV )={stof(f.GetText(1))*Scale,stof(f.GetText(2))*Scale,stof(f.GetText(3))*Scale};
+            //mirroring (X)
+            *(V +IndexV )={-stof(f.GetText(1))*Scale,stof(f.GetText(2))*Scale,stof(f.GetText(3))*Scale};
             IndexV = IndexV+1;
         }
         if(f.GetText(0) == "vt"){
@@ -77,7 +78,8 @@ void GetTBMapData(Vec3 *V,Vec3 *TC,Vec3 *N,std::string File,float Scale){
             IndexTC = IndexTC+1;
         }
         if(f.GetText(0) == "vn"){
-            *(N +IndexN )={stof(f.GetText(1)),stof(f.GetText(2)),stof(f.GetText(3))};
+            //mirroring (X)
+            *(N +IndexN )={-stof(f.GetText(1)),stof(f.GetText(2)),stof(f.GetText(3))};
             IndexN = IndexN+1;
         }
     }
@@ -182,42 +184,42 @@ void LoadTBMap(Brush *Brushes,std::string MapName,std::string MaterialName,std::
             BrushSide =-1;
         }
         if(BrushSide<Engine_Brush_Planes){
-        if(f.GetText(0) == "usemtl"){
-            SkipFace =TBSearchMaterialNodraw(f.GetText(1));
+            if(f.GetText(0) == "usemtl"){
+                SkipFace =TBSearchMaterialNodraw(f.GetText(1));
                 BrushSide = BrushSide + 1;
                 (*(Brushes + Brush)).BrushPlane[BrushSide].Material =
                         TBSearchMaterial(materialNames, Engine_Max_Materials, f.GetText(1));
-        }
-        if(f.GetText(0) == "f") {
-            for (int i = 0; i < 16 && (!f.GetTextOOB((i) * 2)); ++i) {
-                cf.SetStr(f.GetText((i + 1) * 2));
-
-                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].X = VertexDt[stoi(cf.GetText(0)) - 1].X;
-                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0)) - 1].Y;
-                (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Z = VertexDt[stoi(cf.GetText(0)) - 1].Z;
-
-                (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].X = TextureDt[stoi(cf.GetText(1)) - 1].X;
-                (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].Y = TextureDt[stoi(cf.GetText(1)) - 1].Y;
-
-
-                (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN = i + 1;
             }
-            (*(Brushes + Brush)).BrushPlane[BrushSide].Used = true;
+            if(f.GetText(0) == "f") {
+                for (int i = 0; i < 16 && (!f.GetTextOOB((i) * 2)); ++i) {
+                    cf.SetStr(f.GetText((i + 1) * 2));
 
-            if(SkipFace){
-                (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN =0;
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].X = VertexDt[stoi(cf.GetText(0)) - 1].X;
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Y = VertexDt[stoi(cf.GetText(0)) - 1].Y;
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].Vertex[i].Z = VertexDt[stoi(cf.GetText(0)) - 1].Z;
+
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].X = TextureDt[stoi(cf.GetText(1)) - 1].X;
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].Uvs[i].Y = TextureDt[stoi(cf.GetText(1)) - 1].Y;
+
+
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN = i + 1;
+                }
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Used = true;
+
+                if(SkipFace){
+                    (*(Brushes + Brush)).BrushPlane[BrushSide].VertexN =0;
+                }
+
+                cf.SetStr(f.GetText(2));
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.X = NormalDt[stoi(cf.GetText(2)) - 1].X;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Y = NormalDt[stoi(cf.GetText(2)) - 1].Y;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Z = NormalDt[stoi(cf.GetText(2)) - 1].Z;
+
+
+                (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.X = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].X;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Y = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Y;
+                (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Z = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Z;
             }
-
-            cf.SetStr(f.GetText(2));
-            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.X = NormalDt[stoi(cf.GetText(2)) - 1].X;
-            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Y = NormalDt[stoi(cf.GetText(2)) - 1].Y;
-            (*(Brushes + Brush)).BrushPlane[BrushSide].Normal.Z = NormalDt[stoi(cf.GetText(2)) - 1].Z;
-
-
-            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.X = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].X;
-            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Y = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Y;
-            (*(Brushes + Brush)).BrushPlane[BrushSide].CollisionPos.Z = (*(Brushes +Brush)).BrushPlane[BrushSide].Vertex[0].Z;
-        }
 
         }
     }

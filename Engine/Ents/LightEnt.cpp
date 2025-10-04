@@ -100,9 +100,9 @@ class Light: public Ent{
             TextSplit cf;
             cf.SetDivider(' ');
             cf.SetStr(Val);
-            Pos.X = stof(cf.GetText(0))*Engine_Map_Scale;
+            Pos.X = -stof(cf.GetText(0))*Engine_Map_Scale;
             Pos.Y = stof(cf.GetText(2))*Engine_Map_Scale;
-            Pos.Z = stof(cf.GetText(1))*Engine_Map_Scale;
+            Pos.Z = -stof(cf.GetText(1))*Engine_Map_Scale;
             Br = 1;
         }
     }
