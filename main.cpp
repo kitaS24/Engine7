@@ -4,6 +4,8 @@ int main() {
     //Engine();
     Engine Game;
 
+    //Game.DebugMode(false);
+    Game.DebugMode(true);
     Game.Setup();
     Game.SetSwapInterval(1);
 

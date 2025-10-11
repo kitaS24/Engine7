@@ -71,6 +71,8 @@
 //import
 #include "TrenchBroomImport.cpp"
 #include "Vars.cpp"
+//
+#include "StartEntCreate.cpp"
 
 
 class Engine{
@@ -84,6 +86,8 @@ private:
     float DebugTimeScale = 1;
     Vec2I WindowSize = {0,0};
     bool Map1stFrame = true;
+
+    bool DebugGui = true;
 
     void EngineGlSetup(){
         OpenGlInit(true);
@@ -179,13 +183,7 @@ public:
         EngineGlSetup();
         EngineImGuiSetup();
 
-        LevelEnt.push_back(std::make_unique<Ent>());
-        LevelEnt.push_back(std::make_unique<Ent>());
-        LevelEnt.push_back(std::make_unique<Ent>());
-        LevelEnt.push_back(std::make_unique<WorldRender>());
-        LevelEnt.push_back(std::make_unique<Particle>());
-        LevelEnt.push_back(std::make_unique<LightFlood>());
-        LevelEnt.push_back(std::make_unique<Player>());
+        CreateEntsOnStartup();
 
         UserKeyBind.UpdateWindow(&D);
         UserKeyBind.SetupGlfwKeys();
@@ -204,8 +202,10 @@ public:
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        //debug entity list
-        EntList(LevelEnt,DebugEntView,WindowSize,D);
+        if(DebugGui) {
+            //debug entity list
+            EntList(LevelEnt, DebugEntView, WindowSize, D);
+        }
 
 
 
@@ -280,5 +280,11 @@ public:
         LoadTBMap(LevelBrushes,ObjFile,TexturesFile,LevelEnt);
         ImportEnts(MapFile,LevelEnt);
         EngineSave(&LevelEnt,LevelBrushes,OutFile);
+    }
+
+
+    void DebugMode(bool Val){
+        // turns on/off debug GUI
+        DebugGui = Val;
     }
 };
