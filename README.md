@@ -152,7 +152,7 @@ RED - metallic(0-255) | GREEN - roughness(0-255) or shininess
 
 ---
 # License
-**This project is licensed under the GNU GENERAL PUBLIC LICENSE**
+**This project is licensed under the MIT LICENSE**
 
 ## Third-Party Licenses
 **This project uses third-party libraries which have their own licenses**

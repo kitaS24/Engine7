@@ -2,23 +2,7 @@
 // Created by kitaS24 on 18.08.2025.
 //
 
-/*
-    Engine7 - a GoldSrc like engine
-    Copyright (C) 2025  kitaS24
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+// Copyright (c) 2025 kitaS24
 
 
 #include "Core.h"
@@ -89,12 +73,12 @@ private:
 
     bool DebugGui = true;
 
-    void EngineGlSetup(){
+    void EngineGlSetup(std::string Title){
         OpenGlInit(true);
 
         //creating window with W 800 and H 600
         glfwWindowHint(GLFW_DEPTH_BITS, 24);
-        if(!CreateGlWindow(D.window,800,600,"Test")){
+        if(!CreateGlWindow(D.window,800,600,Title.c_str())){
             exit(-1);
         }
         //loading textures/ Missing Texture load
@@ -178,9 +162,9 @@ public:
         glfwSwapInterval(Swap);
     }
 
-    void Setup(){
+    void Setup(std::string Title){
         //engine setup, gl, window, keybinds, OpenAL setup
-        EngineGlSetup();
+        EngineGlSetup(Title);
         EngineImGuiSetup();
 
         CreateEntsOnStartup();
@@ -189,7 +173,7 @@ public:
         UserKeyBind.SetupGlfwKeys();
 
         EngineAl.Setup();
-}
+    }
     bool Frame(){
         EngineAl.SetListener(Cam[0],Cam[2],true);
         glfwGetWindowSize(D.window,&D.X,&D.Y);
